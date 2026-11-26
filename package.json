@@ -1,0 +1,19 @@
+{
+  "name": "mw-design",
+  "version": "1.0.0-rc.1",
+  "private": true,
+  "description": "MoonWitness Design System (@moonwitness/ui, @moonwitness/assets, ui-catalog)",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "bun --filter @moonwitness/ui build && bun --filter @moonwitness/ui-catalog build:built",
+    "typecheck": "bun --filter @moonwitness/ui build && tsc -p apps/ui-catalog/tsconfig.json --noEmit",
+    "test": "bun --filter @moonwitness/ui test",
+    "catalog:build": "bun --filter @moonwitness/ui-catalog build"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3"
+  }
+}

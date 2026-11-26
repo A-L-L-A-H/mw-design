@@ -1,0 +1,335 @@
+{
+  "name": "@moonwitness/ui",
+  "version": "1.0.0-rc.1",
+  "description": "MoonWitness design tokens, typed icons, accessible controls and composition primitives",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "type": "module",
+  "license": "ISC",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "src/styles",
+    "README.md",
+    "TOKENS.md"
+  ],
+  "exports": {
+    "./components.css": "./src/styles/components.css",
+    "./components/button": {
+      "types": "./dist/components/button.d.ts",
+      "import": "./dist/components/button.js"
+    },
+    "./components/input": {
+      "types": "./dist/components/input.d.ts",
+      "import": "./dist/components/input.js"
+    },
+    "./components/checkbox": {
+      "types": "./dist/components/checkbox.d.ts",
+      "import": "./dist/components/checkbox.js"
+    },
+    "./components/badge": {
+      "types": "./dist/components/badge.d.ts",
+      "import": "./dist/components/badge.js"
+    },
+    "./components/avatar": {
+      "types": "./dist/components/avatar.d.ts",
+      "import": "./dist/components/avatar.js"
+    },
+    "./components/select-field": {
+      "types": "./dist/components/select-field.d.ts",
+      "import": "./dist/components/select-field.js"
+    },
+    "./components/dialog": {
+      "types": "./dist/components/dialog.d.ts",
+      "import": "./dist/components/dialog.js"
+    },
+    "./components/command": {
+      "types": "./dist/components/command.d.ts",
+      "import": "./dist/components/command.js"
+    },
+    "./components/label": {
+      "types": "./dist/components/label.d.ts",
+      "import": "./dist/components/label.js"
+    },
+    "./components/popover": {
+      "types": "./dist/components/popover.d.ts",
+      "import": "./dist/components/popover.js"
+    },
+    "./components/sheet": {
+      "types": "./dist/components/sheet.d.ts",
+      "import": "./dist/components/sheet.js"
+    },
+    "./components/switch": {
+      "types": "./dist/components/switch.d.ts",
+      "import": "./dist/components/switch.js"
+    },
+    "./components/textarea": {
+      "types": "./dist/components/textarea.d.ts",
+      "import": "./dist/components/textarea.js"
+    },
+    "./components/tooltip": {
+      "types": "./dist/components/tooltip.d.ts",
+      "import": "./dist/components/tooltip.js"
+    },
+    "./components/tabs": {
+      "types": "./dist/components/tabs.d.ts",
+      "import": "./dist/components/tabs.js"
+    },
+    "./components/dropdown-menu": {
+      "types": "./dist/components/dropdown-menu.d.ts",
+      "import": "./dist/components/dropdown-menu.js"
+    },
+    "./components/select": {
+      "types": "./dist/components/select.d.ts",
+      "import": "./dist/components/select.js"
+    },
+    "./components/toast": {
+      "types": "./dist/components/toast.d.ts",
+      "import": "./dist/components/toast.js"
+    },
+    "./components/field": {
+      "types": "./dist/components/field.d.ts",
+      "import": "./dist/components/field.js"
+    },
+    "./components/skeleton": {
+      "types": "./dist/components/skeleton.d.ts",
+      "import": "./dist/components/skeleton.js"
+    },
+    "./components/empty-state": {
+      "types": "./dist/components/empty-state.d.ts",
+      "import": "./dist/components/empty-state.js"
+    },
+    "./components/page-header": {
+      "types": "./dist/components/page-header.d.ts",
+      "import": "./dist/components/page-header.js"
+    },
+    "./components/panel": {
+      "types": "./dist/components/panel.d.ts",
+      "import": "./dist/components/panel.js"
+    },
+    "./components/section-ribbon": {
+      "types": "./dist/components/section-ribbon.d.ts",
+      "import": "./dist/components/section-ribbon.js"
+    },
+    "./components/paper-note": {
+      "types": "./dist/components/paper-note.d.ts",
+      "import": "./dist/components/paper-note.js"
+    },
+    "./components/artwork-frame": {
+      "types": "./dist/components/artwork-frame.d.ts",
+      "import": "./dist/components/artwork-frame.js"
+    },
+    "./components/metric-tile": {
+      "types": "./dist/components/metric-tile.d.ts",
+      "import": "./dist/components/metric-tile.js"
+    },
+    "./components/toolbar": {
+      "types": "./dist/components/toolbar.d.ts",
+      "import": "./dist/components/toolbar.js"
+    },
+    "./components/pagination": {
+      "types": "./dist/components/pagination.d.ts",
+      "import": "./dist/components/pagination.js"
+    },
+    "./components/table": {
+      "types": "./dist/components/table.d.ts",
+      "import": "./dist/components/table.js"
+    },
+    "./components/status-bar": {
+      "types": "./dist/components/status-bar.d.ts",
+      "import": "./dist/components/status-bar.js"
+    },
+    "./components/smart-button-box": {
+      "types": "./dist/components/smart-button-box.d.ts",
+      "import": "./dist/components/smart-button-box.js"
+    },
+    "./components/kanban-board": {
+      "types": "./dist/components/kanban-board.d.ts",
+      "import": "./dist/components/kanban-board.js"
+    },
+    "./components/filter-facet-bar": {
+      "types": "./dist/components/filter-facet-bar.d.ts",
+      "import": "./dist/components/filter-facet-bar.js"
+    },
+    "./components/chart": {
+      "types": "./dist/components/chart.d.ts",
+      "import": "./dist/components/chart.js"
+    },
+    "./components/character-preview": {
+      "types": "./dist/components/character-preview.d.ts",
+      "import": "./dist/components/character-preview.js"
+    },
+    "./components/effects": {
+      "types": "./dist/components/effects.d.ts",
+      "import": "./dist/components/effects.js"
+    },
+    "./components/audio": {
+      "types": "./dist/components/audio.d.ts",
+      "import": "./dist/components/audio.js"
+    },
+    "./components/date-picker": {
+      "types": "./dist/components/date-picker.d.ts",
+      "import": "./dist/components/date-picker.js"
+    },
+    "./components/number-input": {
+      "types": "./dist/components/number-input.d.ts",
+      "import": "./dist/components/number-input.js"
+    },
+    "./components/tag-input": {
+      "types": "./dist/components/tag-input.d.ts",
+      "import": "./dist/components/tag-input.js"
+    },
+    "./themes": {
+      "types": "./dist/themes/index.d.ts",
+      "import": "./dist/themes/index.js"
+    },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
+    },
+    "./icons/*": {
+      "types": "./dist/icons/*.d.ts",
+      "import": "./dist/icons/*.js"
+    },
+    "./styles/tokens.css": "./src/styles/tokens.css",
+    "./components/layered-scene": {
+      "types": "./dist/components/layered-scene.d.ts",
+      "import": "./dist/components/layered-scene.js"
+    },
+    "./components/sprite-player": {
+      "types": "./dist/components/sprite-player.d.ts",
+      "import": "./dist/components/sprite-player.js"
+    },
+    "./lib/scene-playback": {
+      "types": "./dist/lib/scene-playback.d.ts",
+      "import": "./dist/lib/scene-playback.js"
+    },
+    "./lib/scene-camera": {
+      "types": "./dist/lib/scene-camera.d.ts",
+      "import": "./dist/lib/scene-camera.js"
+    },
+    "./lib/scene-timeline": {
+      "types": "./dist/lib/scene-timeline.d.ts",
+      "import": "./dist/lib/scene-timeline.js"
+    },
+    "./lib/scene-test-harness": {
+      "types": "./dist/lib/scene-test-harness.d.ts",
+      "import": "./dist/lib/scene-test-harness.js"
+    },
+    "./lib/character-adapter": {
+      "types": "./dist/lib/character-adapter.d.ts",
+      "import": "./dist/lib/character-adapter.js"
+    },
+    "./components/scene-particles": {
+      "types": "./dist/components/scene-particles.d.ts",
+      "import": "./dist/components/scene-particles.js"
+    },
+    "./components/scene-transitions": {
+      "types": "./dist/components/scene-transitions.d.ts",
+      "import": "./dist/components/scene-transitions.js"
+    },
+    "./lib/scene-soundscape": {
+      "types": "./dist/lib/scene-soundscape.d.ts",
+      "import": "./dist/lib/scene-soundscape.js"
+    },
+    "./lib/use-modal-focus": {
+      "types": "./dist/lib/use-modal-focus.d.ts",
+      "import": "./dist/lib/use-modal-focus.js"
+    },
+    "./components/update-banner": {
+      "types": "./dist/components/update-banner.d.ts",
+      "import": "./dist/components/update-banner.js"
+    },
+    "./components/mode-picker": {
+      "types": "./dist/components/mode-picker.d.ts",
+      "import": "./dist/components/mode-picker.js"
+    },
+    "./components/log-console": {
+      "types": "./dist/components/log-console.d.ts",
+      "import": "./dist/components/log-console.js"
+    },
+    "./components/comic-panel": {
+      "types": "./dist/components/comic-panel.d.ts",
+      "import": "./dist/components/comic-panel.js"
+    },
+    "./components/comic-theater": {
+      "types": "./dist/components/comic-theater.d.ts",
+      "import": "./dist/components/comic-theater.js"
+    },
+    "./components/epistemic-branch-panel": {
+      "types": "./dist/components/epistemic-branch-panel.d.ts",
+      "import": "./dist/components/epistemic-branch-panel.js"
+    },
+    "./components/speech-bubble": {
+      "types": "./dist/components/speech-bubble.d.ts",
+      "import": "./dist/components/speech-bubble.js"
+    },
+    "./components/character-stage": {
+      "types": "./dist/components/character-stage.d.ts",
+      "import": "./dist/components/character-stage.js"
+    },
+    "./components/quest-card": {
+      "types": "./dist/components/quest-card.d.ts",
+      "import": "./dist/components/quest-card.js"
+    },
+    "./components/confirm-dialog": {
+      "types": "./dist/components/confirm-dialog.d.ts",
+      "import": "./dist/components/confirm-dialog.js"
+    },
+    "./components/error-state": {
+      "types": "./dist/components/error-state.d.ts",
+      "import": "./dist/components/error-state.js"
+    },
+    "./components/breadcrumbs": {
+      "types": "./dist/components/breadcrumbs.d.ts",
+      "import": "./dist/components/breadcrumbs.js"
+    },
+    "./components/brand-mark": {
+      "types": "./dist/components/brand-mark.d.ts",
+      "import": "./dist/components/brand-mark.js"
+    },
+    "./components/inbox-popover": {
+      "types": "./dist/components/inbox-popover.d.ts",
+      "import": "./dist/components/inbox-popover.js"
+    },
+    "./lib/asset-registry": {
+      "types": "./dist/lib/asset-registry.d.ts",
+      "import": "./dist/lib/asset-registry.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/generate-icons.mjs && tsc",
+    "test": "bun run build && node --test tests/*.test.mjs"
+  },
+  "peerDependencies": {
+    "cmdk": ">=1.1.1",
+    "radix-ui": ">=1.6.7",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "sonner": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "cmdk": {
+      "optional": true
+    },
+    "sonner": {
+      "optional": true
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "cmdk": "^1.1.1",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.3.0",
+    "sonner": "^2.0.8"
+  }
+}

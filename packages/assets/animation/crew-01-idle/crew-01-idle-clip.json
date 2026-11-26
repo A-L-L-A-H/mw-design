@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "clipId": "crew-01-idle",
+  "characterId": "crew-01",
+  "pack": "moon-city",
+  "domain": "visual-universe",
+  "description": "Four-frame anime idle loop for anonymous back-facing crew-01: breathing bob, hood drift and hair sway. Each frame is a distinct drawing with its own silhouette; ping-pong playback keeps the loop seamless. Reduced-motion fallback uses frame 1.",
+  "clip": {
+    "id": "crew-01-idle",
+    "loop": true,
+    "direction": "ping-pong",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.9
+    },
+    "frames": [
+      {
+        "asset": "animation/crew-01-idle/crew-01-idle-frame-01.svg",
+        "durationMs": 720
+      },
+      {
+        "asset": "animation/crew-01-idle/crew-01-idle-frame-02.svg",
+        "durationMs": 720
+      },
+      {
+        "asset": "animation/crew-01-idle/crew-01-idle-frame-03.svg",
+        "durationMs": 720
+      },
+      {
+        "asset": "animation/crew-01-idle/crew-01-idle-frame-04.svg",
+        "durationMs": 720
+      }
+    ]
+  },
+  "reducedMotionFallback": "animation/crew-01-idle/crew-01-idle-frame-01.svg",
+  "license": "ISC",
+  "status": "review"
+}

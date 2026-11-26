@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "clipId": "crew-01-walk",
+  "characterId": "crew-01",
+  "pack": "moon-city",
+  "domain": "visual-universe",
+  "description": "Four-frame walk cycle for crew-01: left contact, passing, right contact and passing. Knees, boots, arms and hair change every frame with alternating foot contact points. No reused idle pose.",
+  "clip": {
+    "id": "crew-01-walk",
+    "loop": true,
+    "direction": "ping-pong",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.9
+    },
+    "frames": [
+      {
+        "asset": "animation/crew-01-walk/crew-01-walk-frame-01.svg",
+        "durationMs": 480
+      },
+      {
+        "asset": "animation/crew-01-walk/crew-01-walk-frame-02.svg",
+        "durationMs": 480
+      },
+      {
+        "asset": "animation/crew-01-walk/crew-01-walk-frame-03.svg",
+        "durationMs": 480
+      },
+      {
+        "asset": "animation/crew-01-walk/crew-01-walk-frame-04.svg",
+        "durationMs": 480
+      }
+    ]
+  },
+  "reducedMotionFallback": "animation/crew-01-walk/crew-01-walk-frame-01.svg",
+  "license": "ISC",
+  "status": "review"
+}
