@@ -343,9 +343,9 @@ export const FX_COMBO_PRESETS: readonly AnimeFxComboPreset[] = [
 
 export const FX_LAB_CHARACTER_IDS = [
   'kuro-signal',
-  'vesper-neon',
-  'akira-volt',
-  'nova-flare',
+  'vesper-ink',
+  'akira-pulse',
+  'nova-x',
   'lord-null',
 ] as const;
 
