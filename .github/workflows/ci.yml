@@ -46,7 +46,6 @@ jobs:
         run: |
           set -euo pipefail
           gitleaks git \
-            --source . \
             --config .gitleaks.toml \
             --log-opts="--all" \
             --redact \
