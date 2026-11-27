@@ -68,6 +68,8 @@ jobs:
         run: bunx --workspace=@moonwitness/ui-catalog playwright install chromium --with-deps
 
       - name: Run Playwright integration & accessibility suite
+        env:
+          MW_UI_CATALOG_BASE_PATH: '/moonwitness-xiv/components/'
         run: bun run test:e2e
 
   docker:

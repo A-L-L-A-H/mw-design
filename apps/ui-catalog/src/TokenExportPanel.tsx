@@ -219,7 +219,7 @@ export function TokenExportPanel({
         <span className="catalog-token-export-filename">{filename}</span>
       </div>
 
-      <pre className="catalog-token-export-preview" data-testid="token-export-preview">
+      <pre className="catalog-token-export-preview" data-testid="token-export-preview" tabIndex={0}>
         <code>{exportedOutput}</code>
       </pre>
 

@@ -320,10 +320,10 @@ test.describe('UI catalog key component integration', () => {
     await expect(stage).toContainText('Command Workspace');
 
     await studio.getByRole('button', { name: 'Game Battle HUD', exact: true }).click();
-    await expect(stage).toContainText('HERO HP');
+    await expect(stage).toContainText('HP');
 
     await studio.getByRole('button', { name: 'Cartoon Studio', exact: true }).click();
-    await expect(stage).toContainText('BEAT');
+    await expect(stage).toContainText('Entrance');
 
     await studio.getByRole('button', { name: 'Tablet 768px', exact: true }).click();
     await expect(stage).toHaveAttribute('data-viewport', 'tablet');

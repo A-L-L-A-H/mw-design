@@ -467,7 +467,6 @@ export const KineticText = forwardRef<HTMLSpanElement, KineticTextProps>(functio
       data-slot="kinetic-text"
       data-variant={variant}
       data-reduced-motion={reducedMotion ? 'true' : 'false'}
-      aria-label={text}
       className={cn('mw-ui-kinetic-text', className)}
       {...props}
     >

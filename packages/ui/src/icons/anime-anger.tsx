@@ -5,11 +5,6 @@ export type AnimeAngerIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 'ti
   size?: number | string;
 };
 
-const PATH_D = (
-  "M9 4v4a2 2 0 0 1-2 2H3M15 4v4a2 2 0 0 0 2 2h4"
-  + "M9 20v-4a2 2 0 0 0-2-2H3M15 20v-4a2 2 0 0 1 2-2h4"
-);
-
 const AnimeAngerIcon = forwardRef<SVGSVGElement, AnimeAngerIconProps>(function AnimeAngerIcon(
   { size = 24, title, ...props },
   ref
@@ -32,7 +27,7 @@ const AnimeAngerIcon = forwardRef<SVGSVGElement, AnimeAngerIconProps>(function A
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d={PATH_D} />
+      <path d="M9 4v4a2 2 0 0 1-2 2H3M15 4v4a2 2 0 0 0 2 2h4M9 20v-4a2 2 0 0 0-2-2H3M15 20v-4a2 2 0 0 1 2-2h4" />
     </svg>
   );
 });

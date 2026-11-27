@@ -5,12 +5,6 @@ export type ComboFlameIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 'ti
   size?: number | string;
 };
 
-const PATH_D1 = (
-  "M13 3c2 2.8 5.5 4.8 5.5 9.5A6.5 6.5 0 0 1 12 19a6.5 6.5 0 0 1-6.5-6.5"
-  + "c0-2.5 1.2-4.6 3-6-.2 2 .8 3.2 2.2 3.5C10.5 7 11.4 4.8 13 3Z"
-);
-const PATH_D2 = "m9.5 15 2.5-3.5L14.5 15";
-
 const ComboFlameIcon = forwardRef<SVGSVGElement, ComboFlameIconProps>(function ComboFlameIcon(
   { size = 24, title, ...props },
   ref
@@ -33,8 +27,8 @@ const ComboFlameIcon = forwardRef<SVGSVGElement, ComboFlameIconProps>(function C
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d={PATH_D1} />
-      <path d={PATH_D2} />
+      <path d="M13 3c2 2.8 5.5 4.8 5.5 9.5A6.5 6.5 0 0 1 12 19a6.5 6.5 0 0 1-6.5-6.5c0-2.5 1.2-4.6 3-6-.2 2 .8 3.2 2.2 3.5C10.5 7 11.4 4.8 13 3Z" />
+      <path d="m9.5 15 2.5-3.5L14.5 15" />
     </svg>
   );
 });

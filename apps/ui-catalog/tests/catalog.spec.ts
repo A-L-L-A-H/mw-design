@@ -31,7 +31,7 @@ test('static catalog loads under the repository Pages subpath with its shared UI
   await expect(page.locator('.mw-ui-button').first()).toBeVisible();
   await expect(page.locator('.catalog-footer a')).toHaveAttribute(
     'href',
-    'https://github.com/bjo163/moonwitness-xi/tree/dev/packages/ui'
+    'https://github.com/MoonWitness/moonwitness-design/tree/main/packages/ui'
   );
   expect(failedRequests).toEqual([]);
   expect(new URL(page.url()).pathname).toBe('/moonwitness-xiv/components/');

@@ -994,12 +994,12 @@ a:focus-visible {
 .catalog-a11y-pill[data-severity='pass'],
 .catalog-a11y-badge[data-severity='pass'] {
   background-color: var(--mw-success);
-  color: var(--mw-success-foreground);
+  color: var(--mw-on-success);
 }
 .catalog-a11y-pill[data-severity='warn'],
 .catalog-a11y-badge[data-severity='warn'] {
   background-color: var(--mw-warning);
-  color: var(--mw-warning-foreground);
+  color: var(--mw-on-warning);
 }
 .catalog-a11y-pill[data-severity='fail'],
 .catalog-a11y-badge[data-severity='fail'] {
@@ -1102,7 +1102,7 @@ a:focus-visible {
 }
 .catalog-a11y-focus-index {
   font-weight: 700;
-  color: var(--mw-magenta);
+  color: var(--mw-magenta-readable);
 }
 .catalog-a11y-focus-stop small {
   margin-left: auto;

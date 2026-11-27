@@ -1145,13 +1145,13 @@
 
   .mw-ui-badge[data-variant='success'] {
     border-color: var(--mw-ink);
-    color: var(--mw-success-foreground);
+    color: var(--mw-on-success);
     background: var(--mw-success);
   }
 
   .mw-ui-badge[data-variant='warning'] {
     border-color: var(--mw-ink);
-    color: var(--mw-warning-foreground);
+    color: var(--mw-on-warning);
     background: var(--mw-warning);
   }
 
@@ -6422,7 +6422,11 @@
     font-weight: 800;
   }
   .mw-ui-motion-timeline-kf-index {
-    opacity: 0.72;
+    opacity: 0.88;
+  }
+  .mw-ui-motion-timeline-kf-card[data-active='true'] .mw-ui-motion-timeline-kf-index {
+    opacity: 1;
+    color: var(--mw-primary-foreground);
   }
   .mw-ui-motion-timeline-kf-label {
     flex: 1 1 auto;
