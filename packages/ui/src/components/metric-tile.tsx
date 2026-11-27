@@ -1,6 +1,6 @@
 'use client';
 
-import type { ComponentProps, ReactNode } from 'react';
+import { forwardRef, type ComponentProps, type ReactNode } from 'react';
 import { Tooltip, TooltipTrigger, TooltipContent } from './tooltip.js';
 import { WarningIcon } from '../icons/warning.js';
 
@@ -18,20 +18,23 @@ export type MetricTileProps = Omit<ComponentProps<'article'>, 'children' | 'titl
 };
 
 /** Presentation only: callers own metric meaning, loading, and error states. */
-export function MetricTile({
-  label,
-  value,
-  detail,
-  icon,
-  accent = 'cyan',
-  surface = 'default',
-  frame = 'line',
-  size = 'default',
-  interactive = false,
-  error,
-  className,
-  ...props
-}: MetricTileProps) {
+export const MetricTile = forwardRef<HTMLElement, MetricTileProps>(function MetricTile(
+  {
+    label,
+    value,
+    detail,
+    icon,
+    accent = 'cyan',
+    surface = 'default',
+    frame = 'line',
+    size = 'default',
+    interactive = false,
+    error,
+    className,
+    ...props
+  },
+  ref
+) {
   const hasError = typeof error === 'string' && error.length > 0;
   const displayValue = hasError ? (
     <Tooltip>
@@ -39,7 +42,7 @@ export function MetricTile({
         <span className="mw-ui-metric-tile-error-indicator" aria-label="Error">
           <WarningIcon
             aria-hidden="true"
-            className="size-4 text-destructive"
+            className="mw-ui-metric-tile-error-icon"
             title={error}
           />
         </span>
@@ -52,6 +55,7 @@ export function MetricTile({
 
   return (
     <article
+      ref={ref}
       className={['mw-ui-metric-tile', className].filter(Boolean).join(' ')}
       data-accent={accent}
       data-frame={frame}
@@ -72,4 +76,6 @@ export function MetricTile({
       {detail ? <p className="mw-ui-metric-tile-detail">{detail}</p> : null}
     </article>
   );
-}
+});
+
+MetricTile.displayName = 'MetricTile';

@@ -1054,7 +1054,7 @@ function CatalogContent() {
                 density="compact"
                 headingLevel={3}
                 className="mw-ui-interactive-surface"
-                actions={<Doodle kind="crown" className="text-[var(--mw-yellow)]" />}
+                actions={<Doodle kind="crown" className="catalog-accent-yellow" />}
               >
                 <PageHeader
                   title="ZINE"
@@ -2417,7 +2417,7 @@ function CatalogContent() {
             ))}
             <footer className="catalog-footer">
               <span>MoonWitness UI · built from public package exports</span>
-              <a href="https://github.com/bjo163/moonwitness-xi/tree/dev/packages/ui">
+              <a href="https://github.com/MoonWitness/moonwitness-design/tree/main/packages/ui">
                 Browse package source
               </a>
             </footer>

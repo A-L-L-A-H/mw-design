@@ -1,9 +1,12 @@
-import { useMemo, useState, type ComponentProps } from 'react';
+'use client';
+
+import { forwardRef, useMemo, useState, type ComponentProps } from 'react';
 import { Badge } from './badge.js';
 import { Button } from './button.js';
 import { Input } from './input.js';
 import { Panel } from './panel.js';
 import { SelectField } from './select-field.js';
+import { cn } from '../lib/cn.js';
 import {
   CheckCircleIcon,
   CodeIcon,
@@ -72,12 +75,12 @@ function getLevelBadgeVariant(level: LogLevel): 'destructive' | 'magenta' | 'cya
 
 function LevelIcon({ level }: { readonly level: LogLevel }) {
   if (level === 'error') {
-    return <ErrorIcon className="size-3.5 shrink-0" aria-hidden="true" />;
+    return <ErrorIcon className="mw-ui-log-console-icon" aria-hidden="true" />;
   }
   if (level === 'warn') {
-    return <WarningIcon className="size-3.5 shrink-0" aria-hidden="true" />;
+    return <WarningIcon className="mw-ui-log-console-icon" aria-hidden="true" />;
   }
-  return <InfoIcon className="size-3.5 shrink-0" aria-hidden="true" />;
+  return <InfoIcon className="mw-ui-log-console-icon" aria-hidden="true" />;
 }
 
 function formatTimeShort(timestamp: string): string {
@@ -86,23 +89,26 @@ function formatTimeShort(timestamp: string): string {
   return new Date(parsed).toISOString().slice(11, 23);
 }
 
-export function LogConsole({
-  entries,
-  title = 'Desktop Log Console',
-  description = 'Live local diagnostics across Rust, Sidecar, Webview, MCP, and Mesh.',
-  defaultLevel = 'all',
-  defaultSource = 'all',
-  defaultSearch = '',
-  defaultDisplayMode = 'compact',
-  loading = false,
-  copyStatus = 'idle',
-  emptyMessage = 'No log entries match the active filters.',
-  onRefresh,
-  onClear,
-  onCopyForAi,
-  className,
-  ...props
-}: LogConsoleProps) {
+export const LogConsole = forwardRef<HTMLDivElement, LogConsoleProps>(function LogConsole(
+  {
+    entries,
+    title = 'Desktop Log Console',
+    description = 'Live local diagnostics across Rust, Sidecar, Webview, MCP, and Mesh.',
+    defaultLevel = 'all',
+    defaultSource = 'all',
+    defaultSearch = '',
+    defaultDisplayMode = 'compact',
+    loading = false,
+    copyStatus = 'idle',
+    emptyMessage = 'No log entries match the active filters.',
+    onRefresh,
+    onClear,
+    onCopyForAi,
+    className,
+    ...props
+  },
+  ref
+) {
   const [levelFilter, setLevelFilter] = useState<LogLevelFilter>(defaultLevel);
   const [sourceFilter, setSourceFilter] = useState<LogSourceFilter>(defaultSource);
   const [searchQuery, setSearchQuery] = useState<string>(defaultSearch);
@@ -131,18 +137,20 @@ export function LogConsole({
     [entries]
   );
 
-  const rootClasses = ['mw-ui-log-console flex flex-col gap-3', className]
-    .filter(Boolean)
-    .join(' ');
-
   return (
-    <div data-slot="log-console" data-display-mode={displayMode} className={rootClasses} {...props}>
+    <div
+      ref={ref}
+      data-slot="log-console"
+      data-display-mode={displayMode}
+      className={cn('mw-ui-log-console', className)}
+      {...props}
+    >
       <Panel
         title={title}
         description={description}
         density="compact"
         actions={
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="mw-ui-log-console-actions">
             <Badge variant={errorCount > 0 ? 'destructive' : 'default'}>{errorCount} err</Badge>
             <Badge variant={warnCount > 0 ? 'magenta' : 'default'}>{warnCount} warn</Badge>
             <Button
@@ -154,7 +162,7 @@ export function LogConsole({
               }
               aria-label={`Switch to ${displayMode === 'compact' ? 'terminal' : 'compact'} view`}
             >
-              <CodeIcon className="size-3.5" aria-hidden="true" />
+              <CodeIcon className="mw-ui-log-console-icon" aria-hidden="true" />
               <span>{displayMode === 'compact' ? 'Terminal' : 'Compact'}</span>
             </Button>
             {onRefresh ? (
@@ -166,7 +174,7 @@ export function LogConsole({
                 disabled={loading}
                 aria-label="Refresh logs"
               >
-                <RefreshIcon className="size-3.5" aria-hidden="true" />
+                <RefreshIcon className="mw-ui-log-console-icon" aria-hidden="true" />
                 <span>Refresh</span>
               </Button>
             ) : null}
@@ -178,7 +186,7 @@ export function LogConsole({
                 onClick={onClear}
                 aria-label="Clear logs"
               >
-                <DeleteIcon className="size-3.5" aria-hidden="true" />
+                <DeleteIcon className="mw-ui-log-console-icon" aria-hidden="true" />
                 <span>Clear</span>
               </Button>
             ) : null}
@@ -191,9 +199,9 @@ export function LogConsole({
                 data-action="copy-for-ai"
               >
                 {copyStatus === 'copied' ? (
-                  <CheckCircleIcon className="size-3.5" aria-hidden="true" />
+                  <CheckCircleIcon className="mw-ui-log-console-icon" aria-hidden="true" />
                 ) : (
-                  <SparkleIcon className="size-3.5" aria-hidden="true" />
+                  <SparkleIcon className="mw-ui-log-console-icon" aria-hidden="true" />
                 )}
                 <span>
                   {copyStatus === 'copied'
@@ -207,23 +215,20 @@ export function LogConsole({
           </div>
         }
       >
-        <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-12">
-            <div className="relative sm:col-span-6">
-              <SearchIcon
-                className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-ink-faint"
-                aria-hidden="true"
-              />
+        <div className="mw-ui-log-console-body">
+          <div className="mw-ui-log-console-filters">
+            <div className="mw-ui-log-console-search">
+              <SearchIcon className="mw-ui-log-console-search-icon" aria-hidden="true" />
               <Input
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Filter logs by message, detail, or source..."
                 aria-label="Search logs"
-                className="pl-8"
+                className="mw-ui-log-console-search-input"
               />
             </div>
-            <div className="sm:col-span-3">
+            <div className="mw-ui-log-console-filter-cell">
               <SelectField
                 aria-label="Filter by log level"
                 value={levelFilter}
@@ -236,7 +241,7 @@ export function LogConsole({
                 ))}
               </SelectField>
             </div>
-            <div className="sm:col-span-3">
+            <div className="mw-ui-log-console-filter-cell">
               <SelectField
                 aria-label="Filter by log source"
                 value={sourceFilter}
@@ -261,17 +266,14 @@ export function LogConsole({
           </div>
           <div
             data-slot="log-console-entries"
+            data-mode={displayMode}
             role="log"
             aria-live="off"
-            className={
-              displayMode === 'terminal'
-                ? 'max-h-[26rem] overflow-y-auto border-2 border-ink bg-night p-3 font-mono text-xs text-paper'
-                : 'max-h-[26rem] divide-y divide-ink/15 overflow-y-auto border-2 border-ink bg-paper text-ink'
-            }
+            className="mw-ui-log-console-entries"
           >
             {filteredEntries.length === 0 ? (
-              <div className="flex items-center gap-2 p-4 text-xs opacity-75">
-                <DocumentIcon className="size-4 shrink-0" aria-hidden="true" />
+              <div className="mw-ui-log-console-empty">
+                <DocumentIcon className="mw-ui-log-console-empty-icon" aria-hidden="true" />
                 <span>{emptyMessage}</span>
               </div>
             ) : (
@@ -282,14 +284,16 @@ export function LogConsole({
                     data-log-entry-id={entry.id}
                     data-log-level={entry.level}
                     data-log-source={entry.source}
-                    className="whitespace-pre-wrap break-words py-0.5 leading-relaxed"
+                    className="mw-ui-log-console-terminal-row"
                   >
-                    <span className="opacity-60">[{formatTimeShort(entry.timestamp)}]</span>{' '}
-                    <span className="uppercase font-bold">[{entry.level}]</span>{' '}
-                    <span className="opacity-80">[{entry.source}]</span>{' '}
+                    <span className="mw-ui-log-console-terminal-time">
+                      [{formatTimeShort(entry.timestamp)}]
+                    </span>{' '}
+                    <span className="mw-ui-log-console-terminal-level">[{entry.level}]</span>{' '}
+                    <span className="mw-ui-log-console-terminal-source">[{entry.source}]</span>{' '}
                     <span>{entry.message}</span>
                     {entry.detail ? (
-                      <div className="pl-4 text-[11px] opacity-75">{entry.detail}</div>
+                      <div className="mw-ui-log-console-terminal-detail">{entry.detail}</div>
                     ) : null}
                   </div>
                 ) : (
@@ -298,23 +302,21 @@ export function LogConsole({
                     data-log-entry-id={entry.id}
                     data-log-level={entry.level}
                     data-log-source={entry.source}
-                    className="flex flex-col gap-1 px-3 py-2 text-xs"
+                    className="mw-ui-log-console-compact-row"
                   >
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="mw-ui-log-console-compact-meta">
                       <Badge variant={getLevelBadgeVariant(entry.level)}>
                         <LevelIcon level={entry.level} />
-                        <span className="ml-1 uppercase">{entry.level}</span>
+                        <span className="mw-ui-log-console-level-text">{entry.level}</span>
                       </Badge>
                       <Badge variant="default">{entry.source}</Badge>
-                      <span className="font-mono text-[11px] text-ink-faint">
+                      <span className="mw-ui-log-console-timestamp">
                         {formatTimeShort(entry.timestamp)}
                       </span>
                     </div>
-                    <p className="break-words font-medium text-ink">{entry.message}</p>
+                    <p className="mw-ui-log-console-message">{entry.message}</p>
                     {entry.detail ? (
-                      <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded bg-ink/5 p-2 font-mono text-[11px] text-ink-soft">
-                        {entry.detail}
-                      </pre>
+                      <pre className="mw-ui-log-console-detail">{entry.detail}</pre>
                     ) : null}
                   </div>
                 )
@@ -325,4 +327,6 @@ export function LogConsole({
       </Panel>
     </div>
   );
-}
+});
+
+LogConsole.displayName = 'LogConsole';

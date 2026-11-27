@@ -4,6 +4,26 @@
   "description": "Framework-independent MoonWitness brand and visual assets",
   "type": "module",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MoonWitness/moonwitness-design.git",
+    "directory": "packages/assets"
+  },
+  "homepage": "https://github.com/MoonWitness/moonwitness-design#readme",
+  "bugs": {
+    "url": "https://github.com/MoonWitness/moonwitness-design/issues"
+  },
+  "keywords": [
+    "moonwitness",
+    "design-system",
+    "assets",
+    "icons",
+    "fonts",
+    "brand"
+  ],
   "engines": {
     "node": ">=22"
   },

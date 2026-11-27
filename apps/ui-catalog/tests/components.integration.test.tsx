@@ -241,7 +241,7 @@ describe('CorePrimitivesShowcase integration', () => {
     await user.click(secondTrigger);
     expect(secondTrigger).toHaveAttribute('aria-expanded', 'true');
     expect(
-      screen.getByText(/ship complete CSS inside @moonwitness\/ui\/styles\/components\.css/i)
+      screen.getByText(/ships complete CSS inside @moonwitness\/ui\/components\.css/i)
     ).toBeVisible();
 
     // RadioGroup selection
@@ -494,4 +494,50 @@ describe('viewTracker localStorage utility', () => {
     expect(readSectionViews()).toEqual({ forms: 3 });
   });
 });
+
+describe('Expanded Playground presets, shareable link, and ComponentApiTable', () => {
+  it('supports Card, Switch, Checkbox, and Spinner presets and copies shareable URLs', async () => {
+    const user = userEvent.setup();
+    const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
+    render(<ComponentPlayground />);
+
+    await user.click(screen.getByRole('button', { name: /^Card$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<Card');
+
+    await user.click(screen.getByRole('button', { name: /^Switch$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<Switch');
+
+    await user.click(screen.getByRole('button', { name: /^Checkbox$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<Checkbox');
+
+    await user.click(screen.getByRole('button', { name: /^Spinner$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<Spinner');
+
+    await user.click(screen.getByRole('button', { name: /^Copy share link$/ }));
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText.mock.calls[0]?.[0]).toContain('pg=spinner');
+    expect(screen.getByRole('button', { name: /^Link copied$/ })).toBeInTheDocument();
+  });
+
+  it('filters ComponentApiTable by prop/token and copies the selected import snippet', async () => {
+    const user = userEvent.setup();
+    const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
+    render(<CorePrimitivesShowcase Example={TestExample} />);
+
+    const apiRef = screen.getByTestId('component-api-reference');
+    const search = within(apiRef).getByRole('searchbox', {
+      name: 'Filter component API reference',
+    });
+    await user.type(search, 'sanitizeUrl');
+
+    expect(
+      within(apiRef).getByRole('heading', { name: 'Breadcrumbs & UpdateBanner' })
+    ).toBeInTheDocument();
+    await user.click(within(apiRef).getByRole('button', { name: 'Copy API import' }));
+    expect(writeText).toHaveBeenCalledWith(
+      "import { Breadcrumbs, UpdateBanner, sanitizeUrl } from '@moonwitness/ui';"
+    );
+  });
+});
+
 

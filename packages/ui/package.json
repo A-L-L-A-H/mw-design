@@ -10,6 +10,25 @@
   },
   "type": "module",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MoonWitness/moonwitness-design.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/MoonWitness/moonwitness-design#readme",
+  "bugs": {
+    "url": "https://github.com/MoonWitness/moonwitness-design/issues"
+  },
+  "keywords": [
+    "moonwitness",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "tokens",
+    "accessible",
+    "radix-ui"
+  ],
   "sideEffects": [
     "**/*.css"
   ],
@@ -17,6 +36,7 @@
     "dist",
     "src/styles",
     "README.md",
+    "CHANGELOG.md",
     "TOKENS.md"
   ],
   "exports": {
@@ -301,6 +321,10 @@
     "./lib/asset-registry": {
       "types": "./dist/lib/asset-registry.d.ts",
       "import": "./dist/lib/asset-registry.js"
+    },
+    "./lib/sanitize-url": {
+      "types": "./dist/lib/sanitize-url.d.ts",
+      "import": "./dist/lib/sanitize-url.js"
     },
     "./token-exporter": {
       "types": "./dist/token-exporter.d.ts",

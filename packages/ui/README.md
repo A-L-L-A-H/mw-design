@@ -1,6 +1,33 @@
 # MoonWitness UI Bible
 
-This is the single design and implementation rulebook for `@moonwitness/ui`. `TOKENS.md` records the token contract and contrast requirements. `docs/tasks/sources/todo-ui.md` tracks implementation work; it is not a second source of design rules. Product copy and feature truth stay in the app.
+This is the single design and implementation rulebook for `@moonwitness/ui`. `TOKENS.md` records the token contract and contrast requirements, and `CHANGELOG.md` tracks release changes. Product copy and feature truth stay in the app.
+
+## Quickstart (Zero-Tailwind & SSR)
+
+`@moonwitness/ui` ships standalone scoped CSS (`@layer components` under `.mw-ui-*`) — **no Tailwind CSS configuration or runtime is required**.
+
+```tsx
+import '@moonwitness/ui/styles/tokens.css';
+import '@moonwitness/ui/components.css';
+import { Button, Card, CardContent, ThemeProvider } from '@moonwitness/ui';
+
+export function App() {
+  return (
+    <ThemeProvider defaultMode="dark" defaultSkin="signal-riot" defaultDensity="comfortable">
+      <Card variant="elevated">
+        <CardContent>
+          <Button variant="magenta">Launch dispatch</Button>
+        </CardContent>
+      </Card>
+    </ThemeProvider>
+  );
+}
+```
+
+- **Prevent SSR theme flash**: embed `createSkinInitScript()` (matching `DEFAULT_THEME_STORAGE_KEY = 'mw-ui-theme'`) in your HTML `<head>` so `light`, `dark`, and `high-contrast` modes, `data-skin`, and `data-density` hydrate before first paint.
+- **Root barrel vs optional subpaths**: core primitives, overlays (`Dialog`, `Sheet`, `Popover`, `Tooltip`, `DropdownMenu`, `Select`, `Tabs`), forms, tables, and `sanitizeUrl` are exported from `@moonwitness/ui`. Optional peer-dependency components stay scoped to their subpaths (`@moonwitness/ui/components/command` for `cmdk` and `@moonwitness/ui/components/toast` for `sonner`).
+- **React Server Components**: every interactive and Radix-backed component includes a top-level `'use client'` directive.
+- **URL safety**: `Breadcrumbs` and `UpdateBanner` automatically validate dynamic links via `sanitizeUrl()`.
 
 ## Art direction from the references
 
@@ -69,13 +96,13 @@ The package supports React 18 and 19. `react`, `react-dom`, and `radix-ui` are r
 
 Use `Table`'s optional `scrollLabel` when a table can overflow horizontally. It makes the overflow wrapper a named, keyboard-focusable region while leaving the nested native table semantics intact. When the region itself is focused, Arrow Left/Right pans and Home/End moves to either edge; controls inside the table retain their normal key behavior. The whole page must not acquire horizontal overflow.
 
-Consumers that compile Tailwind utilities must include both the UI package source and built `dist` files in Tailwind's source scan. Otherwise utility-based shared primitives such as Sheet and Dialog can render in the DOM without their required position, overlay, or responsive styles. The Board and UI Catalog stylesheets show the required source paths.
+All shared primitives — including `Dialog`, `Sheet`, `Popover`, `Tooltip`, `Select`, `DropdownMenu`, `Command`, `Switch`, `Checkbox`, `ModePicker`, `LogConsole`, `MetricTile`, and `UpdateBanner` — ship complete standalone styles inside `@moonwitness/ui/components.css` scoped under `@layer components`. Consumers do not need Tailwind CSS to render any component; Tailwind v4 consumers can import `@moonwitness/ui/styles/tokens.css` and `@moonwitness/ui/components.css` alongside Tailwind without conflicts.
 
 When adding a component: first record its behavior and accessibility contract; build it from existing tokens and helpers; expose a narrow public subpath; add a catalog specimen and relevant package checks; then use it from the product surface. Do not add a duplicate “manga” component when an existing primitive can accept a visual treatment.
 
 ## Accessibility, responsive behavior, and states
 
-Dialog centering must be defined in one place. `DialogContent` already applies Tailwind's individual `translate` utilities; shared CSS must not apply a second `transform: translate(...)`, which compounds the offset and can move mobile dialogs outside the viewport. Verify dialog bounds at narrow widths and preserve visible truncation for long metadata inside command items.
+Dialog centering is defined once inside `.mw-ui-dialog-content` in `@moonwitness/ui/components.css` (`position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%)`). Avoid stacking a second centering transform on top of `DialogContent` so narrow viewports remain centered and bounded. Verify dialog bounds at narrow widths and preserve visible truncation for long metadata inside command items.
 
 - Body text, data, and control labels stay high contrast. Normal text pairs meet WCAG AA (4.5:1); focus and non-text boundaries target at least 3:1 against adjacent surfaces. Saturated pink, cyan, and yellow are accents; use their paired dark foreground for text.
 - `SectionRibbon` declares `surface="paper|ink"`; its accent number chooses a theme- and surface-readable color rather than relying on the bright accent over every background.
@@ -110,8 +137,8 @@ Use real product copy and data on production pages. Dashboard percentage trends 
 
 ## Checks
 
-- `pnpm board:ui:check` enforces shared native controls and public package paths across Home and Board. It catches structural rules, not subjective visual quality.
-- `pnpm test:ui`, `pnpm test:assets`, and the existing UI Catalog screenshot tests check reusable behavior and generated sources.
-- Visual acceptance uses reviewed screenshots and responsive specimens. The same deterministically rendered catalog examples are the visual regression surface.
+- `npm run lint` verifies `'use client'` directives, zero Tailwind leakage in `packages/ui/src/components`, URL sanitization on dynamic links, token hygiene, and `package.json` export parity.
+- `npm run typecheck`, `npm run test`, and `npm run test:e2e` validate TypeScript types, package unit/accessibility contracts, and Playwright browser integration tests.
+- Visual acceptance uses reviewed screenshots and responsive specimens in `apps/ui-catalog`.
 
-See [`TOKENS.md`](./TOKENS.md) for semantic token values, theme behavior, typography, and contrast targets. See repository ["TOKENS.md`](./TOKENS.md) untuk nilai token semantik, perilaku tema, tipografi, dan target kontras. Evidence checklist dan implementasi dilihat dari arsip `docs/archive/todos/todo-ui.md` for the phased execution checklist and its current evidence.
+See [`TOKENS.md`](./TOKENS.md) for semantic token values, theme behavior, typography, and contrast targets, and [`CHANGELOG.md`](./CHANGELOG.md) for release notes.

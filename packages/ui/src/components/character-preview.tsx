@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from './button.js';
 import { StatusBar } from './status-bar.js';

@@ -287,6 +287,26 @@ test.describe('UI catalog key component integration', () => {
       .poll(async () => (await readCardMetrics()).stagePaddingTop)
       .toBe(comfortableMetrics.stagePaddingTop);
   });
+
+  test('hydrates Playground from shareable URL params and filters Component API Reference', async ({
+    page,
+  }) => {
+    await page.goto('./?pg=card&bs=heavy&sd=bold#playground');
+
+    const playground = page.getByTestId('component-playground');
+    const preview = playground.getByTestId('playground-preview');
+    await expect(preview).toHaveAttribute('data-border-style', 'heavy');
+    await expect(preview).toHaveAttribute('data-shadow-density', 'bold');
+    await expect(playground.getByTestId('playground-jsx-output')).toContainText('<Card');
+
+    const apiRef = page.getByTestId('component-api-reference');
+    await apiRef.scrollIntoViewIfNeeded();
+    await apiRef
+      .getByRole('searchbox', { name: 'Filter component API reference' })
+      .fill('ThemeProvider');
+    await expect(apiRef).toContainText('createSkinInitScript');
+  });
 });
+
 
 

@@ -4,27 +4,11 @@
 @import '@moonwitness/ui/components.css';
 @import '@moonwitness/assets/fonts.css';
 
-/* Match the packed-package Tailwind contract: utility classes live in both source and dist. */
+/* Keep Tailwind source markers aligned with package contract while all UI primitives ship pure .mw-ui-* CSS. */
 @source '../../../packages/ui/src';
 @source '../../../packages/ui/dist';
-/* Only the overlay/control components used by this catalog need their utility variants emitted;
-   scanning the whole package duplicates unused rules into the initial stylesheet. */
 @source not '../../../packages/ui/src/**';
 @source not '../../../packages/ui/dist/**';
-@source '../../../packages/ui/src/components/command.tsx';
-@source '../../../packages/ui/src/components/dialog.tsx';
-@source '../../../packages/ui/src/components/dropdown-menu.tsx';
-@source '../../../packages/ui/src/components/filter-facet-bar.tsx';
-@source '../../../packages/ui/src/components/kanban-board.tsx';
-@source '../../../packages/ui/src/components/label.tsx';
-@source '../../../packages/ui/src/components/log-console.tsx';
-@source '../../../packages/ui/src/components/mode-picker.tsx';
-@source '../../../packages/ui/src/components/popover.tsx';
-@source '../../../packages/ui/src/components/select.tsx';
-@source '../../../packages/ui/src/components/sheet.tsx';
-@source '../../../packages/ui/src/components/switch.tsx';
-@source '../../../packages/ui/src/components/tooltip.tsx';
-@source '../../../packages/ui/src/components/update-banner.tsx';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -1678,7 +1662,7 @@ a:focus-visible {
   background: var(--mw-magenta);
   color: var(--mw-on-magenta);
   clip-path: var(--mw-grunge-clip-brush-btn);
-  filter: drop-shadow(2px 2px 0 #000000);
+  filter: drop-shadow(2px 2px 0 var(--mw-ink-black));
 }
 .catalog-board-rail-note {
   margin: auto 0 0;
@@ -2738,6 +2722,129 @@ a:focus-visible {
 .catalog-token-export-status {
   color: var(--mw-muted-foreground);
   font: 600 0.72rem/1 var(--mw-font-mono);
+}
+
+.catalog-accent-yellow {
+  color: var(--mw-yellow);
+}
+
+.catalog-api-ref {
+  display: grid;
+  gap: 0.9rem;
+  width: 100%;
+}
+.catalog-api-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.catalog-api-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.catalog-api-search {
+  min-width: min(100%, 16rem);
+  flex: 1 1 14rem;
+  max-width: 22rem;
+}
+.catalog-api-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: var(--mw-frame-width, 2px) solid var(--mw-border);
+  background-color: var(--mw-card);
+  color: var(--mw-card-foreground);
+  box-shadow: var(--mw-shadow-ink);
+}
+.catalog-api-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.catalog-api-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.catalog-api-name {
+  margin: 0;
+  font: 700 1rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.catalog-api-summary {
+  margin: 0;
+  color: var(--mw-muted-foreground);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+.catalog-api-import {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  overflow-x: auto;
+  border: 1px solid var(--mw-border-subtle);
+  background-color: var(--mw-background);
+  color: var(--mw-foreground);
+  font: 500 0.76rem/1.45 var(--mw-font-mono);
+}
+.catalog-api-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.catalog-api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+.catalog-api-table th,
+.catalog-api-table td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid var(--mw-border-subtle);
+  vertical-align: top;
+}
+.catalog-api-table th {
+  font: 700 0.7rem/1.2 var(--mw-font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mw-muted-foreground);
+  border-bottom: 2px solid var(--mw-border);
+}
+.catalog-api-table td code {
+  font: 500 0.74rem/1.35 var(--mw-font-mono);
+  color: var(--mw-foreground);
+}
+.catalog-api-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.catalog-api-tokens-label {
+  font: 700 0.7rem/1 var(--mw-font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mw-muted-foreground);
+}
+.catalog-api-token-chip {
+  padding: 0.18rem 0.45rem;
+  border: 1px solid var(--mw-border-subtle);
+  background-color: var(--mw-surface-elevated);
+  color: var(--mw-foreground);
+  font: 500 0.7rem/1.2 var(--mw-font-mono);
+}
+.catalog-api-empty {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--mw-border-subtle);
+  color: var(--mw-muted-foreground);
+  font-size: 0.84rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

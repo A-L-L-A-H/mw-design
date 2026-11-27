@@ -1,3 +1,5 @@
+'use client';
+
 import {
   createContext,
   useCallback,
@@ -8,6 +10,8 @@ import {
   type ReactNode,
 } from 'react';
 import type { SkinDensity, SkinId } from './types.js';
+
+export const DEFAULT_THEME_STORAGE_KEY = 'mw-ui-theme';
 
 export type ThemeMode = 'light' | 'dark' | 'high-contrast';
 

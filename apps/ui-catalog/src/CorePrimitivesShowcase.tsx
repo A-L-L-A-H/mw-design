@@ -24,6 +24,7 @@ import {
   Separator,
   Spinner,
 } from '@moonwitness/ui';
+import { ComponentApiTable } from './ComponentApiTable.js';
 
 type ExampleWrapper = ComponentType<{
   title: string;
@@ -189,7 +190,7 @@ export function CorePrimitivesShowcase({ Example }: { Example: ExampleWrapper })
             <AccordionItem value="item-2">
               <AccordionTrigger>Works without Tailwind CSS?</AccordionTrigger>
               <AccordionContent>
-                Core components, Switch, Checkbox, and overlays ship complete CSS inside @moonwitness/ui/styles/components.css.
+                Every component, Switch, Checkbox, and overlay ships complete CSS inside @moonwitness/ui/components.css — zero Tailwind runtime required.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
@@ -244,6 +245,13 @@ export function CorePrimitivesShowcase({ Example }: { Example: ExampleWrapper })
             </div>
           </div>
         </div>
+      </Example>
+
+      <Example
+        title="Component API & props reference"
+        description="Searchable prop signatures, defaults, copyable imports, and CSS design tokens for core @moonwitness/ui primitives."
+      >
+        <ComponentApiTable />
       </Example>
     </>
   );

@@ -1,6 +1,10 @@
-import type { ComponentProps } from 'react';
+'use client';
+
+import { forwardRef, type ComponentProps } from 'react';
 import { Badge } from './badge.js';
 import { Button } from './button.js';
+import { cn } from '../lib/cn.js';
+import { sanitizeUrl } from '../lib/sanitize-url.js';
 import {
   CheckCircleIcon,
   CloseIcon,
@@ -11,7 +15,12 @@ import {
 } from '../icons/index.js';
 
 export type UpdateBannerStatus =
-  'idle' | 'checking' | 'available' | 'downloading' | 'ready' | 'error';
+  | 'idle'
+  | 'checking'
+  | 'available'
+  | 'downloading'
+  | 'ready'
+  | 'error';
 
 export type UpdateBannerProps = Omit<ComponentProps<'div'>, 'children'> & {
   currentVersion: string;
@@ -51,68 +60,64 @@ function getStatusBadge(status: UpdateBannerStatus): {
   }
 }
 
-export function UpdateBanner({
-  currentVersion,
-  availableVersion,
-  status,
-  progressPercent,
-  releaseUrl,
-  errorMessage,
-  onCheck,
-  onInstall,
-  onDismiss,
-  className,
-  ...props
-}: UpdateBannerProps) {
+export const UpdateBanner = forwardRef<HTMLDivElement, UpdateBannerProps>(function UpdateBanner(
+  {
+    currentVersion,
+    availableVersion,
+    status,
+    progressPercent,
+    releaseUrl,
+    errorMessage,
+    onCheck,
+    onInstall,
+    onDismiss,
+    className,
+    ...props
+  },
+  ref
+) {
   const badge = getStatusBadge(status);
   const clampedProgress = clampPercent(progressPercent);
   const isLiveAlert = status === 'error';
-  const classes = [
-    'mw-ui-update-banner flex flex-wrap items-center justify-between gap-3 border-b-2 border-ink bg-paper-raised px-4 py-2.5 text-sm text-ink',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const safeReleaseUrl = sanitizeUrl(releaseUrl);
 
   return (
     <div
+      ref={ref}
       data-slot="update-banner"
       data-status={status}
       role={isLiveAlert ? 'alert' : 'status'}
       aria-live={isLiveAlert ? 'assertive' : 'polite'}
-      className={classes}
+      className={cn('mw-ui-update-banner', className)}
       {...props}
     >
-      <div className="flex min-w-0 flex-wrap items-center gap-2.5">
+      <div className="mw-ui-update-banner-meta">
         <Badge variant={badge.variant}>{badge.label}</Badge>
 
         {status === 'checking' && (
-          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-soft">
-            <RefreshIcon
-              className="size-3.5 animate-spin motion-reduce:animate-none"
-              aria-hidden="true"
-            />
+          <span className="mw-ui-update-banner-text" data-tone="muted">
+            <RefreshIcon className="mw-ui-update-banner-icon mw-ui-update-banner-spin" aria-hidden="true" />
             Checking for updates (v{currentVersion})…
           </span>
         )}
 
         {status === 'idle' && (
-          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-soft">
-            <CheckCircleIcon className="size-3.5" aria-hidden="true" />
+          <span className="mw-ui-update-banner-text" data-tone="muted">
+            <CheckCircleIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
             MoonWitness Desktop v{currentVersion}
           </span>
         )}
 
         {status === 'available' && (
-          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink">
-            <DownloadIcon className="size-3.5" aria-hidden="true" />v{availableVersion ?? 'new'}{' '}
+          <span className="mw-ui-update-banner-text">
+            <DownloadIcon className="mw-ui-update-banner-icon" aria-hidden="true" />v{availableVersion ?? 'new'}{' '}
             available (current v{currentVersion})
           </span>
         )}
 
         {status === 'downloading' && (
-          <span className="inline-flex items-center gap-2 font-mono text-xs text-ink">
-            <DownloadIcon className="size-3.5" aria-hidden="true" />
+          <span className="mw-ui-update-banner-text">
+            <DownloadIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
             <span>
               Downloading v{availableVersion ?? 'update'}
               {clampedProgress !== undefined ? ` (${clampedProgress}%)` : '…'}
@@ -121,25 +126,25 @@ export function UpdateBanner({
         )}
 
         {status === 'ready' && (
-          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink">
-            <CheckCircleIcon className="size-3.5" aria-hidden="true" />v
+          <span className="mw-ui-update-banner-text">
+            <CheckCircleIcon className="mw-ui-update-banner-icon" aria-hidden="true" />v
             {availableVersion ?? 'update'} ready — restart to apply
           </span>
         )}
 
         {status === 'error' && (
-          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink">
-            <WarningIcon className="size-3.5" aria-hidden="true" />
+          <span className="mw-ui-update-banner-text">
+            <WarningIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
             {errorMessage ?? `Unable to check for updates (v${currentVersion})`}
           </span>
         )}
       </div>
 
-      <div className="flex shrink-0 flex-wrap items-center gap-2">
-        {releaseUrl && (status === 'available' || status === 'ready') && (
+      <div className="mw-ui-update-banner-actions">
+        {safeReleaseUrl && (status === 'available' || status === 'ready') && (
           <Button asChild variant="outline" size="xs">
-            <a href={releaseUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLinkIcon className="size-3.5" aria-hidden="true" />
+            <a href={safeReleaseUrl} target="_blank" rel="noopener noreferrer">
+              <ExternalLinkIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
               Release Notes
             </a>
           </Button>
@@ -147,14 +152,14 @@ export function UpdateBanner({
 
         {onCheck && (status === 'idle' || status === 'error') && (
           <Button type="button" variant="outline" size="xs" onClick={onCheck}>
-            <RefreshIcon className="size-3.5" aria-hidden="true" />
+            <RefreshIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
             Check for Updates
           </Button>
         )}
 
         {onInstall && (status === 'available' || status === 'ready') && (
           <Button type="button" variant="default" size="xs" onClick={onInstall}>
-            <DownloadIcon className="size-3.5" aria-hidden="true" />
+            <DownloadIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
             {status === 'ready' ? 'Restart & Install' : 'Download & Install'}
           </Button>
         )}
@@ -167,10 +172,12 @@ export function UpdateBanner({
             onClick={onDismiss}
             aria-label="Dismiss update banner"
           >
-            <CloseIcon className="size-3.5" aria-hidden="true" />
+            <CloseIcon className="mw-ui-update-banner-icon" aria-hidden="true" />
           </Button>
         )}
       </div>
     </div>
   );
-}
+});
+
+UpdateBanner.displayName = 'UpdateBanner';

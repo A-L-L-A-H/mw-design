@@ -1,6 +1,9 @@
-import type { ComponentProps, MouseEvent, ReactNode } from 'react';
+'use client';
+
+import { forwardRef, type ComponentProps, type MouseEvent, type ReactNode } from 'react';
 import { ChevronRightIcon } from '../icons/chevron-right.js';
 import { cn } from '../lib/cn.js';
+import { sanitizeUrl } from '../lib/sanitize-url.js';
 
 export type BreadcrumbItem = {
   readonly label: ReactNode;
@@ -15,16 +18,20 @@ export type BreadcrumbsProps = Omit<ComponentProps<'nav'>, 'children'> & {
 };
 
 /** Router-agnostic breadcrumb navigation landmark with customizable link rendering. */
-export function Breadcrumbs({
-  items,
-  renderLink,
-  onNavigate,
-  className,
-  'aria-label': ariaLabel = 'Breadcrumb',
-  ...props
-}: BreadcrumbsProps) {
+export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs(
+  {
+    items,
+    renderLink,
+    onNavigate,
+    className,
+    'aria-label': ariaLabel = 'Breadcrumb',
+    ...props
+  },
+  ref
+) {
   return (
     <nav
+      ref={ref}
       aria-label={ariaLabel}
       data-slot="breadcrumbs"
       className={cn('mw-ui-breadcrumbs', className)}
@@ -32,10 +39,11 @@ export function Breadcrumbs({
     >
       <ol className="mw-ui-breadcrumbs-list">
         {items.map((item, index) => {
-          const isCurrent = Boolean(item.current ?? (!item.href && index === items.length - 1));
+          const safeHref = sanitizeUrl(item.href);
+          const isCurrent = Boolean(item.current ?? (!safeHref && index === items.length - 1));
           const key =
-            typeof item.label === 'string' && item.href
-              ? `${item.href}:${item.label}:${index}`
+            typeof item.label === 'string' && safeHref
+              ? `${safeHref}:${item.label}:${index}`
               : index;
           return (
             <li key={key} className="mw-ui-breadcrumbs-item">
@@ -48,12 +56,12 @@ export function Breadcrumbs({
                 <span className="mw-ui-breadcrumbs-current" aria-current="page">
                   {item.label}
                 </span>
-              ) : item.href ? (
+              ) : safeHref ? (
                 renderLink ? (
-                  renderLink(item, index, 'mw-ui-breadcrumbs-link')
+                  renderLink({ ...item, href: safeHref }, index, 'mw-ui-breadcrumbs-link')
                 ) : (
                   <a
-                    href={item.href}
+                    href={safeHref}
                     className="mw-ui-breadcrumbs-link"
                     onClick={onNavigate ? (event) => onNavigate(item, event) : undefined}
                   >
@@ -69,4 +77,6 @@ export function Breadcrumbs({
       </ol>
     </nav>
   );
-}
+});
+
+Breadcrumbs.displayName = 'Breadcrumbs';
