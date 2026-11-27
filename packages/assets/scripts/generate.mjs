@@ -526,6 +526,198 @@ const icons = [
     paths:
       '<path d="M19 10c0 5-7 12-7 12S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>',
   },
+  {
+    name: 'katana',
+    title: 'Katana blade',
+    paths:
+      '<path d="M20.5 3.5c-4.5 1.8-9.3 6.2-13 11.4l2.2 2.2c5.2-3.7 9.6-8.5 10.8-13.6Z"/><path d="m6.2 13.6 4.2 4.2M7.5 16.5 4 20l1.5 1.5 3.5-3.5"/>',
+  },
+  {
+    name: 'shuriken',
+    title: 'Shuriken star',
+    paths:
+      '<path d="m12 2 2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2Z"/><circle cx="12" cy="12" r="2"/>',
+  },
+  {
+    name: 'shield-crest',
+    title: 'Shield crest',
+    paths:
+      '<path d="M12 2.5 19.5 5.5v6c0 4.6-3.1 8-7.5 10-4.4-2-7.5-5.4-7.5-10v-6L12 2.5Z"/><path d="M12 6.5v11M8.5 10.5h7"/>',
+  },
+  {
+    name: 'heart-hp',
+    title: 'Health heart',
+    paths:
+      '<path d="M12 20.5 4.8 13.8a4.7 4.7 0 0 1 6.7-6.6L12 7.8l.5-.6a4.7 4.7 0 0 1 6.7 6.6L12 20.5Z"/><path d="M8.5 11.5h2l1-2 1.2 4 1-2h1.8"/>',
+  },
+  {
+    name: 'mana-crystal',
+    title: 'Mana crystal',
+    paths:
+      '<polygon points="12 2.5 18.5 9.5 12 21.5 5.5 9.5"/><path d="M5.5 9.5h13M12 2.5l-2.5 7 2.5 12 2.5-12-2.5-7Z"/>',
+  },
+  {
+    name: 'boss-skull',
+    title: 'Boss skull',
+    paths:
+      '<path d="M5 10.5a7 7 0 0 1 14 0c0 2.7-1.4 4.8-3 5.8V19a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 19v-2.7c-1.6-1-3-3.1-3-5.8Z"/><circle cx="9.5" cy="11" r="1.4"/><circle cx="14.5" cy="11" r="1.4"/><path d="M12 14v1.5M10 17.5v3M14 17.5v3"/>',
+  },
+  {
+    name: 'potion-flask',
+    title: 'Potion flask',
+    paths:
+      '<path d="M9.5 3h5M10.5 3v4.5L5.2 16a3.5 3.5 0 0 0 3 5.2h7.6a3.5 3.5 0 0 0 3-5.2L13.5 7.5V3"/><path d="M7.2 14.5h9.6"/><circle cx="10.5" cy="17.5" r="0.9"/><circle cx="14" cy="16.5" r="0.7"/>',
+  },
+  {
+    name: 'loot-chest',
+    title: 'Loot chest',
+    paths:
+      '<rect x="3" y="8" width="18" height="12" rx="1.5"/><path d="M3 11.5h18M5 8V6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5V8"/><rect x="10.2" y="10" width="3.6" height="4" rx="0.6"/>',
+  },
+  {
+    name: 'trophy-crown',
+    title: 'Trophy crown',
+    paths:
+      '<path d="M3.5 18.5h17l1-10.5-5 4-4.5-6.5L7.5 12l-5-4 1 10.5Z"/><path d="M5 21h14"/><circle cx="12" cy="4.5" r="1"/>',
+  },
+  {
+    name: 'quest-scroll',
+    title: 'Quest scroll',
+    paths:
+      '<path d="M6.5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-11"/><path d="M6.5 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2 2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/><path d="M11 9h5.5M11 12.5h5.5M11 16h3.5"/>',
+  },
+  {
+    name: 'element-fire',
+    title: 'Fire element',
+    paths:
+      '<path d="M12.5 2.5c.8 3.2-1.8 4.8-2.2 7.2-.2 1.2.4 2.2 1.5 2.5-.2-1.6.9-2.8 2.2-3.7 2.5 2 4.5 4.4 4.5 7.2a6.5 6.5 0 1 1-13 0c0-3.4 2.4-6.3 5-9 .8-.8 1.5-2.1 2-4.2Z"/>',
+  },
+  {
+    name: 'element-ice',
+    title: 'Ice element',
+    paths:
+      '<path d="M12 2.5v19M3.8 7.2l16.4 9.6M20.2 7.2 3.8 16.8"/><path d="m9.5 5 2.5 2 2.5-2M9.5 19l2.5-2 2.5 2M5 10.2l2.6.8-.6 2.6M19 10.2l-2.6.8.6 2.6"/>',
+  },
+  {
+    name: 'element-volt',
+    title: 'Volt element',
+    paths:
+      '<polygon points="13.5 2.5 5.5 13 11.5 13 10.5 21.5 18.5 11 12.5 11"/><path d="M4 6.5 6.5 8M18 16l2.5 1.5"/>',
+  },
+  {
+    name: 'element-void',
+    title: 'Void element',
+    paths:
+      '<circle cx="12" cy="12" r="4"/><path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9M4.5 7.5a9 9 0 0 1 13-2M19.5 16.5a9 9 0 0 1-13 2"/>',
+  },
+  {
+    name: 'element-wind',
+    title: 'Wind element',
+    paths:
+      '<path d="M3 9h11.5a2.5 2.5 0 1 0-2.5-2.5M3 13h15a2.5 2.5 0 1 1-2.5 2.5M3 17h7.5a2 2 0 1 1-2 2"/>',
+  },
+  {
+    name: 'element-solar',
+    title: 'Solar element',
+    paths:
+      '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3m-15.1-7.1 2.1 2.1m8 8 2.1 2.1m0-12.2-2.1 2.1m-8 8-2.1 2.1"/>',
+  },
+  {
+    name: 'combo-flame',
+    title: 'Combo flame',
+    paths:
+      '<path d="M13 3c2 2.8 5.5 4.8 5.5 9.5A6.5 6.5 0 0 1 12 19a6.5 6.5 0 0 1-6.5-6.5c0-2.5 1.2-4.6 3-6-.2 2 .8 3.2 2.2 3.5C10.5 7 11.4 4.8 13 3Z"/><path d="m9.5 15 2.5-3.5L14.5 15"/>',
+  },
+  {
+    name: 'critical-star',
+    title: 'Critical hit star',
+    paths:
+      '<polygon points="12 2 14.3 8.2 21 6.5 16.4 11.8 21.5 16.5 14.8 15.8 12 22 9.2 15.8 2.5 16.5 7.6 11.8 3 6.5 9.7 8.2"/>',
+  },
+  {
+    name: 'anime-sweatdrop',
+    title: 'Anime sweatdrop',
+    paths:
+      '<path d="M12 3c2.5 4.6 6 8.3 6 12.2a6 6 0 0 1-12 0C6 11.3 9.5 7.6 12 3Z"/><path d="M9.8 14.2c0 1.4.8 2.4 2 2.8"/>',
+  },
+  {
+    name: 'anime-anger',
+    title: 'Anime anger mark',
+    paths:
+      '<path d="M9 4v4a2 2 0 0 1-2 2H3M15 4v4a2 2 0 0 0 2 2h4M9 20v-4a2 2 0 0 0-2-2H3M15 20v-4a2 2 0 0 1 2-2h4"/>',
+  },
+  {
+    name: 'anime-shock',
+    title: 'Anime shock lines',
+    paths:
+      '<path d="m6 3 2.5 7.5L5.5 12 9 21M12 2.5v13m0 4v1.5M18 3l-2.5 7.5 3 1.5L15 21"/>',
+  },
+  {
+    name: 'anime-sparkle',
+    title: 'Anime sparkle',
+    paths:
+      '<path d="m12 2 2 6.5L20.5 10.5 14 12.5 12 19l-2-6.5-6.5-2L10 8.5 12 2Z"/><path d="M18.5 16.5v4M16.5 18.5h4"/>',
+  },
+  {
+    name: 'speech-burst',
+    title: 'Manga shout bubble',
+    paths:
+      '<polygon points="4 6 8 7.5 11.5 3.5 14.5 7 20 5 18.5 10.5 22 13.5 17.5 15.5 18.5 20 13 17.5 8 20.5 8.5 16 3 15 6 11"/>',
+  },
+  {
+    name: 'impact-slash',
+    title: 'Impact slash',
+    paths:
+      '<path d="M4 20 20 4M8.5 19.5 19.5 8.5M4.5 15.5 15.5 4.5"/><path d="M3 10h4M17 14h4"/>',
+  },
+  {
+    name: 'clapperboard',
+    title: 'Animation clapperboard',
+    paths:
+      '<rect x="3" y="9" width="18" height="11.5" rx="1.5"/><path d="M3 9 20.5 4.5 21.5 8 3.5 12.5M8 7.8l2 3.2M13.5 6.3l2 3.2"/>',
+  },
+  {
+    name: 'keyframe-diamond',
+    title: 'Animation keyframe',
+    paths:
+      '<polygon points="12 3 21 12 12 21 3 12"/><polygon points="12 8 16 12 12 16 8 12"/>',
+  },
+  {
+    name: 'gamepad',
+    title: 'Game controller',
+    paths:
+      '<path d="M6.5 7h11a4 4 0 0 1 3.9 4.8l-.9 4.5a2.6 2.6 0 0 1-4.5 1.2L14.2 15.5H9.8L8 17.5a2.6 2.6 0 0 1-4.5-1.2l-.9-4.5A4 4 0 0 1 6.5 7Z"/><path d="M7.5 10.5v3M6 12h3"/><circle cx="15.5" cy="11" r="0.8"/><circle cx="17.5" cy="12.8" r="0.8"/>',
+  },
+  {
+    name: 'dpad',
+    title: 'Directional pad',
+    paths:
+      '<path d="M9.5 3.5h5v6h6v5h-6v6h-5v-6h-6v-5h6v-6Z"/><circle cx="12" cy="12" r="1.2"/>',
+  },
+  {
+    name: 'radar-ping',
+    title: 'Tactical radar',
+    paths:
+      '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12 18.2 5.8"/><circle cx="15.5" cy="14.5" r="1"/>',
+  },
+  {
+    name: 'gacha-ticket',
+    title: 'Summon ticket',
+    paths:
+      '<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7Z"/><path d="M9 5v14M13.5 9.5l1 2 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2-1.5-1.4 2-.3 1-2Z"/>',
+  },
+  {
+    name: 'skill-node',
+    title: 'Skill tree node',
+    paths:
+      '<circle cx="12" cy="5.5" r="2.5"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="18.5" cy="18" r="2.5"/><path d="M10.7 7.7 6.8 15.8M13.3 7.7l3.9 8.1M8 18h8"/>',
+  },
+  {
+    name: 'mecha-helm',
+    title: 'Mecha visor helm',
+    paths:
+      '<path d="M4.5 11.5a7.5 7.5 0 0 1 15 0V17l-4 3.5h-7L4.5 17v-5.5Z"/><path d="M5.5 12h13l-1.5 3.5h-10L5.5 12ZM12 4V2m-5.5 3.5L4.5 3M17.5 5.5 19.5 3"/>',
+  },
 ];
 
 const generated = [];

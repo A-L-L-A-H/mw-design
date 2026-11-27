@@ -2186,6 +2186,38 @@
       "height": 24
     },
     {
+      "path": "icons/anime-anger.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/anime-shock.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/anime-sparkle.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/anime-sweatdrop.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/archive.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2243,6 +2275,14 @@
     },
     {
       "path": "icons/bookmark.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/boss-skull.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2314,6 +2354,14 @@
       "height": 24
     },
     {
+      "path": "icons/clapperboard.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/clock.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2346,6 +2394,14 @@
       "height": 24
     },
     {
+      "path": "icons/combo-flame.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/company.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2355,6 +2411,14 @@
     },
     {
       "path": "icons/credit-card.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/critical-star.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2394,7 +2458,63 @@
       "height": 24
     },
     {
+      "path": "icons/dpad.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/edit.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-fire.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-ice.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-solar.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-void.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-volt.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/element-wind.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2442,6 +2562,22 @@
       "height": 24
     },
     {
+      "path": "icons/gacha-ticket.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/gamepad.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/globe.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2459,6 +2595,14 @@
     },
     {
       "path": "icons/hash.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/heart-hp.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2490,6 +2634,14 @@
       "height": 24
     },
     {
+      "path": "icons/impact-slash.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/inbox.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2514,6 +2666,14 @@
       "height": 24
     },
     {
+      "path": "icons/katana.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/key.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2523,6 +2683,14 @@
     },
     {
       "path": "icons/keyboard.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/keyframe-diamond.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2562,6 +2730,14 @@
       "height": 24
     },
     {
+      "path": "icons/loot-chest.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/mail.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2570,7 +2746,23 @@
       "height": 24
     },
     {
+      "path": "icons/mana-crystal.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/map-pin.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/mecha-helm.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2650,6 +2842,30 @@
       "height": 24
     },
     {
+      "path": "icons/potion-flask.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/quest-scroll.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/radar-ping.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/refresh.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2706,6 +2922,22 @@
       "height": 24
     },
     {
+      "path": "icons/shield-crest.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/shuriken.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/signal-off.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2715,6 +2947,14 @@
     },
     {
       "path": "icons/signal.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/skill-node.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",
@@ -2762,6 +3002,14 @@
       "height": 24
     },
     {
+      "path": "icons/speech-burst.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
       "path": "icons/story.svg",
       "kind": "icon",
       "variant": "currentColor",
@@ -2787,6 +3035,14 @@
     },
     {
       "path": "icons/team.svg",
+      "kind": "icon",
+      "variant": "currentColor",
+      "format": "svg",
+      "width": 24,
+      "height": 24
+    },
+    {
+      "path": "icons/trophy-crown.svg",
       "kind": "icon",
       "variant": "currentColor",
       "format": "svg",

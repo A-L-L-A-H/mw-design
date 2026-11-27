@@ -63,6 +63,12 @@ import { MetricTile } from '@moonwitness/ui/components/metric-tile';
 import { CharacterPreview } from '@moonwitness/ui/components/character-preview';
 import { ExampleCopyButton } from './ExampleCopyButton.js';
 import { ComponentPlayground } from './ComponentPlayground.js';
+import {
+  applyGenreDnaAttribute,
+  type GenreDnaPreset,
+} from '@moonwitness/ui';
+import { AnimatedStudioShowcase } from './AnimatedStudioShowcase.js';
+import { AnimeFxLab } from './AnimeFxLab.js';
 import { CorePrimitivesShowcase } from './CorePrimitivesShowcase.js';
 import { TokenExportPanel } from './TokenExportPanel.js';
 import {
@@ -595,6 +601,23 @@ const SECTION_COMPONENTS: Record<string, readonly string[]> = {
     'SectionRibbon',
     'Live JSX',
   ],
+  'anime-fx-lab': [
+    'FX Lab',
+    'Rumble & Shake',
+    'Camera shake presets',
+    'Screen shake',
+    'Hitstop',
+    'Flash frames',
+    'Impact frame',
+    'Particle burst',
+    'Sparks',
+    'Sakura',
+    'Volt arcs',
+    'Ink splatter',
+    'ScreenFXOverlay',
+    'ImpactFlash',
+    'OnomatopoeiaSFX',
+  ],
   'core-primitives': [
     'Alert',
     'Progress',
@@ -913,7 +936,27 @@ function CatalogContent() {
       description:
         'Modify live component props—variants, sizes, treatments, frames, labels, and states—to inspect rendered output and JSX in real time.',
       loading: 'eager',
-      renderer: () => <ComponentPlayground />,
+      renderer: () => (
+        <div className="catalog-playground-section-stack">
+          <AnimatedStudioShowcase
+            onApplyDnaPreset={(preset: GenreDnaPreset) => {
+              selectSkin(preset.skin);
+              selectThemeMode(preset.mode);
+              selectDensity(preset.density);
+              applyGenreDnaAttribute(preset.dnaAttribute);
+            }}
+          />
+          <ComponentPlayground />
+        </div>
+      ),
+    },
+    'anime-fx-lab': {
+      label: 'FX Lab',
+      title: 'FX Lab',
+      description:
+        'Interactive anime visual effects studio for damped camera shakes, hitstop freeze, 24fps impact flash frames, and radial particle bursts.',
+      loading: 'eager',
+      renderer: () => <AnimeFxLab />,
     },
     'core-primitives': {
       label: 'Core primitives',
@@ -2351,7 +2394,7 @@ function CatalogContent() {
                 </>
               }
               description="A practical catalog of the shared MoonWitness UI package. Explore real components, keyboard behavior, themes, and responsive states."
-              actions={<Badge variant="primary">88 typed icons</Badge>}
+              actions={<Badge variant="primary">120 typed icons · 30 characters</Badge>}
             />
             <Panel
               className="catalog-intro-panel"
@@ -2360,10 +2403,13 @@ function CatalogContent() {
             >
               <div className="catalog-intro-meta">
                 <span>
-                  <strong>88</strong> typed icons
+                  <strong>120</strong> typed icons
                 </span>
                 <span>
-                  <strong>4</strong> new compositions
+                  <strong>30</strong> anime &amp; game characters
+                </span>
+                <span>
+                  <strong>5</strong> genre DNA presets
                 </span>
                 <span>
                   <strong>AA</strong> contrast checked

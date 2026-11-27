@@ -29,6 +29,13 @@ export {
   type ThemeProviderProps,
   type ThemeState,
 } from './provider.js';
+export {
+  GENRE_DNA_PRESETS,
+  getGenreDnaPresetById,
+  applyGenreDnaAttribute,
+  type GenreDnaPreset,
+  type GenreDnaPresetId,
+} from './dna-presets.js';
 
 export const DEFAULT_SKIN_ID: BuiltinSkinId = 'moonwitness-ink';
 
@@ -92,6 +99,70 @@ export const BUILTIN_SKINS: readonly SkinMetadata[] = Object.freeze([
       surface: '#121216',
       foreground: '#f5efdf',
       accent: '#ff2e88',
+    }),
+  }),
+  Object.freeze({
+    id: 'cartoon-pop',
+    label: 'Cartoon Pop',
+    description:
+      'Cel-shaded Saturday-morning cartoon palette with chunky ink outlines, rounded corners, and playful punch.',
+    supportedModes: Object.freeze(['light', 'dark'] as const),
+    supportedDensities: Object.freeze(['comfortable', 'compact'] as const),
+    defaultMode: 'light',
+    defaultDensity: 'comfortable',
+    swatch: Object.freeze({
+      background: '#fff8e7',
+      surface: '#ffffff',
+      foreground: '#14132a',
+      accent: '#ff5c5c',
+    }),
+  }),
+  Object.freeze({
+    id: 'arcade-neon',
+    label: 'Arcade Neon',
+    description:
+      'High-contrast game HUD and cyber-arcade aesthetic with deep obsidian surfaces and electric cyan/magenta accents.',
+    supportedModes: Object.freeze(['light', 'dark'] as const),
+    supportedDensities: Object.freeze(['comfortable', 'compact'] as const),
+    defaultMode: 'dark',
+    defaultDensity: 'compact',
+    swatch: Object.freeze({
+      background: '#080b14',
+      surface: '#111728',
+      foreground: '#eef6ff',
+      accent: '#00e5ff',
+    }),
+  }),
+  Object.freeze({
+    id: 'clean-motion',
+    label: 'Clean Motion',
+    description:
+      'Refined modern web and SaaS product skin with crisp neutral elevation, smooth radii, and tactile micro-motion.',
+    supportedModes: Object.freeze(['light', 'dark'] as const),
+    supportedDensities: Object.freeze(['comfortable', 'compact'] as const),
+    defaultMode: 'light',
+    defaultDensity: 'comfortable',
+    swatch: Object.freeze({
+      background: '#f8fafc',
+      surface: '#ffffff',
+      foreground: '#0f172a',
+      accent: '#2563eb',
+    }),
+  }),
+  Object.freeze({
+    id: 'cozy-rpg',
+    label: 'Cozy RPG',
+    description:
+      'Warm storybook parchment and forest-gold journal aesthetic crafted for RPG menus, quests, and dialogue.',
+    supportedModes: Object.freeze(['light', 'dark'] as const),
+    supportedDensities: Object.freeze(['comfortable', 'compact'] as const),
+    defaultMode: 'light',
+    defaultDensity: 'comfortable',
+    swatch: Object.freeze({
+      background: '#f6eedc',
+      surface: '#fdf9ef',
+      foreground: '#261b12',
+      accent: '#d97706',
     }),
   }),
 ]);

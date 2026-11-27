@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThemeProvider, useTheme } from '@moonwitness/ui/themes';
 import { ComponentPlayground } from '../src/ComponentPlayground.js';
+import { AnimatedStudioShowcase } from '../src/AnimatedStudioShowcase.js';
+import { AnimeFxLab } from '../src/AnimeFxLab.js';
 import { CorePrimitivesShowcase } from '../src/CorePrimitivesShowcase.js';
 import { ExampleCopyButton, buildExampleStyleSnippet } from '../src/ExampleCopyButton.js';
 import {
@@ -17,6 +19,7 @@ import {
   collectActiveDesignTokens,
   formatTokensAsCss,
   formatTokensAsJson,
+  formatTokensAsTailwindTheme,
 } from '../src/tokenExport.js';
 import {
   VIEW_TRACKER_STORAGE_KEY,
@@ -538,6 +541,152 @@ describe('Expanded Playground presets, shareable link, and ComponentApiTable', (
       "import { Breadcrumbs, UpdateBanner, sanitizeUrl } from '@moonwitness/ui';"
     );
   });
+
+  it('switches AnimatedStudioShowcase templates (Web/App/Game/Cartoon), viewport, motion profile, and Curve Lab', async () => {
+    const user = userEvent.setup();
+    render(<AnimatedStudioShowcase />);
+
+    const studio = screen.getByTestId('animated-studio-showcase');
+    const stage = within(studio).getByTestId('studio-template-stage');
+    expect(stage).toHaveAttribute('data-viewport', 'full');
+    expect(stage).toHaveAttribute('data-motion-profile', 'expressive');
+
+    await user.click(within(studio).getByRole('button', { name: 'Game Battle HUD' }));
+    expect(within(stage).getAllByText(/BOSS|HP/i).length).toBeGreaterThan(0);
+
+    await user.click(within(studio).getByRole('button', { name: 'Cartoon Studio' }));
+    expect(within(stage).getAllByRole('button', { name: /Play|Pause/i }).length).toBeGreaterThan(0);
+
+    await user.click(within(studio).getByRole('button', { name: 'Mobile 390px' }));
+    expect(stage).toHaveAttribute('data-viewport', 'mobile');
+
+    await user.click(within(studio).getByRole('button', { name: 'cartoon' }));
+    expect(stage).toHaveAttribute('data-motion-profile', 'cartoon');
+
+    const curveLab = within(studio).getByTestId('motion-curve-lab');
+    await user.click(within(curveLab).getByRole('button', { name: 'steps-12' }));
+    expect(curveLab).toHaveTextContent('curve: steps-12');
+  });
+
+  it('switches Genre DNA presets, filters 30-character roster, toggles DnaIcon treatments, and unlocks SkillTree nodes', async () => {
+    const user = userEvent.setup();
+    render(<AnimatedStudioShowcase />);
+
+    const dnaBar = screen.getByTestId('dna-preset-bar');
+    await user.click(within(dnaBar).getByRole('button', { name: 'Shonen Anime' }));
+    expect(document.documentElement.dataset.dna).toBe('shonen-anime');
+
+    const roster = screen.getByTestId('character-roster-studio');
+    expect(within(roster).getAllByRole('listitem')).toHaveLength(30);
+    await user.click(within(roster).getByRole('button', { name: 'Eclipse Bosses' }));
+    expect(within(roster).getAllByRole('listitem')).toHaveLength(5);
+
+    const iconStudio = screen.getByTestId('dna-icon-studio');
+    await user.click(within(iconStudio).getByRole('button', { name: 'sticker' }));
+    expect(iconStudio.querySelector('[data-treatment="sticker"]')).not.toBeNull();
+
+    const skillTree = screen.getByTestId('skill-tree-showcase');
+    expect(skillTree).toHaveTextContent('4 SP');
+    await user.click(within(skillTree).getByRole('button', { name: /Blade Chain/i }));
+    expect(skillTree).toHaveTextContent('3 SP');
+  });
+
+  it('supports StatGauge, KineticText, Onomatopoeia presets and Tailwind v4 @theme token export', async () => {
+    const user = userEvent.setup();
+    render(<ComponentPlayground />);
+
+    await user.click(screen.getByRole('button', { name: /^StatGauge$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<StatGauge');
+
+    await user.click(screen.getByRole('button', { name: /^KineticText$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<KineticText');
+
+    await user.click(screen.getByRole('button', { name: /^Onomatopoeia$/ }));
+    expect(screen.getByTestId('playground-jsx-output')).toHaveTextContent('<OnomatopoeiaSFX');
+
+    const snapshot = collectActiveDesignTokens();
+    const tw = formatTokensAsTailwindTheme(snapshot);
+    expect(tw).toContain('@theme {');
+    expect(tw).toContain('--color-mw-primary:');
+    expect(buildTokenExportFilename(snapshot, 'tailwind')).toMatch(/\.tailwind\.css$/);
+  });
+
+  it('exercises AnimeFxLab screen shake, flash frames, particle bursts, combos, and reduced-motion mode', async () => {
+    const user = userEvent.setup();
+    render(<AnimeFxLab />);
+
+    const lab = screen.getByTestId('anime-fx-lab');
+    const stage = within(lab).getByTestId('anime-fx-stage');
+    const status = within(lab).getByTestId('anime-fx-status');
+    const jsxOutput = within(lab).getByTestId('anime-fx-jsx-output');
+
+    expect(status).toHaveTextContent('Triggers: 0');
+    expect(jsxOutput).toHaveTextContent('characterId="kuro-signal"');
+
+    // Switch stage character and backdrop
+    await user.click(within(lab).getByRole('button', { name: 'Vesper' }));
+    expect(jsxOutput).toHaveTextContent('characterId="vesper-ink"');
+
+    await user.click(within(lab).getByRole('button', { name: 'Manga Halftone' }));
+    expect(stage).toHaveAttribute('data-backdrop', 'manga-halftone');
+
+    // Trigger screen shake, flash frame, and particle burst
+    await user.click(within(lab).getByRole('button', { name: 'Trigger Screen Shake' }));
+    expect(status).toHaveTextContent('Screen Shake');
+    expect(status).toHaveTextContent('Triggers: 1');
+
+    await user.click(within(lab).getByRole('button', { name: 'Trigger Flash Frame' }));
+    expect(status).toHaveTextContent('Flash Frame');
+    expect(stage).toHaveAttribute('data-flash-active', 'true');
+
+    await user.click(within(lab).getByRole('button', { name: 'Trigger Particle Burst' }));
+    expect(status).toHaveTextContent('Particle Burst');
+    expect(Number(stage.getAttribute('data-particle-count'))).toBeGreaterThan(0);
+
+    // Trigger choreographed combo
+    await user.click(within(lab).getByRole('button', { name: /Volt Awakening/i }));
+    expect(status).toHaveTextContent('Combo · Volt Awakening');
+    expect(jsxOutput).toHaveTextContent('chromatic-split');
+
+    // Rumble & Shake preset library filtering + trigger + camera dock + sustained loop
+    const rumbleLibrary = within(lab).getByTestId('rumble-shake-library');
+    await user.click(within(rumbleLibrary).getByRole('button', { name: 'Impact' }));
+    expect(rumbleLibrary.querySelectorAll('[data-preset-id]')).toHaveLength(3);
+    await user.click(within(rumbleLibrary).getByRole('button', { name: /Seismic Slam/i }));
+    expect(stage).toHaveAttribute('data-active-shake-preset', 'seismic-slam');
+    expect(stage).toHaveAttribute('data-shake-pattern', 'vertical');
+    expect(jsxOutput).toHaveTextContent('seismic-slam');
+
+    // Trigger directly from in-preview camera shake dock
+    const cameraDock = within(lab).getByTestId('camera-shake-dock');
+    await user.click(
+      within(cameraDock).getByRole('button', { name: /Trigger Katana Whiplash in camera preview/i })
+    );
+    expect(stage).toHaveAttribute('data-active-shake-preset', 'katana-whiplash');
+    expect(stage).toHaveAttribute('data-shake-pattern', 'whiplash');
+
+    // Sustained rumble loop + Stop Rumble
+    await user.click(within(rumbleLibrary).getByRole('button', { name: 'Sustained' }));
+    await user.click(within(rumbleLibrary).getByRole('button', { name: 'Loop Sustained: Off' }));
+    await user.click(within(rumbleLibrary).getByRole('button', { name: /Tectonic Rumble/i }));
+    expect(stage).toHaveAttribute('data-continuous-rumble', 'true');
+    await user.click(within(cameraDock).getByRole('button', { name: 'Stop Rumble' }));
+    expect(stage).toHaveAttribute('data-continuous-rumble', 'false');
+
+    // Toggle slow-mo & reduced motion preview
+    await user.click(within(lab).getByRole('button', { name: 'Speed: 1x' }));
+    expect(status).toHaveTextContent('Playback: 0.25x');
+
+    await user.click(within(lab).getByRole('button', { name: 'Reduced Motion: Off' }));
+    expect(stage).toHaveAttribute('data-reduced-motion', 'true');
+    expect(jsxOutput).toHaveTextContent('shakeIntensity={0}');
+
+    // Reset clears counters & particles cleanly
+    await user.click(within(lab).getByRole('button', { name: 'Reset Stage' }));
+    expect(status).toHaveTextContent('Triggers: 0');
+    expect(stage).toHaveAttribute('data-particle-count', '0');
+  });
 });
+
 
 

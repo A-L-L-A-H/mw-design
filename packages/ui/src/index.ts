@@ -27,6 +27,14 @@ export {
   DialogTrigger,
 } from './components/dialog.js';
 export {
+  DnaIcon,
+  type DnaIconMotion,
+  type DnaIconProps,
+  type DnaIconSize,
+  type DnaIconTone,
+  type DnaIconTreatment,
+} from './components/dna-icon.js';
+export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -63,6 +71,19 @@ export {
 } from './components/log-console.js';
 export { MetricTile, type MetricTileProps } from './components/metric-tile.js';
 export { ModePicker, type DesktopExperienceMode, type ModePickerProps } from './components/mode-picker.js';
+export {
+  MotionTimeline,
+  DEFAULT_MOTION_TIMELINE_KEYFRAMES,
+  MOTION_EASING_CATEGORIES,
+  MOTION_EASING_PRESETS,
+  type MotionEasingApplyScope,
+  type MotionEasingCategory,
+  type MotionEasingPreset,
+  type MotionTimelineKeyframe,
+  type MotionTimelineProps,
+  type MotionTimelineSpeed,
+  type NormalizedMotionKeyframe,
+} from './components/motion-timeline.js';
 export { NumberInput, parseNumber, type NumberInputProps } from './components/number-input.js';
 export { PageHeader, type PageHeaderProps } from './components/page-header.js';
 export { Pagination, type PaginationProps } from './components/pagination.js';
@@ -157,6 +178,32 @@ export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './comp
 export { UpdateBanner, type UpdateBannerProps, type UpdateBannerStatus } from './components/update-banner.js';
 export { sanitizeUrl } from './lib/sanitize-url.js';
 export {
+  CHARACTER_FACTIONS,
+  CHARACTER_REGISTRY,
+  filterCharacters,
+  getBossCharacters,
+  getCharacterById,
+  getFactionById,
+  getPlayableCharacters,
+  rollGachaCharacter,
+  type CharacterAccessory,
+  type CharacterArchetype,
+  type CharacterColorToken,
+  type CharacterElement,
+  type CharacterEyeStyle,
+  type CharacterFactionId,
+  type CharacterFactionMeta,
+  type CharacterFilterQuery,
+  type CharacterHairStyle,
+  type CharacterId,
+  type CharacterMood,
+  type CharacterProfile,
+  type CharacterRarity,
+  type CharacterStats,
+  type CharacterUltimateSkill,
+  type CharacterVisualTraits,
+} from './lib/character-registry.js';
+export {
   ThemeProvider,
   useTheme,
   applyThemeState,
@@ -166,6 +213,11 @@ export {
   createThemeRegistry,
   BUILTIN_SKINS,
   DEFAULT_SKIN_ID,
+  GENRE_DNA_PRESETS,
+  getGenreDnaPresetById,
+  applyGenreDnaAttribute,
+  type GenreDnaPreset,
+  type GenreDnaPresetId,
   type ThemeContextValue,
   type ThemeMode,
   type ThemeProviderProps,

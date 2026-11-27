@@ -14,6 +14,7 @@
     "typecheck": "npm run build --workspace=@moonwitness/ui && npx tsc -p apps/ui-catalog/tsconfig.json --noEmit",
     "test": "npm run test --workspace=@moonwitness/ui && npm run test:unit --workspace=@moonwitness/ui-catalog",
     "test:e2e": "npm run test:e2e --workspace=@moonwitness/ui-catalog",
+    "verify:pack": "node scripts/verify-consumer-pack.mjs",
     "catalog:build": "npm run build --workspace=@moonwitness/ui-catalog"
   },
   "devDependencies": {

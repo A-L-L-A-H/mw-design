@@ -11,11 +11,11 @@ import {
   parseTokensFromCss,
 } from '../dist/token-exporter.js';
 
-test('exportDesignTokenBundle includes all 4 builtin skins and core design tokens', () => {
+test('exportDesignTokenBundle includes all 8 builtin skins and core design tokens', () => {
   const bundle = exportDesignTokenBundle();
   assert.equal(bundle.schemaVersion, 'moonwitness-design-tokens/v1');
   assert.equal(bundle.defaultSkinId, 'moonwitness-ink');
-  assert.equal(bundle.skins.length, 4);
+  assert.equal(bundle.skins.length, 8);
   assert.ok(bundle.tokens.length >= 25);
 });
 

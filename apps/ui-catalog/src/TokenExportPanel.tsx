@@ -6,6 +6,7 @@ import {
   downloadTokenFile,
   formatTokensAsCss,
   formatTokensAsJson,
+  formatTokensAsTailwindTheme,
   type ActiveDesignTokenSnapshot,
   type TokenCategory,
   type TokenExportFormat,
@@ -109,7 +110,9 @@ export function TokenExportPanel({
     () =>
       format === 'css'
         ? formatTokensAsCss(snapshot, selectedCategories)
-        : formatTokensAsJson(snapshot, selectedCategories),
+        : format === 'tailwind'
+          ? formatTokensAsTailwindTheme(snapshot, selectedCategories)
+          : formatTokensAsJson(snapshot, selectedCategories),
     [format, snapshot, selectedCategories]
   );
 
@@ -124,10 +127,12 @@ export function TokenExportPanel({
     const content =
       targetFormat === 'css'
         ? formatTokensAsCss(latest, selectedCategories)
-        : formatTokensAsJson(latest, selectedCategories);
+        : targetFormat === 'tailwind'
+          ? formatTokensAsTailwindTheme(latest, selectedCategories)
+          : formatTokensAsJson(latest, selectedCategories);
     const targetName = buildTokenExportFilename(latest, targetFormat);
     const mimeType =
-      targetFormat === 'css' ? 'text/css;charset=utf-8' : 'application/json;charset=utf-8';
+      targetFormat === 'json' ? 'application/json;charset=utf-8' : 'text/css;charset=utf-8';
     downloadTokenFile(content, targetName, mimeType);
     setDownloadedFile(targetName);
     if (downloadTimerRef.current !== null) {
@@ -178,6 +183,15 @@ export function TokenExportPanel({
           >
             JSON Object
           </button>
+          <button
+            type="button"
+            className="catalog-playground-option"
+            data-active={format === 'tailwind' ? 'true' : 'false'}
+            aria-pressed={format === 'tailwind'}
+            onClick={() => setFormat('tailwind')}
+          >
+            Tailwind @theme
+          </button>
         </div>
 
         <div className="catalog-token-export-categories" role="group" aria-label="Token categories">
@@ -205,7 +219,7 @@ export function TokenExportPanel({
         <span className="catalog-token-export-filename">{filename}</span>
       </div>
 
-      <pre className="catalog-token-export-preview" data-testid="token-export-preview">
+      <pre className="catalog-token-export-preview" data-testid="token-export-preview" tabIndex={0}>
         <code>{exportedOutput}</code>
       </pre>
 
@@ -215,6 +229,9 @@ export function TokenExportPanel({
         </Button>
         <Button size="sm" variant="secondary" onClick={() => handleDownload('json')}>
           Download JSON
+        </Button>
+        <Button size="sm" variant="secondary" onClick={() => handleDownload('tailwind')}>
+          Download Tailwind
         </Button>
         <Button size="sm" variant="outline" onClick={handleCopy}>
           {copied ? `Copied ${format.toUpperCase()}` : `Copy ${format.toUpperCase()}`}
