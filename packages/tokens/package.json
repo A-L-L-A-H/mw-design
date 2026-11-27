@@ -1,0 +1,22 @@
+{
+  "name": "@moonwitness/design-tokens",
+  "version": "1.0.0",
+  "description": "Canonical framework-agnostic MoonWitness design tokens, CSS/W3C/Tailwind exporters, and adoption helpers",
+  "type": "module",
+  "engines": {
+    "bun": ">=1.2.0",
+    "node": ">=22.0.0"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "bun test"
+  }
+}
