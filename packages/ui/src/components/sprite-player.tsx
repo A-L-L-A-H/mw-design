@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createSpriteSequenceAdapter } from '../lib/character-adapter.js';
 import { cn } from '../lib/cn.js';

@@ -81,20 +81,20 @@ export function SoundToggle() {
       type="button"
       variant="outline"
       size="sm"
-      className="h-10 w-10 shrink-0 px-0 sm:h-9 sm:w-auto sm:px-3"
+      className="mw-ui-sound-toggle"
       aria-pressed={enabled}
       aria-label={enabled ? 'Mute interface sounds' : 'Enable interface sounds'}
       onClick={() => setEnabled(!enabled)}
     >
       {enabled ? (
         <>
-          <VolumeIcon className="size-4 sm:hidden" aria-hidden="true" />
-          <span className="hidden sm:inline">Sound on</span>
+          <VolumeIcon className="mw-ui-sound-toggle-icon" aria-hidden="true" />
+          <span className="mw-ui-sound-toggle-label">Sound on</span>
         </>
       ) : (
         <>
-          <VolumeOffIcon className="size-4 sm:hidden" aria-hidden="true" />
-          <span className="hidden sm:inline">Sound off</span>
+          <VolumeOffIcon className="mw-ui-sound-toggle-icon" aria-hidden="true" />
+          <span className="mw-ui-sound-toggle-label">Sound off</span>
         </>
       )}
     </Button>

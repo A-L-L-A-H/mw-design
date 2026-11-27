@@ -1,3 +1,5 @@
+'use client';
+
 import type { ComponentProps, ReactNode } from 'react';
 import { getStateIllustration, type StateIllustrationSlug } from '../lib/asset-registry.js';
 import { cn } from '../lib/cn.js';

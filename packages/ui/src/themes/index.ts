@@ -20,6 +20,7 @@ export type {
   UserThemePreferences,
 } from './types.js';
 export {
+  DEFAULT_THEME_STORAGE_KEY,
   ThemeProvider,
   useTheme,
   applyThemeState,
@@ -176,7 +177,12 @@ export function createThemeRegistry(
 
 export const themeRegistry: ThemeRegistry = createThemeRegistry(BUILTIN_SKINS, DEFAULT_SKIN_ID);
 
-export function createSkinInitScript(): string {
+export interface SkinInitScriptOptions {
+  storageKey?: string;
+}
+
+export function createSkinInitScript(options: SkinInitScriptOptions = {}): string {
   const skinIds = JSON.stringify(themeRegistry.list().map((skin) => skin.id));
-  return `(function(){try{var s=localStorage.getItem('mw-board-preferences');var p=s?JSON.parse(s):null;var k=p&&typeof p.skin==='string'?p.skin:'${DEFAULT_SKIN_ID}';var allowed=${skinIds};if(allowed.indexOf(k)===-1)k='${DEFAULT_SKIN_ID}';var d=p&&p.density==='compact'?'compact':'comfortable';var m=(p&&(p.theme==='dark'||p.theme==='light'))?p.theme:(localStorage.getItem('mw-theme')==='dark'?'dark':'light');var r=document.documentElement;r.dataset.skin=k;r.dataset.density=d;r.classList.toggle('dark',m==='dark');}catch(e){}})();`;
+  const primaryKey = JSON.stringify(options.storageKey ?? 'mw-ui-theme');
+  return `(function(){try{var raw=localStorage.getItem(${primaryKey})||localStorage.getItem('mw-board-preferences');var p=raw?JSON.parse(raw):null;var k=p&&typeof p.skin==='string'?p.skin:'${DEFAULT_SKIN_ID}';var allowed=${skinIds};if(allowed.indexOf(k)===-1)k='${DEFAULT_SKIN_ID}';var d=p&&p.density==='compact'?'compact':'comfortable';var rawMode=p&&(p.mode||p.theme);var m=(rawMode==='dark'||rawMode==='light'||rawMode==='high-contrast')?rawMode:(localStorage.getItem('mw-theme')==='dark'?'dark':'light');var r=document.documentElement;r.dataset.skin=k;r.dataset.density=d;r.dataset.theme=m;r.classList.toggle('dark',m==='dark');r.classList.toggle('high-contrast',m==='high-contrast');}catch(e){}})();`;
 }

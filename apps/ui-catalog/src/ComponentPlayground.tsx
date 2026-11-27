@@ -10,12 +10,27 @@ import { Alert, AlertDescription, AlertTitle, type AlertVariant } from '@moonwit
 import { Progress, type ProgressSize, type ProgressVariant } from '@moonwitness/ui/components/progress';
 import { Field } from '@moonwitness/ui/components/field';
 import { Input } from '@moonwitness/ui/components/input';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, type CardPadding, type CardVariant } from '@moonwitness/ui/components/card';
+import { Switch } from '@moonwitness/ui/components/switch';
+import { Checkbox } from '@moonwitness/ui/components/checkbox';
+import { Spinner, type SpinnerSize } from '@moonwitness/ui/components/spinner';
 import { Panel, type PanelProps } from '@moonwitness/ui/components/panel';
 import { SectionRibbon, type SectionRibbonProps } from '@moonwitness/ui/components/section-ribbon';
 import { AddIcon } from '@moonwitness/ui/icons';
 import { auditElementAccessibility, type A11yAuditReport } from './a11yAudit.js';
 
-type PlaygroundComponentId = 'button' | 'badge' | 'alert' | 'progress' | 'field' | 'panel' | 'ribbon';
+type PlaygroundComponentId =
+  | 'button'
+  | 'badge'
+  | 'alert'
+  | 'progress'
+  | 'field'
+  | 'card'
+  | 'switch'
+  | 'checkbox'
+  | 'spinner'
+  | 'panel'
+  | 'ribbon';
 
 type BadgeVariant = NonNullable<BadgeProps['variant']>;
 type BadgeSize = NonNullable<BadgeProps['size']>;
@@ -27,6 +42,7 @@ type RibbonSurface = NonNullable<SectionRibbonProps['surface']>;
 type RibbonFrame = NonNullable<SectionRibbonProps['frame']>;
 type RibbonSize = NonNullable<SectionRibbonProps['size']>;
 type RibbonTreatment = NonNullable<SectionRibbonProps['treatment']>;
+type SwitchSize = 'sm' | 'default';
 type BorderStyleScale = 'default' | 'hairline' | 'heavy' | 'dashed' | 'double';
 type ShadowDensityScale = 'none' | 'subtle' | 'default' | 'bold' | 'impact';
 
@@ -39,6 +55,10 @@ const PLAYGROUND_COMPONENTS: ReadonlyArray<{
   { id: 'alert', label: 'Alert' },
   { id: 'progress', label: 'Progress' },
   { id: 'field', label: 'Field & Input' },
+  { id: 'card', label: 'Card' },
+  { id: 'switch', label: 'Switch' },
+  { id: 'checkbox', label: 'Checkbox' },
+  { id: 'spinner', label: 'Spinner' },
   { id: 'panel', label: 'Panel' },
   { id: 'ribbon', label: 'SectionRibbon' },
 ];
@@ -105,6 +125,11 @@ const RIBBON_SURFACES: readonly RibbonSurface[] = ['paper', 'ink'];
 const RIBBON_FRAMES: readonly RibbonFrame[] = ['line', 'torn', 'scuffed', 'grunge'];
 const RIBBON_SIZES: readonly RibbonSize[] = ['sm', 'md', 'lg'];
 const RIBBON_TREATMENTS: readonly RibbonTreatment[] = ['display', 'brush'];
+
+const CARD_VARIANTS: readonly CardVariant[] = ['default', 'elevated', 'muted', 'interactive'];
+const CARD_PADDINGS: readonly CardPadding[] = ['none', 'sm', 'md', 'lg'];
+const SWITCH_SIZES: readonly SwitchSize[] = ['sm', 'default'];
+const SPINNER_SIZES: readonly SpinnerSize[] = ['sm', 'md', 'lg'];
 
 const BORDER_STYLE_SCALES: readonly BorderStyleScale[] = [
   'hairline',
@@ -203,13 +228,45 @@ async function copySnippet(text: string): Promise<boolean> {
   return ok;
 }
 
+function readInitialPlaygroundParams(): {
+  component: PlaygroundComponentId;
+  borderStyle: BorderStyleScale;
+  shadowDensity: ShadowDensityScale;
+} {
+  if (typeof window === 'undefined') {
+    return { component: 'button', borderStyle: 'default', shadowDensity: 'default' };
+  }
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const pg = params.get('pg') as PlaygroundComponentId | null;
+    const bs = params.get('bs') as BorderStyleScale | null;
+    const sd = params.get('sd') as ShadowDensityScale | null;
+    return {
+      component:
+        pg && PLAYGROUND_COMPONENTS.some((item) => item.id === pg) ? pg : 'button',
+      borderStyle:
+        bs && BORDER_STYLE_SCALES.includes(bs) ? bs : 'default',
+      shadowDensity:
+        sd && SHADOW_DENSITY_SCALES.includes(sd) ? sd : 'default',
+    };
+  } catch {
+    return { component: 'button', borderStyle: 'default', shadowDensity: 'default' };
+  }
+}
+
 export function ComponentPlayground() {
-  const [selected, setSelected] = useState<PlaygroundComponentId>('button');
-  const [borderStyle, setBorderStyle] = useState<BorderStyleScale>('default');
-  const [shadowDensity, setShadowDensity] = useState<ShadowDensityScale>('default');
+  const initialParams = readInitialPlaygroundParams();
+  const [selected, setSelected] = useState<PlaygroundComponentId>(initialParams.component);
+  const [borderStyle, setBorderStyle] = useState<BorderStyleScale>(initialParams.borderStyle);
+  const [shadowDensity, setShadowDensity] = useState<ShadowDensityScale>(
+    initialParams.shadowDensity
+  );
   const [copiedJsx, setCopiedJsx] = useState(false);
+  const [copiedShareLink, setCopiedShareLink] = useState(false);
   const copyTimerRef = useRef<number | null>(null);
+  const shareTimerRef = useRef<number | null>(null);
   const previewRef = useRef<HTMLDivElement | null>(null);
+  const checkboxPreviewRef = useRef<HTMLInputElement | null>(null);
   const [a11yReport, setA11yReport] = useState<A11yAuditReport | null>(null);
 
   // Button state
@@ -271,6 +328,38 @@ export function ComponentPlayground() {
   const [ribbonTitle, setRibbonTitle] = useState('Field transmission');
   const [ribbonShowAction, setRibbonShowAction] = useState(true);
 
+  // Card state
+  const [cardVariant, setCardVariant] = useState<CardVariant>('elevated');
+  const [cardPadding, setCardPadding] = useState<CardPadding>('md');
+  const [cardTitle, setCardTitle] = useState('Editorial brief');
+  const [cardDescription, setCardDescription] = useState(
+    'Composable Card surface supporting elevation, padding density, and footer actions.'
+  );
+  const [cardShowFooter, setCardShowFooter] = useState(true);
+
+  // Switch state
+  const [switchSize, setSwitchSize] = useState<SwitchSize>('default');
+  const [switchChecked, setSwitchChecked] = useState(true);
+  const [switchDisabled, setSwitchDisabled] = useState(false);
+  const [switchLabel, setSwitchLabel] = useState('Enable live telemetry');
+
+  // Checkbox state
+  const [checkboxChecked, setCheckboxChecked] = useState(true);
+  const [checkboxIndeterminate, setCheckboxIndeterminate] = useState(false);
+  const [checkboxDisabled, setCheckboxDisabled] = useState(false);
+  const [checkboxLabel, setCheckboxLabel] = useState('Include print bleed marks');
+
+  // Spinner state
+  const [spinnerSize, setSpinnerSize] = useState<SpinnerSize>('md');
+  const [spinnerShowLabel, setSpinnerShowLabel] = useState(true);
+  const [spinnerLabel, setSpinnerLabel] = useState('Syncing tokens');
+
+  useEffect(() => {
+    if (checkboxPreviewRef.current) {
+      checkboxPreviewRef.current.indeterminate = checkboxIndeterminate;
+    }
+  }, [checkboxIndeterminate, selected]);
+
   const runA11yAudit = useCallback(() => {
     setA11yReport(auditElementAccessibility(previewRef.current));
   }, []);
@@ -324,6 +413,22 @@ export function ComponentPlayground() {
     ribbonNumber,
     ribbonTitle,
     ribbonShowAction,
+    cardVariant,
+    cardPadding,
+    cardTitle,
+    cardDescription,
+    cardShowFooter,
+    switchSize,
+    switchChecked,
+    switchDisabled,
+    switchLabel,
+    checkboxChecked,
+    checkboxIndeterminate,
+    checkboxDisabled,
+    checkboxLabel,
+    spinnerSize,
+    spinnerShowLabel,
+    spinnerLabel,
   ]);
 
   useEffect(() => {
@@ -342,6 +447,9 @@ export function ComponentPlayground() {
     return () => {
       if (copyTimerRef.current !== null) {
         window.clearTimeout(copyTimerRef.current);
+      }
+      if (shareTimerRef.current !== null) {
+        window.clearTimeout(shareTimerRef.current);
       }
     };
   }, []);
@@ -392,6 +500,28 @@ export function ComponentPlayground() {
         'Live preview of MoonWitness panel surfaces, frames, and spacing density.'
       );
       setPanelShowAction(true);
+    } else if (selected === 'card') {
+      setCardVariant('elevated');
+      setCardPadding('md');
+      setCardTitle('Editorial brief');
+      setCardDescription(
+        'Composable Card surface supporting elevation, padding density, and footer actions.'
+      );
+      setCardShowFooter(true);
+    } else if (selected === 'switch') {
+      setSwitchSize('default');
+      setSwitchChecked(true);
+      setSwitchDisabled(false);
+      setSwitchLabel('Enable live telemetry');
+    } else if (selected === 'checkbox') {
+      setCheckboxChecked(true);
+      setCheckboxIndeterminate(false);
+      setCheckboxDisabled(false);
+      setCheckboxLabel('Include print bleed marks');
+    } else if (selected === 'spinner') {
+      setSpinnerSize('md');
+      setSpinnerShowLabel(true);
+      setSpinnerLabel('Syncing tokens');
     } else {
       setRibbonAccent('magenta');
       setRibbonSurface('paper');
@@ -473,6 +603,41 @@ export function ComponentPlayground() {
       ].filter(Boolean);
       return `<Panel\n  ${props.join('\n  ')}\n>\n  <p>Panel body content</p>\n</Panel>`;
     }
+    if (selected === 'card') {
+      const props = [
+        cardVariant !== 'default' ? `variant="${cardVariant}"` : null,
+        cardPadding !== 'md' ? `padding="${cardPadding}"` : null,
+      ].filter(Boolean);
+      const propString = props.length > 0 ? ` ${props.join(' ')}` : '';
+      const footerBlock = cardShowFooter
+        ? `\n  <CardFooter>\n    <Button size="sm" variant="outline">Review</Button>\n  </CardFooter>`
+        : '';
+      return `<Card${propString}>\n  <CardHeader>\n    <CardTitle>${cardTitle || 'Card'}</CardTitle>\n    <CardDescription>${cardDescription}</CardDescription>\n  </CardHeader>\n  <CardContent>Variant: ${cardVariant}</CardContent>${footerBlock}\n</Card>`;
+    }
+    if (selected === 'switch') {
+      const props = [
+        switchSize !== 'default' ? `size="${switchSize}"` : null,
+        switchChecked ? 'checked' : 'checked={false}',
+        switchDisabled ? 'disabled' : null,
+        `aria-label="${switchLabel || 'Toggle option'}"`,
+      ].filter(Boolean);
+      return `<Switch ${props.join(' ')} />`;
+    }
+    if (selected === 'checkbox') {
+      const props = [
+        checkboxChecked ? 'checked' : 'checked={false}',
+        checkboxDisabled ? 'disabled' : null,
+      ].filter(Boolean);
+      return `<label className="mw-ui-radio-option">\n  <Checkbox ${props.join(' ')} />\n  <span>${checkboxLabel || 'Option'}</span>\n</label>`;
+    }
+    if (selected === 'spinner') {
+      const props = [
+        spinnerSize !== 'md' ? `size="${spinnerSize}"` : null,
+        `label="${spinnerLabel || 'Loading'}"`,
+        spinnerShowLabel ? 'showLabel' : null,
+      ].filter(Boolean);
+      return `<Spinner ${props.join(' ')} />`;
+    }
     const props = [
       `title="${ribbonTitle}"`,
       ribbonNumber ? `number="${ribbonNumber}"` : null,
@@ -508,6 +673,38 @@ export function ComponentPlayground() {
     copyTimerRef.current = window.setTimeout(() => {
       setCopiedJsx(false);
       copyTimerRef.current = null;
+    }, 2000);
+  }
+
+  async function handleCopyShareLink() {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('pg', selected);
+    if (borderStyle !== 'default') {
+      url.searchParams.set('bs', borderStyle);
+    } else {
+      url.searchParams.delete('bs');
+    }
+    if (shadowDensity !== 'default') {
+      url.searchParams.set('sd', shadowDensity);
+    } else {
+      url.searchParams.delete('sd');
+    }
+    url.hash = '#playground';
+    try {
+      window.history.replaceState(null, '', url.toString());
+    } catch {
+      // Ignore history restriction in embedded contexts.
+    }
+    const ok = await copySnippet(url.toString());
+    if (!ok) return;
+    setCopiedShareLink(true);
+    if (shareTimerRef.current !== null) {
+      window.clearTimeout(shareTimerRef.current);
+    }
+    shareTimerRef.current = window.setTimeout(() => {
+      setCopiedShareLink(false);
+      shareTimerRef.current = null;
     }, 2000);
   }
 
@@ -548,6 +745,14 @@ export function ComponentPlayground() {
                 onClick={resetCurrentComponent}
               >
                 Reset props
+              </button>
+              <button
+                type="button"
+                className="catalog-copy-button"
+                data-copied={copiedShareLink ? 'true' : 'false'}
+                onClick={handleCopyShareLink}
+              >
+                {copiedShareLink ? 'Link copied' : 'Copy share link'}
               </button>
               <button
                 type="button"
@@ -678,6 +883,82 @@ export function ComponentPlayground() {
                   </p>
                 </Panel>
               </div>
+            ) : null}
+
+            {selected === 'card' ? (
+              <div className="catalog-playground-wide-box">
+                <Card variant={cardVariant} padding={cardPadding}>
+                  <CardHeader>
+                    <CardTitle>{cardTitle || 'Editorial brief'}</CardTitle>
+                    {cardDescription ? <CardDescription>{cardDescription}</CardDescription> : null}
+                  </CardHeader>
+                  <CardContent>
+                    <p className="catalog-playground-panel-copy">
+                      Active props: variant={cardVariant}, padding={cardPadding}.
+                    </p>
+                  </CardContent>
+                  {cardShowFooter ? (
+                    <CardFooter>
+                      <Button size="sm" variant="outline">
+                        Review
+                      </Button>
+                    </CardFooter>
+                  ) : null}
+                </Card>
+              </div>
+            ) : null}
+
+            {selected === 'switch' ? (
+              <div className="catalog-playground-preview-stack">
+                <label className="mw-ui-radio-option">
+                  <Switch
+                    size={switchSize}
+                    checked={switchChecked}
+                    disabled={switchDisabled}
+                    onCheckedChange={setSwitchChecked}
+                    aria-label={switchLabel || 'Toggle option'}
+                  />
+                  <span>{switchLabel || 'Toggle option'}</span>
+                </label>
+                <span className="catalog-playground-status" role="status">
+                  State: {switchDisabled ? 'disabled' : switchChecked ? 'checked' : 'unchecked'}
+                </span>
+              </div>
+            ) : null}
+
+            {selected === 'checkbox' ? (
+              <div className="catalog-playground-preview-stack">
+                <label className="mw-ui-radio-option">
+                  <Checkbox
+                    ref={checkboxPreviewRef}
+                    checked={checkboxChecked}
+                    disabled={checkboxDisabled}
+                    onChange={(event) => {
+                      setCheckboxIndeterminate(false);
+                      setCheckboxChecked(event.target.checked);
+                    }}
+                  />
+                  <span>{checkboxLabel || 'Option'}</span>
+                </label>
+                <span className="catalog-playground-status" role="status">
+                  State:{' '}
+                  {checkboxDisabled
+                    ? 'disabled'
+                    : checkboxIndeterminate
+                      ? 'indeterminate'
+                      : checkboxChecked
+                        ? 'checked'
+                        : 'unchecked'}
+                </span>
+              </div>
+            ) : null}
+
+            {selected === 'spinner' ? (
+              <Spinner
+                size={spinnerSize}
+                label={spinnerLabel || 'Loading'}
+                showLabel={spinnerShowLabel}
+              />
             ) : null}
 
             {selected === 'ribbon' ? (
@@ -1126,6 +1407,149 @@ export function ComponentPlayground() {
                   onChange={(event) => setRibbonShowAction(event.target.checked)}
                 />
                 <span>Show action badge</span>
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'card' ? (
+            <>
+              <OptionSelector
+                label="Variant"
+                options={CARD_VARIANTS}
+                value={cardVariant}
+                onChange={setCardVariant}
+              />
+              <OptionSelector
+                label="Padding"
+                options={CARD_PADDINGS}
+                value={cardPadding}
+                onChange={setCardPadding}
+              />
+              <label className="catalog-playground-input-field">
+                <span>Title</span>
+                <input
+                  type="text"
+                  value={cardTitle}
+                  onChange={(event) => setCardTitle(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-input-field">
+                <span>Description</span>
+                <input
+                  type="text"
+                  value={cardDescription}
+                  onChange={(event) => setCardDescription(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={cardShowFooter}
+                  onChange={(event) => setCardShowFooter(event.target.checked)}
+                />
+                <span>Show footer action</span>
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'switch' ? (
+            <>
+              <OptionSelector
+                label="Size"
+                options={SWITCH_SIZES}
+                value={switchSize}
+                onChange={setSwitchSize}
+              />
+              <label className="catalog-playground-input-field">
+                <span>Label</span>
+                <input
+                  type="text"
+                  value={switchLabel}
+                  onChange={(event) => setSwitchLabel(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={switchChecked}
+                  onChange={(event) => setSwitchChecked(event.target.checked)}
+                />
+                <span>Checked</span>
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={switchDisabled}
+                  onChange={(event) => setSwitchDisabled(event.target.checked)}
+                />
+                <span>Disabled</span>
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'checkbox' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Label</span>
+                <input
+                  type="text"
+                  value={checkboxLabel}
+                  onChange={(event) => setCheckboxLabel(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={checkboxChecked}
+                  onChange={(event) => {
+                    setCheckboxIndeterminate(false);
+                    setCheckboxChecked(event.target.checked);
+                  }}
+                />
+                <span>Checked</span>
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={checkboxIndeterminate}
+                  onChange={(event) => setCheckboxIndeterminate(event.target.checked)}
+                />
+                <span>Indeterminate</span>
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={checkboxDisabled}
+                  onChange={(event) => setCheckboxDisabled(event.target.checked)}
+                />
+                <span>Disabled</span>
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'spinner' ? (
+            <>
+              <OptionSelector
+                label="Size"
+                options={SPINNER_SIZES}
+                value={spinnerSize}
+                onChange={setSpinnerSize}
+              />
+              <label className="catalog-playground-input-field">
+                <span>Accessible label</span>
+                <input
+                  type="text"
+                  value={spinnerLabel}
+                  onChange={(event) => setSpinnerLabel(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-toggle">
+                <input
+                  type="checkbox"
+                  checked={spinnerShowLabel}
+                  onChange={(event) => setSpinnerShowLabel(event.target.checked)}
+                />
+                <span>Show visible label</span>
               </label>
             </>
           ) : null}

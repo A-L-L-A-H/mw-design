@@ -19,7 +19,9 @@ export function ToastHost({
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setPortalTarget(document.body);
+    if (typeof document !== 'undefined') {
+      setPortalTarget(document.body);
+    }
   }, []);
 
   if (!portalTarget) return null;

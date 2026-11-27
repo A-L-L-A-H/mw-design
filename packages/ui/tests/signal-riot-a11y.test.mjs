@@ -276,7 +276,7 @@ test('prefers-reduced-motion disables animations, stamps, particles, and transit
     '.mw-ui-speech-bubble',
     '.mw-ui-scene-particle',
     '.mw-ui-comic-transition',
-    '.mw-ui-update-banner .animate-spin',
+    '.mw-ui-update-banner-spin',
     '.mw-ui-command-item',
     '.mw-ui-layered-scene-stage',
     '.mw-ui-layered-scene-layer',
@@ -438,7 +438,7 @@ test('prefers-reduced-motion disables animations, stamps, particles, and transit
       container.querySelector('.mw-ui-speech-bubble[data-reduced-motion="true"]') !== null,
       true
     );
-    assert.ok(container.querySelector('.mw-ui-update-banner .motion-reduce\\:animate-none'));
+    assert.ok(container.querySelector('.mw-ui-update-banner .mw-ui-update-banner-spin'));
 
     await act(async () => root.unmount());
   } finally {

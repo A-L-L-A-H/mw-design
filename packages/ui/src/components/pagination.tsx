@@ -1,3 +1,5 @@
+'use client';
+
 import type { ComponentProps, ReactNode } from 'react';
 
 export type PaginationProps = Omit<ComponentProps<'nav'>, 'children'> & {

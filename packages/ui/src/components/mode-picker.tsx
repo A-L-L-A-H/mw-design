@@ -73,9 +73,7 @@ export function ModePicker({
       <DialogContent
         data-slot="mode-picker"
         aria-modal="true"
-        className={['mw-ui-mode-picker max-w-2xl p-0 sm:max-w-2xl', className]
-          .filter(Boolean)
-          .join(' ')}
+        className={['mw-ui-mode-picker', className].filter(Boolean).join(' ')}
         showCloseButton={false}
         onEscapeKeyDown={(event) => {
           if (!onDismiss) event.preventDefault();
@@ -85,16 +83,14 @@ export function ModePicker({
         }}
         {...props}
       >
-        <div className="p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4 border-b-2 border-dashed border-ink/25 pb-4">
-            <div className="space-y-1">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
-                MoonWitness Desktop
-              </p>
-              <DialogTitle className="font-display text-2xl uppercase tracking-wide text-ink">
-                {title}
-              </DialogTitle>
-              <DialogDescription className="text-sm text-ink-soft">{description}</DialogDescription>
+        <div className="mw-ui-mode-picker-inner">
+          <div className="mw-ui-mode-picker-header">
+            <div className="mw-ui-mode-picker-heading">
+              <p className="mw-ui-mode-picker-kicker">MoonWitness Desktop</p>
+              <DialogTitle className="mw-ui-mode-picker-title">{title}</DialogTitle>
+              <DialogDescription className="mw-ui-mode-picker-description">
+                {description}
+              </DialogDescription>
             </div>
             {onDismiss ? (
               <DialogClose asChild>
@@ -104,13 +100,13 @@ export function ModePicker({
                   size="icon-sm"
                   aria-label="Close mode selector"
                 >
-                  <CloseIcon className="size-4" aria-hidden="true" />
+                  <CloseIcon className="mw-ui-mode-picker-close-icon" aria-hidden="true" />
                 </Button>
               </DialogClose>
             ) : null}
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mw-ui-mode-picker-grid">
             {MODE_OPTIONS.map((option) => {
               const isSelected = currentMode === option.id;
               const Icon = option.id === 'workspace' ? ColumnsIcon : CodeIcon;
@@ -119,38 +115,32 @@ export function ModePicker({
                   key={option.id}
                   data-mode-option={option.id}
                   data-selected={isSelected ? 'true' : 'false'}
-                  className={`flex flex-col justify-between gap-4 border-2 p-4 transition-colors ${
-                    isSelected
-                      ? 'border-ink bg-primary/15 shadow-ink-sm'
-                      : 'border-ink/40 bg-paper-raised hover:border-ink'
-                  }`}
+                  className="mw-ui-mode-picker-card"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="grid size-10 shrink-0 place-items-center border-2 border-ink bg-paper text-ink shadow-ink-sm">
-                        <Icon className="size-5" aria-hidden="true" />
+                  <div className="mw-ui-mode-picker-card-body">
+                    <div className="mw-ui-mode-picker-card-top">
+                      <span className="mw-ui-mode-picker-icon-box">
+                        <Icon className="mw-ui-mode-picker-icon" aria-hidden="true" />
                       </span>
                       <Badge variant={option.badgeVariant}>{option.badge}</Badge>
                     </div>
 
                     <div>
-                      <h3 className="font-display text-lg uppercase tracking-wide text-ink">
-                        {option.label}
-                      </h3>
-                      <p className="font-mono text-xs text-ink-faint">{option.subtitle}</p>
+                      <h3 className="mw-ui-mode-picker-card-title">{option.label}</h3>
+                      <p className="mw-ui-mode-picker-card-subtitle">{option.subtitle}</p>
                     </div>
 
-                    <ul className="space-y-1.5 text-xs text-ink-soft">
+                    <ul className="mw-ui-mode-picker-highlights">
                       {option.highlights.map((item) => (
-                        <li key={item} className="flex items-center gap-2">
+                        <li key={item} className="mw-ui-mode-picker-highlight">
                           {option.id === 'workspace' ? (
                             <CheckCircleIcon
-                              className="size-3.5 shrink-0 text-ink"
+                              className="mw-ui-mode-picker-highlight-icon"
                               aria-hidden="true"
                             />
                           ) : (
                             <SparkleIcon
-                              className="size-3.5 shrink-0 text-ink"
+                              className="mw-ui-mode-picker-highlight-icon"
                               aria-hidden="true"
                             />
                           )}
@@ -163,7 +153,7 @@ export function ModePicker({
                   <Button
                     type="button"
                     variant={isSelected ? 'default' : 'outline'}
-                    className="w-full"
+                    className="mw-ui-mode-picker-action"
                     aria-pressed={isSelected}
                     onClick={() => onSelect(option.id)}
                   >

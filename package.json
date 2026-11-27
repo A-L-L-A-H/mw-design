@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "npm run build --workspace=@moonwitness/ui && npm run dev --workspace=@moonwitness/ui-catalog",
     "build": "npm run build --workspace=@moonwitness/ui && npm run build:built --workspace=@moonwitness/ui-catalog",
+    "lint": "node scripts/lint-repo.mjs",
     "typecheck": "npm run build --workspace=@moonwitness/ui && npx tsc -p apps/ui-catalog/tsconfig.json --noEmit",
     "test": "npm run test --workspace=@moonwitness/ui && npm run test:unit --workspace=@moonwitness/ui-catalog",
     "test:e2e": "npm run test:e2e --workspace=@moonwitness/ui-catalog",

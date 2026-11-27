@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Button, type ButtonProps } from './button.js';
 
@@ -127,3 +129,5 @@ export const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(functio
     </Button>
   );
 });
+
+CopyButton.displayName = 'CopyButton';
