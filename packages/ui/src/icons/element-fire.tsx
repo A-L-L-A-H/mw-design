@@ -5,6 +5,11 @@ export type ElementFireIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 't
   size?: number | string;
 };
 
+const PATH_D = (
+  "M12.5 2.5c.8 3.2-1.8 4.8-2.2 7.2-.2 1.2.4 2.2 1.5 2.5-.2-1.6.9-2.8 2.2-3.7"
+  + " 2.5 2 4.5 4.4 4.5 7.2a6.5 6.5 0 1 1-13 0c0-3.4 2.4-6.3 5-9 .8-.8 1.5-2.1 2-4.2Z"
+);
+
 const ElementFireIcon = forwardRef<SVGSVGElement, ElementFireIconProps>(function ElementFireIcon(
   { size = 24, title, ...props },
   ref
@@ -27,7 +32,7 @@ const ElementFireIcon = forwardRef<SVGSVGElement, ElementFireIconProps>(function
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d="M12.5 2.5c.8 3.2-1.8 4.8-2.2 7.2-.2 1.2.4 2.2 1.5 2.5-.2-1.6.9-2.8 2.2-3.7 2.5 2 4.5 4.4 4.5 7.2a6.5 6.5 0 1 1-13 0c0-3.4 2.4-6.3 5-9 .8-.8 1.5-2.1 2-4.2Z" />
+      <path d={PATH_D} />
     </svg>
   );
 });

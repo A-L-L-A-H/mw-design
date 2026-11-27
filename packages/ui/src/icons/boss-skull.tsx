@@ -5,6 +5,11 @@ export type BossSkullIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 'tit
   size?: number | string;
 };
 
+const PATH_D = (
+  "M5 10.5a7 7 0 0 1 14 0c0 2.7-1.4 4.8-3 5.8V19a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5"
+  + "0 0 1 8 19v-2.7c-1.6-1-3-3.1-3-5.8Z"
+);
+
 const BossSkullIcon = forwardRef<SVGSVGElement, BossSkullIconProps>(function BossSkullIcon(
   { size = 24, title, ...props },
   ref
@@ -27,7 +32,7 @@ const BossSkullIcon = forwardRef<SVGSVGElement, BossSkullIconProps>(function Bos
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d="M5 10.5a7 7 0 0 1 14 0c0 2.7-1.4 4.8-3 5.8V19a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 19v-2.7c-1.6-1-3-3.1-3-5.8Z" />
+      <path d={PATH_D} />
       <circle cx="9.5" cy="11" r="1.4" />
       <circle cx="14.5" cy="11" r="1.4" />
       <path d="M12 14v1.5M10 17.5v3M14 17.5v3" />

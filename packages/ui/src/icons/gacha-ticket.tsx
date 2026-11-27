@@ -5,6 +5,12 @@ export type GachaTicketIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 't
   size?: number | string;
 };
 
+const PATH_D1 = (
+  "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2"
+  + " 0 0 1-2-2v-3a2 2 0 0 0 0-4V7Z"
+);
+const PATH_D2 = "M9 5v14M13.5 9.5l1 2 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2-1.5-1.4 2-.3 1-2Z";
+
 const GachaTicketIcon = forwardRef<SVGSVGElement, GachaTicketIconProps>(function GachaTicketIcon(
   { size = 24, title, ...props },
   ref
@@ -27,8 +33,8 @@ const GachaTicketIcon = forwardRef<SVGSVGElement, GachaTicketIconProps>(function
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7Z" />
-      <path d="M9 5v14M13.5 9.5l1 2 2 .3-1.5 1.4.4 2-1.9-1-1.9 1 .4-2-1.5-1.4 2-.3 1-2Z" />
+      <path d={PATH_D1} />
+      <path d={PATH_D2} />
     </svg>
   );
 });

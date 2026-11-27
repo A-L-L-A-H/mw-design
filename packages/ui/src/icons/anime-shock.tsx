@@ -5,6 +5,11 @@ export type AnimeShockIconProps = Omit<SVGProps<SVGSVGElement>, 'children' | 'ti
   size?: number | string;
 };
 
+const PATH_D = (
+  "m6 3 2.5 7.5L5.5 12 9 21M12 2.5v13m0 4v1.5"
+  + "M18 3l-2.5 7.5 3 1.5L15 21"
+);
+
 const AnimeShockIcon = forwardRef<SVGSVGElement, AnimeShockIconProps>(function AnimeShockIcon(
   { size = 24, title, ...props },
   ref
@@ -27,7 +32,7 @@ const AnimeShockIcon = forwardRef<SVGSVGElement, AnimeShockIconProps>(function A
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <path d="m6 3 2.5 7.5L5.5 12 9 21M12 2.5v13m0 4v1.5M18 3l-2.5 7.5 3 1.5L15 21" />
+      <path d={PATH_D} />
     </svg>
   );
 });
