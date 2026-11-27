@@ -167,7 +167,7 @@ export function AnimeFxLab() {
   const [activeScreenFx, setActiveScreenFx] = useState<ScreenFXKind | null>(null);
   const [particles, setParticles] = useState<FxParticle[]>([]);
   const [rigPose, setRigPose] = useState<CartoonRigPose>('idle');
-  const [rigMood, setRigMood] = useState<CartoonRigMood>('excited');
+  const [rigMood, setRigMood] = useState<CartoonRigMood>('happy');
   const [squashTick, setSquashTick] = useState(0);
   const [smearActive, setSmearActive] = useState(false);
   const [sfxCallout, setSfxCallout] = useState<{
@@ -386,8 +386,8 @@ export function AnimeFxLab() {
         `${labelPrefix} (${intensity}px, ${continuous ? 'looping' : `${duration}ms`}${freezeMs > 0 ? `, ${freezeMs}ms hitstop` : ''})`
       );
 
-      if (sfxEnabled) playProceduralSfx(options?.sfx ?? 'impact-hit', true, true);
-      pulseCharacterPose(intensity >= 16 ? 'hurt' : 'attack', intensity >= 16 ? 'shocked' : 'fierce', intensity >= 12);
+      if (sfxEnabled) playProceduralSfx(options?.sfx ?? 'hit-impact', true, true);
+      pulseCharacterPose(intensity >= 16 ? 'hurt' : 'attack', intensity >= 16 ? 'surprised' : 'determined', intensity >= 12);
 
       if (effectiveReduced) {
         shakeRunRef.current.active = false;
@@ -514,7 +514,7 @@ export function AnimeFxLab() {
       setTriggerCount((c) => c + 1);
       setLastActionLabel(`Particle Burst · ${kind} (${count} particles)`);
       if (sfxEnabled) playProceduralSfx('boing', true, true);
-      pulseCharacterPose('attack', 'excited', false);
+      pulseCharacterPose('attack', 'happy', false);
 
       const spawned = generateParticleBurst({
         kind,
@@ -694,7 +694,7 @@ export function AnimeFxLab() {
     setActiveScreenFx(null);
     setParticles([]);
     setRigPose('idle');
-    setRigMood('excited');
+    setRigMood('happy');
     setSmearActive(false);
     setSfxCallout(null);
     setTriggerCount(0);

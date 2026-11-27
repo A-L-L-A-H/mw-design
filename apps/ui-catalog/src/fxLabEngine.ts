@@ -163,7 +163,7 @@ export const RUMBLE_SHAKE_PRESETS: readonly RumbleShakePreset[] = [
     frequency: 1.15,
     hitstopMs: 75,
     description: 'Diagonal anime slash snap with sharp angular camera kick.',
-    sfx: 'impact-hit',
+    sfx: 'hit-impact',
   },
   {
     id: 'seismic-slam',
@@ -176,7 +176,7 @@ export const RUMBLE_SHAKE_PRESETS: readonly RumbleShakePreset[] = [
     frequency: 1.0,
     hitstopMs: 120,
     description: 'Heavy vertical crater slam with deep rebound decay.',
-    sfx: 'impact-hit',
+    sfx: 'hit-impact',
   },
   {
     id: 'railgun-recoil',
@@ -189,7 +189,7 @@ export const RUMBLE_SHAKE_PRESETS: readonly RumbleShakePreset[] = [
     frequency: 1.35,
     hitstopMs: 90,
     description: 'Explosive beam kickback throwing the camera horizontally.',
-    sfx: 'impact-hit',
+    sfx: 'hit-impact',
   },
   {
     id: 'power-charge',
@@ -216,7 +216,7 @@ export const RUMBLE_SHAKE_PRESETS: readonly RumbleShakePreset[] = [
     frequency: 1.1,
     hitstopMs: 60,
     description: 'Prolonged omnidirectional shockwave with heavy rotational roll.',
-    sfx: 'impact-hit',
+    sfx: 'hit-impact',
   },
   {
     id: 'tectonic-rumble',
@@ -230,7 +230,7 @@ export const RUMBLE_SHAKE_PRESETS: readonly RumbleShakePreset[] = [
     hitstopMs: 0,
     sustained: true,
     description: 'Low-frequency multi-harmonic tremor for collapsing arenas.',
-    sfx: 'impact-hit',
+    sfx: 'hit-impact',
   },
 ];
 
@@ -282,8 +282,8 @@ export const FX_COMBO_PRESETS: readonly AnimeFxComboPreset[] = [
     onomatopoeia: 'BOOM!!',
     onomatopoeiaTone: 'impact',
     pose: 'attack',
-    mood: 'fierce',
-    sfx: 'impact-hit',
+    mood: 'determined',
+    sfx: 'hit-impact',
   },
   {
     id: 'parry-counter',
@@ -300,7 +300,7 @@ export const FX_COMBO_PRESETS: readonly AnimeFxComboPreset[] = [
     onomatopoeia: 'CLANG!',
     onomatopoeiaTone: 'speed',
     pose: 'victory',
-    mood: 'excited',
+    mood: 'happy',
     sfx: 'success-chime',
   },
   {
@@ -318,7 +318,7 @@ export const FX_COMBO_PRESETS: readonly AnimeFxComboPreset[] = [
     onomatopoeia: 'BZZZT!',
     onomatopoeiaTone: 'electric',
     pose: 'attack',
-    mood: 'fierce',
+    mood: 'determined',
     sfx: 'toggle-pop',
   },
   {
@@ -336,8 +336,8 @@ export const FX_COMBO_PRESETS: readonly AnimeFxComboPreset[] = [
     onomatopoeia: 'DOOM!',
     onomatopoeiaTone: 'comic',
     pose: 'hurt',
-    mood: 'shocked',
-    sfx: 'impact-hit',
+    mood: 'surprised',
+    sfx: 'hit-impact',
   },
 ];
 
