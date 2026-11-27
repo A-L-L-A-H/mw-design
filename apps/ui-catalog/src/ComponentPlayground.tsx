@@ -16,7 +16,34 @@ import { Checkbox } from '@moonwitness/ui/components/checkbox';
 import { Spinner, type SpinnerSize } from '@moonwitness/ui/components/spinner';
 import { Panel, type PanelProps } from '@moonwitness/ui/components/panel';
 import { SectionRibbon, type SectionRibbonProps } from '@moonwitness/ui/components/section-ribbon';
-import { AddIcon } from '@moonwitness/ui/icons';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@moonwitness/ui/components/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@moonwitness/ui/components/tabs';
+import { SelectField } from '@moonwitness/ui/components/select-field';
+import {
+  CHARACTER_REGISTRY,
+  DnaIcon,
+  type DnaIconTone,
+  type DnaIconTreatment,
+} from '@moonwitness/ui';
+import { KineticText, MotionTimeline } from '@moonwitness/ui/motion';
+import { BossHealthBar, LootRevealCard, StatGauge, type StatGaugeTone } from '@moonwitness/ui/game';
+import {
+  AnimeCutIn,
+  CartoonRig,
+  OnomatopoeiaSFX,
+  type AnimeEmoteKind,
+  type CartoonRigMood,
+  type OnomatopoeiaTone,
+} from '@moonwitness/ui/cartoon';
+import { AddIcon, KatanaIcon } from '@moonwitness/ui/icons';
 import { auditElementAccessibility, type A11yAuditReport } from './a11yAudit.js';
 
 type PlaygroundComponentId =
@@ -30,7 +57,19 @@ type PlaygroundComponentId =
   | 'checkbox'
   | 'spinner'
   | 'panel'
-  | 'ribbon';
+  | 'ribbon'
+  | 'dialog'
+  | 'tabs'
+  | 'select'
+  | 'stat-gauge'
+  | 'kinetic-text'
+  | 'motion-timeline'
+  | 'onomatopoeia'
+  | 'character-rig'
+  | 'anime-cut-in'
+  | 'boss-health-bar'
+  | 'loot-card'
+  | 'dna-icon';
 
 type BadgeVariant = NonNullable<BadgeProps['variant']>;
 type BadgeSize = NonNullable<BadgeProps['size']>;
@@ -61,6 +100,18 @@ const PLAYGROUND_COMPONENTS: ReadonlyArray<{
   { id: 'spinner', label: 'Spinner' },
   { id: 'panel', label: 'Panel' },
   { id: 'ribbon', label: 'SectionRibbon' },
+  { id: 'dialog', label: 'Dialog' },
+  { id: 'tabs', label: 'Tabs' },
+  { id: 'select', label: 'Select' },
+  { id: 'stat-gauge', label: 'StatGauge' },
+  { id: 'kinetic-text', label: 'KineticText' },
+  { id: 'motion-timeline', label: 'MotionTimeline' },
+  { id: 'onomatopoeia', label: 'Onomatopoeia' },
+  { id: 'character-rig', label: 'CartoonRig (30)' },
+  { id: 'anime-cut-in', label: 'AnimeCutIn' },
+  { id: 'boss-health-bar', label: 'BossHealthBar' },
+  { id: 'loot-card', label: 'LootRevealCard' },
+  { id: 'dna-icon', label: 'DnaIcon' },
 ];
 
 const BUTTON_VARIANTS: readonly ButtonVariant[] = [
@@ -130,6 +181,13 @@ const CARD_VARIANTS: readonly CardVariant[] = ['default', 'elevated', 'muted', '
 const CARD_PADDINGS: readonly CardPadding[] = ['none', 'sm', 'md', 'lg'];
 const SWITCH_SIZES: readonly SwitchSize[] = ['sm', 'default'];
 const SPINNER_SIZES: readonly SpinnerSize[] = ['sm', 'md', 'lg'];
+const GAUGE_TONES: readonly StatGaugeTone[] = ['hp', 'mp', 'xp', 'shield', 'stamina'];
+const KINETIC_SPLITS: readonly ('word' | 'char')[] = ['word', 'char'];
+const ONOMATOPOEIA_TONES: readonly OnomatopoeiaTone[] = ['impact', 'electric', 'speed', 'comic'];
+const RIG_MOODS: readonly CartoonRigMood[] = ['neutral', 'happy', 'surprised', 'determined', 'angry', 'ko'];
+const RIG_EMOTES: readonly (AnimeEmoteKind | 'none')[] = ['none', 'sparkle', 'sweatdrop', 'anger', 'shock', 'exclaim'];
+const DNA_ICON_TREATMENTS: readonly DnaIconTreatment[] = ['wireframe', 'cel-ink', 'duotone', 'sticker'];
+const DNA_ICON_TONES: readonly DnaIconTone[] = ['primary', 'magenta', 'cyan', 'violet', 'success', 'warning', 'error', 'neutral'];
 
 const BORDER_STYLE_SCALES: readonly BorderStyleScale[] = [
   'hairline',
@@ -354,6 +412,52 @@ export function ComponentPlayground() {
   const [spinnerShowLabel, setSpinnerShowLabel] = useState(true);
   const [spinnerLabel, setSpinnerLabel] = useState('Syncing tokens');
 
+  // Dialog state
+  const [dialogTitle, setDialogTitle] = useState('Publish release v1.0');
+  const [dialogDescription, setDialogDescription] = useState(
+    'Confirm token bundle and component exports before tagging npm.'
+  );
+
+  // Tabs state
+  const [tabsValue, setTabsValue] = useState('overview');
+
+  // Select state
+  const [selectValue, setSelectValue] = useState('cartoon-pop');
+
+  // StatGauge state
+  const [gaugeTone, setGaugeTone] = useState<StatGaugeTone>('hp');
+  const [gaugeValue, setGaugeValue] = useState(72);
+  const [gaugeSegments, setGaugeSegments] = useState(10);
+
+  // KineticText state
+  const [kineticText, setKineticText] = useState('Animate Every Frame');
+  const [kineticSplit, setKineticSplit] = useState<'word' | 'char'>('word');
+  const [kineticStagger, setKineticStagger] = useState(45);
+  const [kineticKey, setKineticKey] = useState(0);
+
+  // Onomatopoeia state
+  const [sfxWord, setSfxWord] = useState('KRA-KOOM!');
+  const [sfxTone, setSfxTone] = useState<OnomatopoeiaTone>('impact');
+  const [sfxBurstKey, setSfxBurstKey] = useState(0);
+
+  // MotionTimeline state
+  const [timelineTitle, setTimelineTitle] = useState('Keyframe Curve');
+  const [timelineDuration, setTimelineDuration] = useState(1600);
+  const [timelineLoop, setTimelineLoop] = useState(true);
+  const [timelineShowPreview, setTimelineShowPreview] = useState(true);
+  const [timelineShowPresets, setTimelineShowPresets] = useState(true);
+
+  // Anime / Game / DNA state
+  const [pgCharId, setPgCharId] = useState('kuro-signal');
+  const [pgMood, setPgMood] = useState<CartoonRigMood>('determined');
+  const [pgEmote, setPgEmote] = useState<AnimeEmoteKind | 'none'>('sparkle');
+  const [pgCutInActive, setPgCutInActive] = useState(true);
+  const [pgBossHp, setPgBossHp] = useState(265);
+  const [pgBossStagger, setPgBossStagger] = useState(64);
+  const [pgLootRevealed, setPgLootRevealed] = useState(true);
+  const [pgDnaTreatment, setPgDnaTreatment] = useState<DnaIconTreatment>('cel-ink');
+  const [pgDnaTone, setPgDnaTone] = useState<DnaIconTone>('magenta');
+
   useEffect(() => {
     if (checkboxPreviewRef.current) {
       checkboxPreviewRef.current.indeterminate = checkboxIndeterminate;
@@ -429,6 +533,32 @@ export function ComponentPlayground() {
     spinnerSize,
     spinnerShowLabel,
     spinnerLabel,
+    dialogTitle,
+    dialogDescription,
+    tabsValue,
+    selectValue,
+    gaugeTone,
+    gaugeValue,
+    gaugeSegments,
+    kineticText,
+    kineticSplit,
+    kineticStagger,
+    sfxWord,
+    sfxTone,
+    timelineTitle,
+    timelineDuration,
+    timelineLoop,
+    timelineShowPreview,
+    timelineShowPresets,
+    pgCharId,
+    pgMood,
+    pgEmote,
+    pgCutInActive,
+    pgBossHp,
+    pgBossStagger,
+    pgLootRevealed,
+    pgDnaTreatment,
+    pgDnaTone,
   ]);
 
   useEffect(() => {
@@ -522,6 +652,48 @@ export function ComponentPlayground() {
       setSpinnerSize('md');
       setSpinnerShowLabel(true);
       setSpinnerLabel('Syncing tokens');
+    } else if (selected === 'dialog') {
+      setDialogTitle('Publish release v1.0');
+      setDialogDescription('Confirm token bundle and component exports before tagging npm.');
+    } else if (selected === 'tabs') {
+      setTabsValue('overview');
+    } else if (selected === 'select') {
+      setSelectValue('cartoon-pop');
+    } else if (selected === 'stat-gauge') {
+      setGaugeTone('hp');
+      setGaugeValue(72);
+      setGaugeSegments(10);
+    } else if (selected === 'kinetic-text') {
+      setKineticText('Animate Every Frame');
+      setKineticSplit('word');
+      setKineticStagger(45);
+      setKineticKey((k) => k + 1);
+    } else if (selected === 'onomatopoeia') {
+      setSfxWord('KRA-KOOM!');
+      setSfxTone('impact');
+      setSfxBurstKey((k) => k + 1);
+    } else if (selected === 'motion-timeline') {
+      setTimelineTitle('Keyframe Curve');
+      setTimelineDuration(1600);
+      setTimelineLoop(true);
+      setTimelineShowPreview(true);
+      setTimelineShowPresets(true);
+    } else if (selected === 'character-rig') {
+      setPgCharId('kuro-signal');
+      setPgMood('determined');
+      setPgEmote('sparkle');
+    } else if (selected === 'anime-cut-in') {
+      setPgCharId('kuro-signal');
+      setPgCutInActive(true);
+    } else if (selected === 'boss-health-bar') {
+      setPgBossHp(265);
+      setPgBossStagger(64);
+    } else if (selected === 'loot-card') {
+      setPgCharId('aria-lumina');
+      setPgLootRevealed(true);
+    } else if (selected === 'dna-icon') {
+      setPgDnaTreatment('cel-ink');
+      setPgDnaTone('magenta');
     } else {
       setRibbonAccent('magenta');
       setRibbonSurface('paper');
@@ -637,6 +809,49 @@ export function ComponentPlayground() {
         spinnerShowLabel ? 'showLabel' : null,
       ].filter(Boolean);
       return `<Spinner ${props.join(' ')} />`;
+    }
+    if (selected === 'dialog') {
+      return `<Dialog>\n  <DialogTrigger asChild><Button>Open dialog</Button></DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>${dialogTitle}</DialogTitle>\n      <DialogDescription>${dialogDescription}</DialogDescription>\n    </DialogHeader>\n  </DialogContent>\n</Dialog>`;
+    }
+    if (selected === 'tabs') {
+      return `<Tabs value="${tabsValue}" onValueChange={setTab}>\n  <TabsList>\n    <TabsTrigger value="overview">Overview</TabsTrigger>\n    <TabsTrigger value="motion">Motion</TabsTrigger>\n    <TabsTrigger value="tokens">Tokens</TabsTrigger>\n  </TabsList>\n  <TabsContent value="${tabsValue}">Active tab: ${tabsValue}</TabsContent>\n</Tabs>`;
+    }
+    if (selected === 'select') {
+      return `<SelectField\n  aria-label="Choose skin preset"\n  value="${selectValue}"\n  onChange={(e) => setValue(e.target.value)}\n>\n  <option value="cartoon-pop">Cartoon Pop</option>\n  <option value="arcade-neon">Arcade Neon</option>\n  <option value="clean-motion">Clean Motion</option>\n  <option value="cozy-rpg">Cozy RPG</option>\n</SelectField>`;
+    }
+    if (selected === 'stat-gauge') {
+      return `<StatGauge\n  label="${gaugeTone.toUpperCase()}"\n  value={${gaugeValue}}\n  max={100}\n  tone="${gaugeTone}"\n  segments={${gaugeSegments}}\n/>`;
+    }
+    if (selected === 'kinetic-text') {
+      return `<KineticText\n  text="${kineticText}"\n  splitBy="${kineticSplit}"\n  staggerMs={${kineticStagger}}\n/>`;
+    }
+    if (selected === 'onomatopoeia') {
+      return `<OnomatopoeiaSFX text="${sfxWord}" tone="${sfxTone}" />`;
+    }
+    if (selected === 'motion-timeline') {
+      const props = [
+        `title="${timelineTitle || 'Keyframe Curve'}"`,
+        timelineDuration !== 1600 ? `durationMs={${timelineDuration}}` : null,
+        !timelineLoop ? 'defaultLoop={false}' : null,
+        !timelineShowPreview ? 'showPreview={false}' : null,
+        timelineShowPresets ? 'showPresetLibrary' : null,
+      ].filter(Boolean);
+      return `<MotionTimeline\n  ${props.join('\n  ')}\n/>`;
+    }
+    if (selected === 'character-rig') {
+      return `<CartoonRig\n  characterId="${pgCharId}"\n  mood="${pgMood}"${pgEmote !== 'none' ? `\n  emote="${pgEmote}"` : ''}\n  size="lg"\n/>`;
+    }
+    if (selected === 'anime-cut-in') {
+      return `<AnimeCutIn\n  active={${pgCutInActive}}\n  characterId="${pgCharId}"\n/>`;
+    }
+    if (selected === 'boss-health-bar') {
+      return `<BossHealthBar\n  characterId="lord-null"\n  hp={${pgBossHp}}\n  maxHp={380}\n  phases={3}\n  stagger={${pgBossStagger}}\n/>`;
+    }
+    if (selected === 'loot-card') {
+      return `<LootRevealCard\n  characterId="${pgCharId}"\n  revealed={${pgLootRevealed}}\n/>`;
+    }
+    if (selected === 'dna-icon') {
+      return `<DnaIcon treatment="${pgDnaTreatment}" tone="${pgDnaTone}" size="lg">\n  <KatanaIcon size={24} />\n</DnaIcon>`;
     }
     const props = [
       `title="${ribbonTitle}"`,
@@ -975,6 +1190,163 @@ export function ComponentPlayground() {
                   action={ribbonShowAction ? <Badge variant="primary">Live</Badge> : undefined}
                 />
               </div>
+            ) : null}
+
+            {selected === 'dialog' ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="default">Open interactive dialog</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{dialogTitle || 'Dialog title'}</DialogTitle>
+                    <DialogDescription>{dialogDescription}</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button size="sm" variant="default">
+                      Confirm action
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            ) : null}
+
+            {selected === 'tabs' ? (
+              <div className="catalog-playground-wide-box">
+                <Tabs value={tabsValue} onValueChange={setTabsValue}>
+                  <TabsList>
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="motion">Motion</TabsTrigger>
+                    <TabsTrigger value="tokens">Tokens</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="overview">
+                    Overview tab content with keyboard arrow navigation.
+                  </TabsContent>
+                  <TabsContent value="motion">
+                    Motion tab content using semantic timing tokens.
+                  </TabsContent>
+                  <TabsContent value="tokens">
+                    Tokens tab content reflecting the active theme and skin.
+                  </TabsContent>
+                </Tabs>
+              </div>
+            ) : null}
+
+            {selected === 'select' ? (
+              <div className="catalog-playground-field-box">
+                <Field label="Target skin preset" htmlFor="playground-select-skin">
+                  <SelectField
+                    id="playground-select-skin"
+                    value={selectValue}
+                    onChange={(event) => setSelectValue(event.target.value)}
+                  >
+                    <option value="cartoon-pop">Cartoon Pop</option>
+                    <option value="arcade-neon">Arcade Neon</option>
+                    <option value="clean-motion">Clean Motion</option>
+                    <option value="cozy-rpg">Cozy RPG</option>
+                  </SelectField>
+                </Field>
+              </div>
+            ) : null}
+
+            {selected === 'stat-gauge' ? (
+              <div className="catalog-playground-wide-box">
+                <StatGauge
+                  label={gaugeTone.toUpperCase()}
+                  value={gaugeValue}
+                  max={100}
+                  tone={gaugeTone}
+                  segments={gaugeSegments}
+                />
+              </div>
+            ) : null}
+
+            {selected === 'kinetic-text' ? (
+              <div className="catalog-playground-preview-stack">
+                <KineticText
+                  key={kineticKey}
+                  text={kineticText || 'Animate Every Frame'}
+                  splitBy={kineticSplit}
+                  staggerMs={kineticStagger}
+                />
+              </div>
+            ) : null}
+
+            {selected === 'onomatopoeia' ? (
+              <OnomatopoeiaSFX
+                key={sfxBurstKey}
+                text={sfxWord || 'POW!'}
+                tone={sfxTone}
+              />
+            ) : null}
+
+            {selected === 'motion-timeline' ? (
+              <div className="catalog-playground-wide-box">
+                <MotionTimeline
+                  title={timelineTitle || 'Keyframe Curve'}
+                  durationMs={timelineDuration}
+                  defaultLoop={timelineLoop}
+                  showPreview={timelineShowPreview}
+                  showPresetLibrary={timelineShowPresets}
+                  defaultProgress={0.32}
+                />
+              </div>
+            ) : null}
+
+            {selected === 'character-rig' ? (
+              <CartoonRig
+                characterId={pgCharId}
+                mood={pgMood}
+                emote={pgEmote === 'none' ? undefined : pgEmote}
+                size="lg"
+              />
+            ) : null}
+
+            {selected === 'anime-cut-in' ? (
+              <div className="catalog-playground-wide-box">
+                <AnimeCutIn
+                  active={pgCutInActive}
+                  characterId={pgCharId}
+                  onDismiss={() => setPgCutInActive(false)}
+                />
+                {!pgCutInActive ? (
+                  <Button size="sm" variant="default" onClick={() => setPgCutInActive(true)}>
+                    Trigger Cut-In
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
+
+            {selected === 'boss-health-bar' ? (
+              <div className="catalog-playground-wide-box">
+                <BossHealthBar
+                  characterId="lord-null"
+                  hp={pgBossHp}
+                  maxHp={380}
+                  phases={3}
+                  stagger={pgBossStagger}
+                  broken={pgBossStagger >= 100}
+                />
+              </div>
+            ) : null}
+
+            {selected === 'loot-card' ? (
+              <LootRevealCard
+                characterId={pgCharId}
+                revealed={pgLootRevealed}
+                onRevealChange={setPgLootRevealed}
+              />
+            ) : null}
+
+            {selected === 'dna-icon' ? (
+              <DnaIcon
+                treatment={pgDnaTreatment}
+                tone={pgDnaTone}
+                size="lg"
+                label="Katana DNA icon"
+              >
+                <KatanaIcon size={24} aria-hidden="true" />
+              </DnaIcon>
             ) : null}
           </div>
 
@@ -1551,6 +1923,289 @@ export function ComponentPlayground() {
                 />
                 <span>Show visible label</span>
               </label>
+            </>
+          ) : null}
+
+          {selected === 'dialog' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Dialog title</span>
+                <input
+                  type="text"
+                  value={dialogTitle}
+                  onChange={(event) => setDialogTitle(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-input-field">
+                <span>Dialog description</span>
+                <input
+                  type="text"
+                  value={dialogDescription}
+                  onChange={(event) => setDialogDescription(event.target.value)}
+                />
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'tabs' ? (
+            <OptionSelector
+              label="Active tab"
+              options={['overview', 'motion', 'tokens'] as const}
+              value={tabsValue as 'overview' | 'motion' | 'tokens'}
+              onChange={setTabsValue}
+            />
+          ) : null}
+
+          {selected === 'select' ? (
+            <OptionSelector
+              label="Selected value"
+              options={['cartoon-pop', 'arcade-neon', 'clean-motion', 'cozy-rpg'] as const}
+              value={selectValue as 'cartoon-pop' | 'arcade-neon' | 'clean-motion' | 'cozy-rpg'}
+              onChange={setSelectValue}
+            />
+          ) : null}
+
+          {selected === 'stat-gauge' ? (
+            <>
+              <OptionSelector
+                label="Gauge tone"
+                options={GAUGE_TONES}
+                value={gaugeTone}
+                onChange={setGaugeTone}
+              />
+              <label className="catalog-playground-input-field">
+                <span>Value: {gaugeValue}%</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={gaugeValue}
+                  onChange={(event) => setGaugeValue(Number(event.target.value))}
+                />
+              </label>
+              <label className="catalog-playground-input-field">
+                <span>Segments: {gaugeSegments}</span>
+                <input
+                  type="range"
+                  min={1}
+                  max={20}
+                  value={gaugeSegments}
+                  onChange={(event) => setGaugeSegments(Number(event.target.value))}
+                />
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'kinetic-text' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Headline text</span>
+                <input
+                  type="text"
+                  value={kineticText}
+                  onChange={(event) => setKineticText(event.target.value)}
+                />
+              </label>
+              <OptionSelector
+                label="Split mode"
+                options={KINETIC_SPLITS}
+                value={kineticSplit}
+                onChange={(next) => {
+                  setKineticSplit(next);
+                  setKineticKey((k) => k + 1);
+                }}
+              />
+              <label className="catalog-playground-input-field">
+                <span>Stagger: {kineticStagger}ms</span>
+                <input
+                  type="range"
+                  min={15}
+                  max={120}
+                  step={5}
+                  value={kineticStagger}
+                  onChange={(event) => setKineticStagger(Number(event.target.value))}
+                />
+              </label>
+              <Button size="sm" variant="outline" onClick={() => setKineticKey((k) => k + 1)}>
+                Replay entrance
+              </Button>
+            </>
+          ) : null}
+
+          {selected === 'onomatopoeia' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>SFX text</span>
+                <input
+                  type="text"
+                  value={sfxWord}
+                  onChange={(event) => setSfxWord(event.target.value)}
+                />
+              </label>
+              <OptionSelector
+                label="Comic tone"
+                options={ONOMATOPOEIA_TONES}
+                value={sfxTone}
+                onChange={(next) => {
+                  setSfxTone(next);
+                  setSfxBurstKey((k) => k + 1);
+                }}
+              />
+              <Button size="sm" variant="outline" onClick={() => setSfxBurstKey((k) => k + 1)}>
+                Pop burst
+              </Button>
+            </>
+          ) : null}
+
+          {selected === 'motion-timeline' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Timeline title</span>
+                <input
+                  type="text"
+                  value={timelineTitle}
+                  onChange={(event) => setTimelineTitle(event.target.value)}
+                />
+              </label>
+              <label className="catalog-playground-input-field">
+                <span>Duration: {timelineDuration}ms</span>
+                <input
+                  type="range"
+                  min={600}
+                  max={3200}
+                  step={100}
+                  value={timelineDuration}
+                  onChange={(event) => setTimelineDuration(Number(event.target.value))}
+                />
+              </label>
+              <label className="catalog-playground-checkbox">
+                <Checkbox
+                  checked={timelineLoop}
+                  onChange={(event) => setTimelineLoop(event.target.checked)}
+                />
+                <span>Loop playback by default</span>
+              </label>
+              <label className="catalog-playground-checkbox">
+                <Checkbox
+                  checked={timelineShowPreview}
+                  onChange={(event) => setTimelineShowPreview(event.target.checked)}
+                />
+                <span>Show live keyframe preview track</span>
+              </label>
+              <label className="catalog-playground-checkbox">
+                <Checkbox
+                  checked={timelineShowPresets}
+                  onChange={(event) => setTimelineShowPresets(event.target.checked)}
+                />
+                <span>Show easing curve preset library</span>
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'character-rig' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Character (30 Registry)</span>
+                <select
+                  className="mw-ui-template-battle-select"
+                  value={pgCharId}
+                  onChange={(e) => setPgCharId(e.target.value)}
+                >
+                  {CHARACTER_REGISTRY.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.faction})
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <OptionSelector label="Mood" options={RIG_MOODS} value={pgMood} onChange={setPgMood} />
+              <OptionSelector label="Anime Emote" options={RIG_EMOTES} value={pgEmote} onChange={setPgEmote} />
+            </>
+          ) : null}
+
+          {selected === 'anime-cut-in' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Character</span>
+                <select
+                  className="mw-ui-template-battle-select"
+                  value={pgCharId}
+                  onChange={(e) => setPgCharId(e.target.value)}
+                >
+                  {CHARACTER_REGISTRY.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} — {c.ultimate.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button size="sm" variant="default" onClick={() => setPgCutInActive((v) => !v)}>
+                {pgCutInActive ? 'Hide Cut-In' : 'Show Cut-In'}
+              </Button>
+            </>
+          ) : null}
+
+          {selected === 'boss-health-bar' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Boss HP: {pgBossHp} / 380</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={380}
+                  value={pgBossHp}
+                  onChange={(e) => setPgBossHp(Number(e.target.value))}
+                />
+              </label>
+              <label className="catalog-playground-input-field">
+                <span>Stagger Gauge: {pgBossStagger}%</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={pgBossStagger}
+                  onChange={(e) => setPgBossStagger(Number(e.target.value))}
+                />
+              </label>
+            </>
+          ) : null}
+
+          {selected === 'loot-card' ? (
+            <>
+              <label className="catalog-playground-input-field">
+                <span>Summoned Character</span>
+                <select
+                  className="mw-ui-template-battle-select"
+                  value={pgCharId}
+                  onChange={(e) => setPgCharId(e.target.value)}
+                >
+                  {CHARACTER_REGISTRY.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.rarity})
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button size="sm" variant="outline" onClick={() => setPgLootRevealed((v) => !v)}>
+                {pgLootRevealed ? 'Reset Unrevealed' : 'Reveal Card'}
+              </Button>
+            </>
+          ) : null}
+
+          {selected === 'dna-icon' ? (
+            <>
+              <OptionSelector
+                label="Treatment"
+                options={DNA_ICON_TREATMENTS}
+                value={pgDnaTreatment}
+                onChange={setPgDnaTreatment}
+              />
+              <OptionSelector
+                label="Tone"
+                options={DNA_ICON_TONES}
+                value={pgDnaTone}
+                onChange={setPgDnaTone}
+              />
             </>
           ) : null}
 

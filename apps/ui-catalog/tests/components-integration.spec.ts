@@ -306,7 +306,90 @@ test.describe('UI catalog key component integration', () => {
       .fill('ThemeProvider');
     await expect(apiRef).toContainText('createSkinInitScript');
   });
+
+  test('AnimatedStudioShowcase switches Web/App/Game/Cartoon templates, viewport, Curve Lab, and Tailwind @theme export', async ({
+    page,
+  }) => {
+    await page.goto('./#playground');
+
+    const studio = page.getByTestId('animated-studio-showcase');
+    await expect(studio).toBeVisible();
+    const stage = studio.getByTestId('studio-template-stage');
+
+    await studio.getByRole('button', { name: 'App Shell', exact: true }).click();
+    await expect(stage).toContainText('Command Workspace');
+
+    await studio.getByRole('button', { name: 'Game Battle HUD', exact: true }).click();
+    await expect(stage).toContainText('HERO HP');
+
+    await studio.getByRole('button', { name: 'Cartoon Studio', exact: true }).click();
+    await expect(stage).toContainText('BEAT');
+
+    await studio.getByRole('button', { name: 'Tablet 768px', exact: true }).click();
+    await expect(stage).toHaveAttribute('data-viewport', 'tablet');
+
+    const curveLab = studio.getByTestId('motion-curve-lab');
+    await curveLab.getByRole('button', { name: 'elastic', exact: true }).click();
+    await expect(curveLab).toContainText('curve: elastic');
+
+    // Verify Tailwind @theme export tab in TokenExportPanel
+    await page.goto('./#foundations');
+    const exportPanel = page.getByTestId('token-export-panel');
+    await exportPanel.scrollIntoViewIfNeeded();
+    await exportPanel.getByRole('button', { name: 'Tailwind @theme', exact: true }).click();
+    await expect(exportPanel.getByTestId('token-export-preview')).toContainText('@theme {');
+  });
+
+  test('MotionTimeline renders SVG easing paths, toggles play/pause, jumps to keyframes, and applies easing curve presets', async ({
+    page,
+  }) => {
+    await page.goto('./#playground');
+
+    const showcase = page.getByTestId('motion-timeline-showcase');
+    await showcase.scrollIntoViewIfNeeded();
+    await expect(showcase).toBeVisible();
+
+    const timeline = showcase.locator('[data-slot="motion-timeline"]');
+    await expect(timeline.locator('svg path.mw-ui-motion-timeline-segment-path')).toHaveCount(3);
+    await expect(timeline.locator('svg path.mw-ui-motion-timeline-elapsed-path')).toBeVisible();
+
+    const playBtn = timeline.getByRole('button', { name: 'Play animation timeline' });
+    await playBtn.click();
+    await expect(timeline).toHaveAttribute('data-playing', 'true');
+    const pauseBtn = timeline.getByRole('button', { name: 'Pause animation timeline' });
+    await expect(pauseBtn).toBeVisible();
+    await pauseBtn.click();
+    await expect(timeline).toHaveAttribute('data-playing', 'false');
+
+    // Jump to a keyframe card
+    await timeline.getByRole('button', { name: /Hold/i }).click();
+    await expect(timeline).toContainText('progress: 72%');
+
+    // Apply ease-in-out-back from the Easing Curve Preset Library across all segments
+    const presetLib = timeline.locator('[data-slot="motion-timeline-preset-library"]');
+    await expect(presetLib).toBeVisible();
+    await presetLib.getByRole('button', { name: 'Back & Overshoot', exact: true }).click();
+    const backPreset = presetLib.locator('[data-preset-id="ease-in-out-back"]');
+    await backPreset.click();
+    await expect(backPreset).toHaveAttribute('data-active', 'true');
+    await expect(timeline).toContainText('easing: ease-in-out-back');
+
+    // Switch scope to Active Segment and apply Elastic from Physics category
+    await presetLib.getByRole('button', { name: 'Active Segment', exact: true }).click();
+    await presetLib.getByRole('button', { name: 'Physics', exact: true }).click();
+    const elasticPreset = presetLib.locator('[data-preset-id="elastic"]');
+    await elasticPreset.click();
+    await expect(elasticPreset).toHaveAttribute('data-active', 'true');
+    await expect(timeline).toContainText('easing: elastic');
+
+    // Switch timeline preset
+    await showcase.getByRole('button', { name: 'Game Hit Bounce', exact: true }).click();
+    await expect(timeline).toContainText('Motion Timeline · Game Hit Bounce');
+    await expect(timeline).toContainText('Impact');
+  });
 });
+
+
 
 
 

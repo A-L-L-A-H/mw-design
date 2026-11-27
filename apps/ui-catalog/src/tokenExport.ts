@@ -1,5 +1,7 @@
+import tokensBundle from '@moonwitness/ui/tokens.bundle.json';
+
 export type TokenCategory = 'colors' | 'spacing' | 'typography';
-export type TokenExportFormat = 'css' | 'json';
+export type TokenExportFormat = 'css' | 'json' | 'tailwind';
 
 export interface ActiveDesignTokenSnapshot {
   meta: {
@@ -96,92 +98,64 @@ export const TYPOGRAPHY_TOKENS = [
   '--mw-line-height-normal',
 ] as const;
 
-const FALLBACK_VALUES: Record<string, string> = {
-  '--mw-background': '#f3efe4',
-  '--mw-foreground': '#0d0d0d',
-  '--mw-surface': '#fffdf6',
-  '--mw-surface-foreground': '#0d0d0d',
-  '--mw-popover': '#fffdf6',
-  '--mw-popover-foreground': '#0d0d0d',
-  '--mw-primary': '#ffe031',
-  '--mw-primary-foreground': '#0d0d0d',
-  '--mw-secondary': '#f3efe4',
-  '--mw-secondary-foreground': '#0d0d0d',
-  '--mw-muted': '#e7e2d4',
-  '--mw-muted-foreground': '#3a3a36',
-  '--mw-accent': '#ffe031',
-  '--mw-accent-foreground': '#0d0d0d',
-  '--mw-destructive': '#b42318',
-  '--mw-destructive-foreground': '#fffdf6',
-  '--mw-success': '#166534',
-  '--mw-on-success': '#fffdf6',
-  '--mw-warning': '#facc15',
-  '--mw-on-warning': '#0d0d0d',
-  '--mw-info': '#175cd3',
-  '--mw-on-info': '#fffdf6',
-  '--mw-border': '#0d0d0d',
-  '--mw-border-strong': '#0d0d0d',
-  '--mw-border-subtle': '#a4a096',
-  '--mw-focus': '#0d0d0d',
-  '--mw-paper': '#f3efe4',
-  '--mw-paper-raised': '#fffdf6',
-  '--mw-ink': '#0d0d0d',
-  '--mw-yellow': '#ffe031',
-  '--mw-magenta': '#ff2e88',
-  '--mw-signal-blue': '#00b8f0',
-  '--mw-violet': '#c084fc',
-  '--mw-chart-1': '#476a2a',
-  '--mw-chart-2': '#ff2e88',
-  '--mw-chart-3': '#176b87',
-  '--mw-chart-4': '#936a22',
-  '--mw-chart-5': '#76519b',
-  '--mw-space-1': '0.25rem',
-  '--mw-space-2': '0.5rem',
-  '--mw-space-3': '0.75rem',
-  '--mw-space-4': '1rem',
-  '--mw-space-6': '1.5rem',
-  '--mw-space-8': '2rem',
-  '--mw-avatar-size': '2.5rem',
-  '--mw-panel-gap-compact': '0.375rem',
-  '--mw-panel-gap-comfortable': '0.75rem',
-  '--mw-panel-padding-compact': '0.625rem',
-  '--mw-panel-padding-comfortable': '1rem',
-  '--mw-frame-width': '2px',
-  '--mw-comic-border-width': '2px',
-  '--mw-comic-gutter': '0.75rem',
-  '--mw-torn-safe-inset': '0.75rem',
-  '--mw-radius-sm': '0.125rem',
-  '--mw-radius-md': '0.25rem',
-  '--mw-radius-lg': '0.5rem',
-  '--mw-radius-full': '9999px',
-  '--mw-shadow-ink': '3px 3px 0 0 #0d0d0d',
-  '--mw-shadow-ink-lg': '6px 6px 0 0 #0d0d0d',
-  '--mw-shadow-comic': '4px 4px 0 0 #0d0d0d',
-  '--mw-font-display': "'Anton', 'MoonWitness Grunge', Impact, 'Arial Narrow', sans-serif",
-  '--mw-font-grunge': "'MoonWitness Grunge', 'Road Rage', Impact, 'Arial Narrow', sans-serif",
-  '--mw-font-condensed': "'MoonWitness Grunge', 'Road Rage', Impact, 'Arial Narrow', sans-serif",
-  '--mw-font-brush': "'Road Rage', 'MoonWitness Grunge', Impact, 'Arial Narrow', sans-serif",
-  '--mw-font-sans': "'Space Grotesk', ui-sans-serif, system-ui, sans-serif",
-  '--mw-font-mono': "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
-  '--mw-font-size-2xs': '0.75rem',
-  '--mw-font-size-xs': '0.75rem',
-  '--mw-font-size-sm': '0.875rem',
-  '--mw-font-size-md': '1rem',
-  '--mw-font-size-lg': '1.125rem',
-  '--mw-font-size-xl': '1.25rem',
-  '--mw-font-size-2xl': '1.5rem',
-  '--mw-line-height-tight': '1.2',
-  '--mw-line-height-normal': '1.5',
+type TokenBundleEntry = {
+  cssVariable: string;
+  value: string;
+  darkValue?: string;
 };
+
+const BUNDLE_TOKENS: ReadonlyMap<string, TokenBundleEntry> = new Map(
+  ((tokensBundle as { tokens?: TokenBundleEntry[] }).tokens ?? []).map((entry) => [
+    entry.cssVariable,
+    entry,
+  ])
+);
+
+const TOKEN_ALIAS_MAP: Readonly<Record<string, string>> = {
+  '--mw-surface-foreground': '--mw-foreground',
+  '--mw-popover': '--mw-surface',
+  '--mw-popover-foreground': '--mw-foreground',
+  '--mw-primary-foreground': '--mw-ink-black',
+  '--mw-secondary': '--mw-background',
+  '--mw-secondary-foreground': '--mw-foreground',
+  '--mw-muted': '--mw-background',
+  '--mw-muted-foreground': '--mw-foreground',
+  '--mw-accent': '--mw-primary',
+  '--mw-accent-foreground': '--mw-ink-black',
+  '--mw-destructive': '--mw-error',
+  '--mw-destructive-foreground': '--mw-surface',
+  '--mw-on-success': '--mw-surface',
+  '--mw-on-warning': '--mw-ink-black',
+  '--mw-on-info': '--mw-surface',
+  '--mw-border': '--mw-foreground',
+  '--mw-border-strong': '--mw-foreground',
+  '--mw-border-subtle': '--mw-foreground',
+  '--mw-focus': '--mw-foreground',
+  '--mw-paper': '--mw-background',
+  '--mw-paper-raised': '--mw-surface',
+  '--mw-ink': '--mw-foreground',
+};
+
+function resolveBundleFallback(token: string, isDark: boolean): string {
+  const direct = BUNDLE_TOKENS.get(token);
+  if (direct) return (isDark && direct.darkValue) || direct.value;
+  const alias = TOKEN_ALIAS_MAP[token];
+  if (alias) {
+    const aliased = BUNDLE_TOKENS.get(alias);
+    if (aliased) return (isDark && aliased.darkValue) || aliased.value;
+  }
+  return `var(${token})`;
+}
 
 function readTokenGroup(
   tokens: readonly string[],
-  computed: CSSStyleDeclaration | null
+  computed: CSSStyleDeclaration | null,
+  isDark: boolean
 ): Record<string, string> {
   const entries: Record<string, string> = {};
   for (const token of tokens) {
     const raw = computed?.getPropertyValue(token).trim();
-    entries[token] = raw || FALLBACK_VALUES[token] || '';
+    entries[token] = raw || resolveBundleFallback(token, isDark);
   }
   return entries;
 }
@@ -200,11 +174,12 @@ export function collectActiveDesignTokens(
   const skin = root?.dataset.skin || 'moonwitness-ink';
   const density = root?.dataset.density || 'comfortable';
 
+  const isDark = theme === 'dark' || theme === 'high-contrast';
   return {
     meta: { theme, skin, density },
-    colors: readTokenGroup(COLOR_TOKENS, computed),
-    spacing: readTokenGroup(SPACING_TOKENS, computed),
-    typography: readTokenGroup(TYPOGRAPHY_TOKENS, computed),
+    colors: readTokenGroup(COLOR_TOKENS, computed, isDark),
+    spacing: readTokenGroup(SPACING_TOKENS, computed, isDark),
+    typography: readTokenGroup(TYPOGRAPHY_TOKENS, computed, isDark),
   };
 }
 
@@ -251,12 +226,56 @@ export function formatTokensAsJson(
   return `${JSON.stringify(payload, null, 2)}\n`;
 }
 
+export function formatTokensAsTailwindTheme(
+  snapshot: ActiveDesignTokenSnapshot,
+  categories: readonly TokenCategory[] = ['colors', 'spacing', 'typography']
+): string {
+  const activeSet = new Set(categories);
+  const lines: string[] = [
+    `/* MoonWitness Tailwind v4 @theme — theme: ${snapshot.meta.theme}, skin: ${snapshot.meta.skin}, density: ${snapshot.meta.density} */`,
+    '@theme {',
+  ];
+  if (activeSet.has('colors')) {
+    for (const [name, value] of Object.entries(snapshot.colors)) {
+      const key = name.replace(/^--mw-/, '');
+      lines.push(`  --color-mw-${key}: ${value};`);
+    }
+  }
+  if (activeSet.has('spacing')) {
+    for (const [name, value] of Object.entries(snapshot.spacing)) {
+      const key = name.replace(/^--mw-/, '');
+      if (key.startsWith('radius-')) {
+        lines.push(`  --radius-mw-${key.slice(7)}: ${value};`);
+      } else if (key.startsWith('shadow-')) {
+        lines.push(`  --shadow-mw-${key.slice(7)}: ${value};`);
+      } else {
+        lines.push(`  --spacing-mw-${key}: ${value};`);
+      }
+    }
+  }
+  if (activeSet.has('typography')) {
+    for (const [name, value] of Object.entries(snapshot.typography)) {
+      const key = name.replace(/^--mw-/, '');
+      if (key.startsWith('font-size-')) {
+        lines.push(`  --text-mw-${key.slice(10)}: ${value};`);
+      } else if (key.startsWith('font-')) {
+        lines.push(`  --font-mw-${key.slice(5)}: ${value};`);
+      } else {
+        lines.push(`  --leading-mw-${key}: ${value};`);
+      }
+    }
+  }
+  lines.push('}');
+  return `${lines.join('\n')}\n`;
+}
+
 export function buildTokenExportFilename(
   snapshot: ActiveDesignTokenSnapshot,
   format: TokenExportFormat
 ): string {
   const sanitize = (part: string) => part.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  return `moonwitness-tokens-${sanitize(snapshot.meta.skin)}-${sanitize(snapshot.meta.theme)}-${sanitize(snapshot.meta.density)}.${format}`;
+  const ext = format === 'tailwind' ? 'tailwind.css' : format;
+  return `moonwitness-tokens-${sanitize(snapshot.meta.skin)}-${sanitize(snapshot.meta.theme)}-${sanitize(snapshot.meta.density)}.${ext}`;
 }
 
 export function downloadTokenFile(content: string, filename: string, mimeType: string): void {

@@ -365,10 +365,45 @@
     "./components/spinner": {
       "types": "./dist/components/spinner.d.ts",
       "import": "./dist/components/spinner.js"
-    }
+    },
+    "./components/motion-timeline": {
+      "types": "./dist/components/motion-timeline.d.ts",
+      "import": "./dist/components/motion-timeline.js"
+    },
+    "./components/dna-icon": {
+      "types": "./dist/components/dna-icon.d.ts",
+      "import": "./dist/components/dna-icon.js"
+    },
+    "./lib/character-registry": {
+      "types": "./dist/lib/character-registry.d.ts",
+      "import": "./dist/lib/character-registry.js"
+    },
+    "./motion": {
+      "types": "./dist/motion/index.d.ts",
+      "import": "./dist/motion/index.js"
+    },
+    "./motion/physics": {
+      "types": "./dist/motion/physics.d.ts",
+      "import": "./dist/motion/physics.js"
+    },
+    "./game": {
+      "types": "./dist/game/index.d.ts",
+      "import": "./dist/game/index.js"
+    },
+    "./cartoon": {
+      "types": "./dist/cartoon/index.d.ts",
+      "import": "./dist/cartoon/index.js"
+    },
+    "./templates": {
+      "types": "./dist/templates/index.d.ts",
+      "import": "./dist/templates/index.js"
+    },
+    "./tokens.w3c.json": "./dist/tokens.w3c.json",
+    "./tokens.bundle.json": "./dist/tokens.bundle.json",
+    "./tailwind-preset.css": "./dist/tailwind-preset.css"
   },
   "scripts": {
-    "build": "node scripts/generate-icons.mjs && tsc",
+    "build": "node scripts/generate-icons.mjs && tsc && node scripts/generate-token-artifacts.mjs",
     "test": "npm run build && node --test tests/*.test.mjs"
   },
   "peerDependencies": {

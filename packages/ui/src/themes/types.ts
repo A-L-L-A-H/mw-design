@@ -6,7 +6,11 @@ export type BuiltinSkinId =
   | 'moonwitness-ink'
   | 'moonwitness-compact'
   | 'moonwitness-high-contrast'
-  | 'moonwitness-riot';
+  | 'moonwitness-riot'
+  | 'cartoon-pop'
+  | 'arcade-neon'
+  | 'clean-motion'
+  | 'cozy-rpg';
 
 export type SkinId = BuiltinSkinId | (string & {});
 

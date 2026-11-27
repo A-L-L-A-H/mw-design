@@ -1,8 +1,10 @@
+import { evaluateEasing, type MotionEasingName } from '../motion/physics.js';
+
 export const MAX_TIMELINE_DEPTH = 16;
 
 export type TimelineTrackKind = 'entrance' | 'layer-transition' | 'clip' | 'event';
 
-export type TimelineEasing = 'linear' | 'ease-out' | 'ease-in-out';
+export type TimelineEasing = MotionEasingName;
 
 export interface TimelineTrack {
   readonly id: string;
@@ -11,6 +13,7 @@ export interface TimelineTrack {
   readonly durationMs: number;
   readonly targetId?: string;
   readonly easing?: TimelineEasing;
+  readonly sfx?: string;
   readonly triggers?: readonly string[];
   readonly payload?: Record<string, unknown>;
 }
@@ -65,14 +68,7 @@ export interface SceneTimeline {
 }
 
 function applyEasing(progress: number, easing: TimelineEasing | undefined): number {
-  const clamped = Math.min(1, Math.max(0, progress));
-  if (easing === 'ease-out') {
-    return 1 - (1 - clamped) * (1 - clamped);
-  }
-  if (easing === 'ease-in-out') {
-    return clamped < 0.5 ? 2 * clamped * clamped : 1 - Math.pow(-2 * clamped + 2, 2) / 2;
-  }
-  return clamped;
+  return evaluateEasing(progress, easing ?? 'linear');
 }
 
 export function validateTimelineTracks(

@@ -2580,51 +2580,51 @@ a:focus-visible {
     flex-direction: column;
     align-items: flex-start;
   }
+}
 
-  .fx-lab {
-    display: grid;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
-  }
-  .fx-lab-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
+.fx-lab {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+.fx-lab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.fx-lab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-width: 0;
+}
+.fx-lab-particles,
+.fx-lab-transitions,
+.fx-lab-audio {
+  min-width: 0;
+}
+.fx-lab-particle-stage,
+.fx-lab-transition-stage {
+  position: relative;
+  border: 2px solid var(--mw-border-strong);
+  background: repeating-conic-gradient(var(--catalog-grid-a) 0% 25%, var(--catalog-grid-b) 0% 50%)
+    50% / 16px 16px;
+  overflow: hidden;
+}
+.fx-lab-caption {
+  margin: 0.35rem 0 0;
+  font: 500 0.7rem var(--mw-font-mono);
+  color: var(--mw-muted);
+}
+.fx-lab-audio-status {
+  margin: 0.35rem 0 0.5rem;
+  font: 500 0.75rem var(--mw-font-mono);
+}
+@media (max-width: 720px) {
   .fx-lab-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-    min-width: 0;
-  }
-  .fx-lab-particles,
-  .fx-lab-transitions,
-  .fx-lab-audio {
-    min-width: 0;
-  }
-  .fx-lab-particle-stage,
-  .fx-lab-transition-stage {
-    position: relative;
-    border: 2px solid var(--mw-border-strong);
-    background: repeating-conic-gradient(var(--catalog-grid-a) 0% 25%, var(--catalog-grid-b) 0% 50%)
-      50% / 16px 16px;
-    overflow: hidden;
-  }
-  .fx-lab-caption {
-    margin: 0.35rem 0 0;
-    font: 500 0.7rem var(--mw-font-mono);
-    color: var(--mw-muted);
-  }
-  .fx-lab-audio-status {
-    margin: 0.35rem 0 0.5rem;
-    font: 500 0.75rem var(--mw-font-mono);
-  }
-  @media (max-width: 720px) {
-    .fx-lab-grid {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2845,6 +2845,1053 @@ a:focus-visible {
   border: 1px dashed var(--mw-border-subtle);
   color: var(--mw-muted-foreground);
   font-size: 0.84rem;
+}
+
+.catalog-playground-section-stack {
+  display: grid;
+  gap: 1.5rem;
+}
+.catalog-studio {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 2px solid var(--mw-border);
+  background-color: var(--mw-surface);
+  box-shadow: var(--mw-shadow-ink);
+}
+.catalog-studio-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.catalog-studio-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.catalog-studio-title {
+  margin: 0;
+  font: 700 1.25rem/1.15 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.catalog-studio-subtitle {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--mw-muted-foreground);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.catalog-studio-controls {
+  display: grid;
+  gap: 0.65rem;
+}
+.catalog-studio-secondary-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+.catalog-studio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.catalog-studio-stage {
+  width: 100%;
+  margin: 0 auto;
+  transition: max-width var(--mw-motion-normal) var(--mw-motion-ease);
+}
+.catalog-studio-stage[data-viewport='tablet'] {
+  max-width: 768px;
+}
+.catalog-studio-stage[data-viewport='mobile'] {
+  max-width: 390px;
+}
+.catalog-timeline-showcase {
+  display: grid;
+  gap: 0.65rem;
+}
+.catalog-timeline-showcase-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.catalog-curve-lab {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--mw-border);
+  background-color: var(--mw-surface-elevated);
+}
+.catalog-curve-lab-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.catalog-curve-lab-title {
+  margin: 0 0 0.2rem;
+  font: 700 0.95rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.catalog-curve-lab-copy {
+  margin: 0;
+  color: var(--mw-muted-foreground);
+  font-size: 0.8rem;
+}
+.catalog-curve-lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.catalog-curve-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 600 0.74rem var(--mw-font-mono);
+}
+.catalog-curve-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.85rem;
+}
+.catalog-curve-graph-card,
+.catalog-curve-track-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.8rem;
+  border: 1px solid var(--mw-border-subtle);
+  background-color: var(--mw-surface);
+}
+.catalog-curve-svg {
+  width: 100%;
+  height: 110px;
+  display: block;
+}
+.catalog-curve-guide {
+  stroke: var(--mw-border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.catalog-curve-path {
+  fill: none;
+  stroke: var(--mw-magenta-readable);
+  stroke-width: 2.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.catalog-curve-dot {
+  fill: var(--mw-magenta);
+  stroke: var(--mw-ink);
+  stroke-width: 2;
+}
+.catalog-curve-readout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font: 600 0.72rem var(--mw-font-mono);
+  color: var(--mw-muted-foreground);
+}
+.catalog-curve-track-label {
+  font: 700 0.72rem var(--mw-font-mono);
+  text-transform: uppercase;
+  color: var(--mw-muted-foreground);
+}
+.catalog-curve-track {
+  position: relative;
+  height: 3.2rem;
+  border: 2px solid var(--mw-border);
+  border-radius: var(--mw-radius-md);
+  background-color: var(--mw-background);
+  overflow: hidden;
+}
+.catalog-curve-ball {
+  position: absolute;
+  top: 50%;
+  margin-top: -14px;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--mw-ink);
+  border-radius: 9999px;
+  background-color: var(--mw-yellow);
+  box-shadow: var(--mw-shadow-ink);
+}
+.catalog-curve-code {
+  font: 500 0.74rem/1.4 var(--mw-font-mono);
+  color: var(--mw-foreground);
+}
+.catalog-dna-preset-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  border: var(--mw-dna-ink-width, 2px) solid var(--mw-border-strong);
+  background: var(--mw-surface-elevated);
+  box-shadow: var(--mw-shadow-ink);
+}
+.catalog-dna-preset-label {
+  font: 700 0.72rem/1 var(--mw-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mw-magenta-readable);
+}
+.catalog-dna-suite-stack {
+  display: grid;
+  gap: 1.25rem;
+}
+.catalog-roster-studio {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: var(--mw-dna-ink-width, 2px) solid var(--mw-border-strong);
+  background-color: var(--mw-surface-elevated);
+  box-shadow: var(--mw-shadow-ink);
+}
+.catalog-roster-filters {
+  display: grid;
+  gap: 0.55rem;
+}
+.catalog-roster-subfilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+.catalog-roster-search {
+  flex: 1 1 13rem;
+  max-width: 18rem;
+}
+.catalog-roster-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(17rem, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.catalog-roster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.55rem;
+  max-height: 31rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+.catalog-roster-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.45rem;
+  border: 2px solid var(--mw-border);
+  background: var(--mw-surface);
+  color: var(--mw-foreground);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 140ms var(--mw-motion-ease), border-color 140ms var(--mw-motion-ease);
+}
+.catalog-roster-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--mw-primary);
+}
+.catalog-roster-card[data-selected='true'] {
+  border-color: var(--mw-magenta);
+  box-shadow: var(--mw-shadow-ink);
+  background: var(--mw-background);
+}
+.catalog-roster-card-meta {
+  display: grid;
+  gap: 0.1rem;
+  width: 100%;
+}
+.catalog-roster-card-code {
+  font: 700 0.62rem/1 var(--mw-font-mono);
+  color: var(--mw-magenta-readable);
+}
+.catalog-roster-card-meta strong {
+  font: 700 0.82rem/1.15 var(--mw-font-sans);
+}
+.catalog-roster-card-meta small {
+  font: 600 0.65rem/1.2 var(--mw-font-mono);
+  color: var(--mw-muted-foreground);
+  text-transform: uppercase;
+}
+.catalog-roster-inspector {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  border: 2px solid var(--mw-border-strong);
+  background: var(--mw-surface);
+}
+.catalog-roster-inspector-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+.catalog-roster-inspector-title h5 {
+  margin: 0.25rem 0 0.15rem;
+  font: 700 1.25rem/1.1 var(--mw-font-display);
+  text-transform: uppercase;
+}
+.catalog-roster-inspector-title p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--mw-muted-foreground);
+}
+.catalog-roster-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.catalog-roster-stats span {
+  padding: 0.3rem 0.4rem;
+  border: 1px solid var(--mw-border);
+  background: var(--mw-background);
+  font: 700 0.7rem/1 var(--mw-font-mono);
+  text-align: center;
+}
+.catalog-roster-ultimate {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 4px solid var(--mw-magenta);
+  background: var(--mw-background);
+}
+.catalog-roster-ultimate small {
+  font: 700 0.7rem/1.2 var(--mw-font-mono);
+  color: var(--mw-magenta-readable);
+}
+.catalog-roster-ultimate strong {
+  font: 700 0.88rem/1.2 var(--mw-font-display);
+  text-transform: uppercase;
+}
+.catalog-roster-ultimate p {
+  margin: 0.1rem 0 0;
+  font-size: 0.76rem;
+  color: var(--mw-muted-foreground);
+}
+.catalog-roster-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.catalog-dna-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.55rem;
+}
+.catalog-dna-icon-tile {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.4rem;
+  border: 1px solid var(--mw-border);
+  background: var(--mw-surface);
+  color: var(--mw-foreground);
+  font: 600 0.68rem/1.2 var(--mw-font-mono);
+  cursor: pointer;
+}
+.catalog-dna-icon-tile[data-selected='true'] {
+  border-color: var(--mw-primary);
+  box-shadow: var(--mw-shadow-ink);
+}
+@media (max-width: 58rem) {
+  .catalog-roster-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.anime-fx-lab {
+  display: grid;
+  gap: 1.15rem;
+  padding: 1.25rem;
+  border: var(--mw-dna-ink-width, 2px) solid var(--mw-border-strong);
+  background-color: var(--mw-surface);
+  color: var(--mw-foreground);
+  box-shadow: var(--mw-shadow-ink);
+  min-width: 0;
+}
+
+.anime-fx-lab-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.anime-fx-lab-context-controls,
+.anime-fx-lab-mode-toggles,
+.anime-fx-control-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.anime-fx-stage-shell {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.anime-fx-stage-camera {
+  position: relative;
+  min-height: 20rem;
+  aspect-ratio: 2 / 1;
+  max-height: 24rem;
+  width: 100%;
+  overflow: hidden;
+  border: var(--mw-dna-ink-width, 2px) solid var(--mw-border-strong);
+  border-radius: var(--mw-radius-md);
+  background-color: var(--mw-ink-black);
+  color: var(--mw-paper-cream);
+  will-change: transform;
+}
+
+.anime-fx-stage-camera[data-backdrop='arena-dark'] {
+  background-color: var(--mw-ink-black);
+  background-image:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--mw-cyan) 16%, transparent) 0%, transparent 62%),
+    linear-gradient(to right, color-mix(in srgb, var(--mw-paper-cream) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--mw-paper-cream) 8%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 28px 28px, 28px 28px;
+}
+
+.anime-fx-stage-camera[data-backdrop='manga-halftone'] {
+  background-color: var(--mw-paper-cream);
+  color: var(--mw-ink-black);
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--mw-ink-black) 18%, transparent) 1.4px,
+    transparent 1.4px
+  );
+  background-size: 11px 11px;
+}
+
+.anime-fx-stage-camera[data-backdrop='speedlines'] {
+  background-color: var(--mw-ink-black);
+  color: var(--mw-paper-cream);
+}
+
+.anime-fx-stage-camera[data-hitstop='true'] {
+  filter: contrast(1.22) saturate(1.15);
+}
+
+.anime-fx-stage-speedlines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.anime-fx-stage-hit-area {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  padding: 0.75rem 0.9rem;
+  background: transparent;
+  color: inherit;
+  cursor: crosshair;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.anime-fx-stage-hit-area:focus-visible {
+  outline: 3px solid var(--mw-focus);
+  outline-offset: -3px;
+}
+
+.anime-fx-stage-hint {
+  font: 600 0.72rem/1 var(--mw-font-mono);
+  letter-spacing: 0.04em;
+  opacity: 0.78;
+  padding: 0.25rem 0.5rem;
+  background-color: color-mix(in srgb, var(--mw-ink-black) 70%, transparent);
+  color: var(--mw-paper-cream);
+  border-radius: var(--mw-radius-xs);
+}
+
+.anime-fx-stage-subject {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.anime-fx-stage-subject-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--mw-radius-xs);
+  background-color: color-mix(in srgb, var(--mw-ink-black) 78%, transparent);
+  color: var(--mw-paper-cream);
+}
+
+.anime-fx-stage-subject-caption strong {
+  font: 700 0.85rem/1.1 var(--mw-font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.anime-fx-stage-subject-caption span {
+  font: 500 0.72rem/1.1 var(--mw-font-mono);
+  opacity: 0.85;
+}
+
+.anime-fx-stage-callout {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.anime-fx-particle-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.anime-fx-shockwave-ring {
+  fill: none;
+  stroke: var(--mw-yellow);
+  stroke-width: 3;
+}
+
+.anime-fx-particle-spark,
+.anime-fx-particle-star,
+.anime-fx-particle-sakura {
+  stroke: var(--mw-ink-black);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.anime-fx-particle-volt {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.anime-fx-particle-ink {
+  fill: var(--mw-ink-black);
+  stroke: var(--mw-paper-cream);
+  stroke-width: 1.25;
+}
+
+.anime-fx-particle-tone-0 .anime-fx-particle-spark,
+.anime-fx-particle-tone-0 .anime-fx-particle-star {
+  fill: var(--mw-yellow);
+}
+
+.anime-fx-particle-tone-1 .anime-fx-particle-spark,
+.anime-fx-particle-tone-1 .anime-fx-particle-star {
+  fill: var(--mw-magenta);
+}
+
+.anime-fx-particle-tone-2 .anime-fx-particle-spark,
+.anime-fx-particle-tone-2 .anime-fx-particle-star {
+  fill: var(--mw-cyan);
+}
+
+.anime-fx-particle-tone-0 .anime-fx-particle-sakura {
+  fill: var(--mw-magenta);
+}
+
+.anime-fx-particle-tone-1 .anime-fx-particle-sakura {
+  fill: var(--mw-paper-cream);
+}
+
+.anime-fx-particle-tone-2 .anime-fx-particle-sakura {
+  fill: var(--mw-yellow);
+}
+
+.anime-fx-particle-tone-0 .anime-fx-particle-volt {
+  stroke: var(--mw-cyan);
+}
+
+.anime-fx-particle-tone-1 .anime-fx-particle-volt {
+  stroke: var(--mw-yellow);
+}
+
+.anime-fx-particle-tone-2 .anime-fx-particle-volt {
+  stroke: var(--mw-paper-cream);
+}
+
+.anime-fx-impact-frame-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.anime-fx-impact-frame-layer[data-mode='impact-bw'][data-polarity='dark'] {
+  background-color: color-mix(in srgb, var(--mw-ink-black) 82%, transparent);
+}
+
+.anime-fx-impact-frame-layer[data-mode='impact-bw'][data-polarity='light'] {
+  background-color: color-mix(in srgb, var(--mw-paper-cream) 88%, transparent);
+}
+
+.anime-fx-impact-frame-layer[data-mode='impact-bw'][data-polarity='dark'] .anime-fx-impact-rays {
+  fill: var(--mw-paper-cream);
+}
+
+.anime-fx-impact-frame-layer[data-mode='impact-bw'][data-polarity='light'] .anime-fx-impact-rays {
+  fill: var(--mw-ink-black);
+}
+
+.anime-fx-impact-rays {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.anime-fx-impact-frame-layer[data-mode='whiteout'] {
+  background-color: color-mix(in srgb, var(--mw-paper-cream) 90%, transparent);
+}
+
+.anime-fx-impact-frame-layer[data-mode='invert-negative'] {
+  backdrop-filter: invert(1) contrast(1.4);
+  background-color: color-mix(in srgb, var(--mw-magenta) 16%, transparent);
+}
+
+.anime-fx-impact-frame-layer[data-mode='chromatic-split'] {
+  box-shadow:
+    inset 12px 0 0 color-mix(in srgb, var(--mw-cyan) 62%, transparent),
+    inset -12px 0 0 color-mix(in srgb, var(--mw-magenta) 62%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--mw-cyan) 22%, transparent),
+    transparent 35%,
+    transparent 65%,
+    color-mix(in srgb, var(--mw-magenta) 22%, transparent)
+  );
+}
+
+.anime-fx-telemetry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.45rem 0.1rem;
+  border-bottom: 1px solid var(--mw-border-subtle);
+  font: 600 0.76rem/1.4 var(--mw-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--mw-muted-foreground);
+}
+
+.anime-fx-telemetry-event {
+  color: var(--mw-foreground);
+}
+
+.anime-fx-telemetry-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.anime-fx-combos {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.anime-fx-combos-head h3,
+.anime-fx-panel-head h3 {
+  margin: 0 0 0.15rem;
+  font: 700 0.96rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--mw-foreground);
+}
+
+.anime-fx-combos-head p,
+.anime-fx-panel-head p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--mw-muted-foreground);
+}
+
+.anime-fx-combos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.anime-fx-combo-card {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  padding: 0.75rem 0.85rem;
+  border: var(--mw-frame-width, 2px) solid var(--mw-border);
+  border-radius: var(--mw-radius-sm);
+  background-color: var(--mw-surface-elevated);
+  color: var(--mw-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 140ms var(--mw-motion-ease), border-color 140ms var(--mw-motion-ease);
+}
+
+.anime-fx-combo-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--mw-magenta);
+}
+
+.anime-fx-combo-card:focus-visible {
+  outline: 3px solid var(--mw-focus);
+  outline-offset: 2px;
+}
+
+.anime-fx-combo-title {
+  font: 700 0.84rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.anime-fx-combo-sub {
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--mw-muted-foreground);
+}
+
+.anime-fx-workbench {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.anime-fx-panel {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 0.95rem;
+  border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius-sm);
+  background-color: var(--mw-surface-elevated);
+  min-width: 0;
+}
+
+.anime-fx-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.anime-fx-sliders {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.anime-fx-slider-row {
+  display: grid;
+  gap: 0.3rem;
+  font: 600 0.74rem/1.2 var(--mw-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--mw-foreground);
+}
+
+.anime-fx-slider-row input[type='range'] {
+  width: 100%;
+  accent-color: var(--mw-primary);
+}
+
+.anime-fx-code-panel {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--mw-border-subtle);
+}
+
+.anime-fx-code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font: 700 0.74rem/1.2 var(--mw-font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mw-muted-foreground);
+}
+
+.anime-fx-code-block {
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius-sm);
+  background-color: var(--mw-background);
+  color: var(--mw-foreground);
+  font: 500 0.75rem/1.5 var(--mw-font-mono);
+  overflow-x: auto;
+}
+
+.anime-fx-camera-viewport {
+  position: relative;
+  overflow: hidden;
+  border: var(--mw-dna-ink-width, 2px) solid var(--mw-border-strong);
+  border-radius: var(--mw-radius-md);
+  background-color: var(--mw-ink-black);
+}
+
+.anime-fx-camera-viewport .anime-fx-stage-camera {
+  border: 0;
+  border-radius: 0;
+}
+
+.anime-fx-camera-hud-top {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--mw-radius-xs);
+  background-color: color-mix(in srgb, var(--mw-ink-black) 82%, transparent);
+  color: var(--mw-paper-cream);
+  font: 600 0.68rem/1.1 var(--mw-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.anime-fx-camera-dock {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.7rem;
+  z-index: 7;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: calc(100% - 11rem);
+  padding: 0.3rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--mw-paper-cream) 28%, transparent);
+  border-radius: var(--mw-radius-sm);
+  background-color: color-mix(in srgb, var(--mw-ink-black) 84%, transparent);
+  color: var(--mw-paper-cream);
+}
+
+.anime-fx-camera-dock-label {
+  font: 700 0.66rem/1 var(--mw-font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mw-yellow);
+  padding-inline: 0.15rem;
+}
+
+.anime-fx-camera-dock-btn {
+  border: 1px solid color-mix(in srgb, var(--mw-paper-cream) 32%, transparent);
+  border-radius: var(--mw-radius-xs);
+  background-color: color-mix(in srgb, var(--mw-ink-black) 70%, transparent);
+  color: var(--mw-paper-cream);
+  font: 600 0.68rem/1 var(--mw-font-mono);
+  padding: 0.3rem 0.48rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms var(--mw-motion-ease), border-color 120ms var(--mw-motion-ease);
+}
+
+.anime-fx-camera-dock-btn:hover {
+  border-color: var(--mw-cyan);
+  background-color: color-mix(in srgb, var(--mw-cyan) 22%, var(--mw-ink-black));
+}
+
+.anime-fx-camera-dock-btn[data-active='true'] {
+  border-color: var(--mw-yellow);
+  background-color: var(--mw-yellow);
+  color: var(--mw-ink-black);
+}
+
+.anime-fx-camera-dock-btn:focus-visible {
+  outline: 2px solid var(--mw-yellow);
+  outline-offset: 2px;
+}
+
+.anime-fx-camera-dock-stop {
+  border-color: var(--mw-magenta);
+  background-color: var(--mw-magenta);
+  color: var(--mw-ink-black);
+}
+
+.anime-fx-rumble-library {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius-sm);
+  background-color: var(--mw-surface-elevated);
+}
+
+.anime-fx-rumble-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+}
+
+.anime-fx-rumble-head h3 {
+  margin: 0 0 0.15rem;
+  font: 700 0.96rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--mw-foreground);
+}
+
+.anime-fx-rumble-head p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--mw-muted-foreground);
+}
+
+.anime-fx-rumble-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.anime-fx-rumble-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.anime-fx-rumble-card {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  padding: 0.7rem 0.75rem;
+  border: var(--mw-frame-width, 2px) solid var(--mw-border);
+  border-radius: var(--mw-radius-sm);
+  background-color: var(--mw-surface);
+  color: var(--mw-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 140ms var(--mw-motion-ease), border-color 140ms var(--mw-motion-ease);
+}
+
+.anime-fx-rumble-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--mw-primary);
+}
+
+.anime-fx-rumble-card[data-active='true'] {
+  border-color: var(--mw-magenta);
+  box-shadow: var(--mw-shadow-ink);
+  background-color: var(--mw-background);
+}
+
+.anime-fx-rumble-card:focus-visible {
+  outline: 3px solid var(--mw-focus);
+  outline-offset: 2px;
+}
+
+.anime-fx-rumble-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.anime-fx-rumble-name {
+  font: 700 0.82rem/1.2 var(--mw-font-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.anime-fx-rumble-cat {
+  font: 600 0.64rem/1 var(--mw-font-mono);
+  text-transform: uppercase;
+  color: var(--mw-magenta-readable);
+}
+
+.anime-fx-rumble-wave {
+  width: 100%;
+  height: 28px;
+  display: block;
+}
+
+.anime-fx-rumble-wave-axis {
+  stroke: var(--mw-border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.anime-fx-rumble-wave-line {
+  fill: none;
+  stroke: var(--mw-magenta-readable);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.anime-fx-rumble-meta {
+  font: 600 0.67rem/1.3 var(--mw-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--mw-foreground);
+}
+
+.anime-fx-rumble-desc {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--mw-muted-foreground);
+}
+
+@media (max-width: 68rem) {
+  .anime-fx-rumble-grid,
+  .anime-fx-combos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .anime-fx-workbench {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 40rem) {
+  .anime-fx-lab {
+    padding: 0.85rem;
+  }
+  .anime-fx-stage-camera {
+    min-height: 16.5rem;
+    aspect-ratio: 4 / 3;
+  }
+  .anime-fx-camera-dock {
+    max-width: calc(100% - 1.5rem);
+  }
+  .anime-fx-stage-hint {
+    display: none;
+  }
+  .anime-fx-rumble-grid,
+  .anime-fx-combos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

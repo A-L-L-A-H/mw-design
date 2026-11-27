@@ -13,9 +13,12 @@ import { Button } from './button.js';
 import { VolumeIcon } from '../icons/volume.js';
 import { VolumeOffIcon } from '../icons/volume-off.js';
 import {
+  getGlobalAudioEnabled,
   persistSoundPreference,
   playCatalogSound,
   readSoundPreference,
+  setGlobalAudioEnabled,
+  subscribeAudioPreference,
   type SfxName,
 } from '../lib/audio-runtime.js';
 
@@ -30,24 +33,30 @@ type SfxContextValue = {
 const SfxContext = createContext<SfxContextValue | null>(null);
 
 export function SoundProvider({ children }: { children: ReactNode }) {
-  const [enabled, setEnabledState] = useState(false);
+  const [enabled, setEnabledState] = useState(() => getGlobalAudioEnabled());
   const [ready, setReady] = useState(false);
   useEffect(() => {
     try {
-      setEnabledState(readSoundPreference(window.localStorage));
+      const stored = readSoundPreference(window.localStorage);
+      setEnabledState(stored);
+      setGlobalAudioEnabled(stored);
     } catch {
       setEnabledState(false);
+      setGlobalAudioEnabled(false);
     }
+    const unsubscribe = subscribeAudioPreference((next) => setEnabledState(next));
     const activate = () => setReady(true);
     window.addEventListener('pointerdown', activate, { once: true, passive: true });
     window.addEventListener('keydown', activate, { once: true });
     return () => {
+      unsubscribe();
       window.removeEventListener('pointerdown', activate);
       window.removeEventListener('keydown', activate);
     };
   }, []);
   const setEnabled = useCallback((value: boolean) => {
     setEnabledState(value);
+    setGlobalAudioEnabled(value);
     try {
       persistSoundPreference(window.localStorage, value);
     } catch {

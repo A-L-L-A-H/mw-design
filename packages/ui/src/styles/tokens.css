@@ -118,6 +118,13 @@
   --mw-comic-border-width: 2px;
   --mw-comic-gutter: 0.75rem;
   --mw-shadow-comic: 4px 4px 0 0 var(--mw-ink);
+  --mw-dna-skew: -8deg;
+  --mw-dna-halftone-size: 7px;
+  --mw-dna-halftone-opacity: 0.16;
+  --mw-dna-cel-highlight: rgb(255 255 255 / 38%);
+  --mw-dna-border-heavy: 3px;
+  --mw-dna-speedline-opacity: 0.22;
+  --mw-dna-chromatic-x: 3px;
   --mw-motion-pop: 180ms;
   --mw-motion-fast: 120ms;
   --mw-motion-normal: 160ms;
@@ -402,6 +409,11 @@
   --mw-shadow-anime-impact: 4px 4px 0 0 #0a0a0c, 8px 8px 0 0 #ff2e88;
   --mw-halftone-dot: rgb(10 10 12 / 18%);
   --mw-grunge-grain-opacity: 0.2;
+  --mw-dna-skew: -10deg;
+  --mw-dna-halftone-size: 6px;
+  --mw-dna-halftone-opacity: 0.24;
+  --mw-dna-border-heavy: 3px;
+  --mw-dna-chromatic-x: 4px;
 }
 
 [data-skin='moonwitness-riot'].dark {
@@ -489,6 +501,212 @@
   --mw-shadow-anime-impact: 4px 4px 0 0 #ffffff, 7px 7px 0 0 #ffe600;
 }
 
+/* Skin: cartoon-pop (cel-shaded cartoon & playful game) */
+[data-skin='cartoon-pop'] {
+  color-scheme: light;
+  --mw-paper: #fff8e7;
+  --mw-paper-raised: #ffffff;
+  --mw-ink: #14132a;
+  --mw-ink-soft: #323055;
+  --mw-ink-faint: #4c4973;
+  --mw-muted: #f4e7c6;
+  --mw-primary: #ffd43b;
+  --mw-primary-foreground: #14132a;
+  --mw-accent: #ff5c5c;
+  --mw-accent-foreground: #14132a;
+  --mw-on-accent: #14132a;
+  --mw-on-magenta: #14132a;
+  --mw-focus: #1d4ed8;
+  --mw-magenta-readable: #b41759;
+  --mw-cyan-readable: #00668c;
+  --mw-yellow-readable: #6b4f00;
+  --mw-violet-readable: #5b21b6;
+  --mw-radius-sm: 0.45rem;
+  --mw-radius-md: 0.75rem;
+  --mw-radius-lg: 1.15rem;
+  --mw-frame-width: 3px;
+  --mw-shadow-ink: 4px 4px 0 0 #14132a;
+  --mw-shadow-ink-lg: 7px 7px 0 0 #14132a;
+  --mw-shadow-comic: 4px 4px 0 0 #14132a;
+  --mw-dna-skew: -6deg;
+  --mw-dna-halftone-size: 8px;
+  --mw-dna-halftone-opacity: 0.2;
+  --mw-dna-border-heavy: 3px;
+}
+
+[data-skin='cartoon-pop'].dark {
+  color-scheme: dark;
+  --mw-paper: #141326;
+  --mw-paper-raised: #1e1c38;
+  --mw-ink: #fff8e7;
+  --mw-ink-soft: #d9d4eb;
+  --mw-ink-faint: #b3accf;
+  --mw-muted: #2a274d;
+  --mw-primary: #ffd43b;
+  --mw-primary-foreground: #14132a;
+  --mw-accent: #ff70a6;
+  --mw-accent-foreground: #14132a;
+  --mw-focus: #ffd43b;
+  --mw-magenta-readable: #ff70a6;
+  --mw-cyan-readable: #38d9ff;
+  --mw-yellow-readable: #ffd43b;
+  --mw-violet-readable: #d0bfff;
+  --mw-shadow-ink: 4px 4px 0 0 #070611;
+  --mw-shadow-ink-lg: 7px 7px 0 0 #070611;
+}
+
+/* Skin: arcade-neon (game HUD & cyber arcade) */
+[data-skin='arcade-neon'] {
+  color-scheme: light;
+  --mw-paper: #eef4fb;
+  --mw-paper-raised: #ffffff;
+  --mw-ink: #0a1020;
+  --mw-ink-soft: #283552;
+  --mw-ink-faint: #425274;
+  --mw-muted: #dce6f5;
+  --mw-primary: #00d4ff;
+  --mw-primary-foreground: #0a1020;
+  --mw-accent: #ff2e93;
+  --mw-accent-foreground: #0a1020;
+  --mw-on-accent: #0a1020;
+  --mw-focus: #005b99;
+  --mw-magenta-readable: #a60e5b;
+  --mw-cyan-readable: #005f80;
+  --mw-yellow-readable: #685000;
+  --mw-violet-readable: #5b21b6;
+  --mw-radius-sm: 0.125rem;
+  --mw-radius-md: 0.25rem;
+  --mw-radius-lg: 0.375rem;
+  --mw-frame-width: 2px;
+  --mw-shadow-ink: 3px 3px 0 0 #0a1020;
+  --mw-shadow-ink-lg: 6px 6px 0 0 #0a1020;
+}
+
+[data-skin='arcade-neon'].dark {
+  color-scheme: dark;
+  --mw-paper: #080b14;
+  --mw-paper-raised: #111728;
+  --mw-ink: #eef6ff;
+  --mw-ink-soft: #b8cae6;
+  --mw-ink-faint: #90a6c7;
+  --mw-muted: #1b243d;
+  --mw-primary: #00e5ff;
+  --mw-primary-foreground: #080b14;
+  --mw-accent: #ff3b9a;
+  --mw-accent-foreground: #080b14;
+  --mw-on-accent: #080b14;
+  --mw-focus: #00e5ff;
+  --mw-magenta-readable: #ff6bb5;
+  --mw-cyan-readable: #33ebff;
+  --mw-yellow-readable: #ffe64d;
+  --mw-violet-readable: #c8a2ff;
+  --mw-shadow-ink: 3px 3px 0 0 #00e5ff;
+  --mw-shadow-ink-lg: 5px 5px 0 0 #ff3b9a;
+  --mw-dna-skew: -12deg;
+  --mw-dna-halftone-opacity: 0.14;
+  --mw-dna-speedline-opacity: 0.3;
+  --mw-dna-chromatic-x: 4px;
+}
+
+/* Skin: clean-motion (modern web & SaaS product motion) */
+[data-skin='clean-motion'] {
+  color-scheme: light;
+  --mw-paper: #f8fafc;
+  --mw-paper-raised: #ffffff;
+  --mw-ink: #0f172a;
+  --mw-ink-soft: #334155;
+  --mw-ink-faint: #475569;
+  --mw-muted: #e2e8f0;
+  --mw-primary: #2563eb;
+  --mw-primary-foreground: #ffffff;
+  --mw-accent: #0ea5e9;
+  --mw-accent-foreground: #0f172a;
+  --mw-on-accent: #0f172a;
+  --mw-focus: #1d4ed8;
+  --mw-magenta-readable: #9d174d;
+  --mw-cyan-readable: #0369a1;
+  --mw-yellow-readable: #713f12;
+  --mw-violet-readable: #5b21b6;
+  --mw-radius-sm: 0.375rem;
+  --mw-radius-md: 0.625rem;
+  --mw-radius-lg: 0.875rem;
+  --mw-frame-width: 1px;
+  --mw-shadow-ink: 0 2px 8px rgb(15 23 42 / 10%);
+  --mw-shadow-ink-lg: 0 10px 24px rgb(15 23 42 / 14%);
+  --mw-shadow-comic: 0 4px 12px rgb(15 23 42 / 10%);
+}
+
+[data-skin='clean-motion'].dark {
+  color-scheme: dark;
+  --mw-paper: #0b1120;
+  --mw-paper-raised: #111827;
+  --mw-ink: #f8fafc;
+  --mw-ink-soft: #cbd5e1;
+  --mw-ink-faint: #94a3b8;
+  --mw-muted: #1e293b;
+  --mw-primary: #60a5fa;
+  --mw-primary-foreground: #0b1120;
+  --mw-accent: #38bdf8;
+  --mw-accent-foreground: #0b1120;
+  --mw-on-accent: #0b1120;
+  --mw-focus: #60a5fa;
+  --mw-magenta-readable: #f472b6;
+  --mw-cyan-readable: #38bdf8;
+  --mw-yellow-readable: #fde047;
+  --mw-violet-readable: #c4b5fd;
+  --mw-shadow-ink: 0 2px 10px rgb(0 0 0 / 45%);
+  --mw-shadow-ink-lg: 0 12px 28px rgb(0 0 0 / 55%);
+}
+
+/* Skin: cozy-rpg (warm parchment & tabletop adventure) */
+[data-skin='cozy-rpg'] {
+  color-scheme: light;
+  --mw-paper: #f6eedc;
+  --mw-paper-raised: #fdf9ef;
+  --mw-ink: #261b12;
+  --mw-ink-soft: #4d3927;
+  --mw-ink-faint: #624a35;
+  --mw-muted: #e9dcc0;
+  --mw-primary: #f59e0b;
+  --mw-primary-foreground: #261b12;
+  --mw-accent: #10b981;
+  --mw-accent-foreground: #14221b;
+  --mw-on-accent: #261b12;
+  --mw-focus: #9a3412;
+  --mw-magenta-readable: #9f1239;
+  --mw-cyan-readable: #0f6277;
+  --mw-yellow-readable: #713f12;
+  --mw-violet-readable: #5b21b6;
+  --mw-radius-sm: 0.25rem;
+  --mw-radius-md: 0.5rem;
+  --mw-radius-lg: 0.75rem;
+  --mw-frame-width: 2px;
+  --mw-shadow-ink: 3px 3px 0 0 #3f2d1d;
+  --mw-shadow-ink-lg: 6px 6px 0 0 #3f2d1d;
+}
+
+[data-skin='cozy-rpg'].dark {
+  color-scheme: dark;
+  --mw-paper: #1b1510;
+  --mw-paper-raised: #261e17;
+  --mw-ink: #f7efe0;
+  --mw-ink-soft: #d9cbb2;
+  --mw-ink-faint: #b6a488;
+  --mw-muted: #352a20;
+  --mw-primary: #fbbf24;
+  --mw-primary-foreground: #1b1510;
+  --mw-accent: #34d399;
+  --mw-accent-foreground: #0c1f17;
+  --mw-on-accent: #1b1510;
+  --mw-focus: #fbbf24;
+  --mw-magenta-readable: #fb7185;
+  --mw-cyan-readable: #5eead4;
+  --mw-yellow-readable: #fcd34d;
+  --mw-violet-readable: #d8b4fe;
+  --mw-shadow-ink: 3px 3px 0 0 #0a0705;
+  --mw-shadow-ink-lg: 6px 6px 0 0 #0a0705;
+}
+
 /* Density: compact */
 [data-density='compact'] {
   --mw-space-2: 0.375rem;
@@ -499,8 +717,75 @@
   --mw-panel-padding-comfortable: 0.75rem;
 }
 
+/* Motion intensity profiles */
+:root {
+  --mw-motion-scale: 1;
+}
+
+[data-motion-profile='off'] {
+  --mw-motion-scale: 0;
+  --mw-motion-fast: 0ms;
+  --mw-motion-normal: 0ms;
+  --mw-motion-slow: 0ms;
+  --mw-motion-pop: 0ms;
+  --mw-motion-effect: 0ms;
+  --mw-motion-pulse: 0ms;
+  --mw-motion-anime-snap: 0ms;
+  --mw-motion-anime-slash: 0ms;
+  --mw-motion-anime-burst: 0ms;
+  --mw-motion-grunge-jitter: 0ms;
+}
+
+[data-motion-profile='subtle'] {
+  --mw-motion-scale: 0.72;
+}
+
+[data-motion-profile='expressive'] {
+  --mw-motion-scale: 1;
+}
+
+[data-motion-profile='cartoon'] {
+  --mw-motion-scale: 1.25;
+}
+
+[data-dna='signal-riot-zine'] {
+  --mw-dna-skew: -10deg;
+  --mw-dna-halftone-opacity: 0.26;
+  --mw-dna-speedline-opacity: 0.26;
+  --mw-dna-chromatic-x: 4px;
+}
+
+[data-dna='shonen-anime'] {
+  --mw-dna-skew: -11deg;
+  --mw-dna-halftone-opacity: 0.22;
+  --mw-dna-speedline-opacity: 0.34;
+  --mw-dna-chromatic-x: 3px;
+}
+
+[data-dna='arcade-fighter'] {
+  --mw-dna-skew: -13deg;
+  --mw-dna-halftone-opacity: 0.15;
+  --mw-dna-speedline-opacity: 0.32;
+  --mw-dna-chromatic-x: 5px;
+}
+
+[data-dna='cozy-jrpg'] {
+  --mw-dna-skew: -3deg;
+  --mw-dna-halftone-opacity: 0.1;
+  --mw-dna-speedline-opacity: 0.12;
+  --mw-dna-chromatic-x: 1px;
+}
+
+[data-dna='saturday-cartoon'] {
+  --mw-dna-skew: -7deg;
+  --mw-dna-halftone-opacity: 0.24;
+  --mw-dna-speedline-opacity: 0.28;
+  --mw-dna-chromatic-x: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
+    --mw-motion-scale: 0;
     --mw-motion-fast: 0ms;
     --mw-motion-normal: 0ms;
     --mw-motion-slow: 0ms;

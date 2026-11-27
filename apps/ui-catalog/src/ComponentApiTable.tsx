@@ -11,7 +11,7 @@ export type ApiPropSpec = {
 export type ComponentApiSpec = {
   id: string;
   name: string;
-  category: 'Core' | 'Form' | 'Overlay' | 'Feedback' | 'Theme';
+  category: 'Core' | 'Form' | 'Overlay' | 'Feedback' | 'Theme' | 'Motion' | 'Game' | 'Cartoon' | 'Templates';
   importSnippet: string;
   summary: string;
   props: readonly ApiPropSpec[];
@@ -254,6 +254,318 @@ export const COMPONENT_API_SPECS: readonly ComponentApiSpec[] = [
       },
     ],
     tokens: ['--mw-background', '--mw-foreground', '--mw-surface-elevated', '--mw-font-display'],
+  },
+  {
+    id: 'motion-engine',
+    name: 'MotionProvider & MotionStage',
+    category: 'Motion',
+    importSnippet:
+      "import { MotionProvider, MotionStage, ScrollReveal, KineticText, AnimatedNumber, evaluateEasing } from '@moonwitness/ui/motion';",
+    summary:
+      'Universal animation context controlling motion intensity profiles (off/subtle/expressive/cartoon), deterministic spring & 18-curve easing physics, and hitstop/camera shake.',
+    props: [
+      {
+        name: 'defaultProfile (MotionProvider)',
+        type: "'off' | 'subtle' | 'expressive' | 'cartoon'",
+        defaultValue: "'expressive'",
+        description: 'Scales motion amplitude and honors prefers-reduced-motion automatically.',
+      },
+      {
+        name: 'defaultSfxEnabled (MotionProvider)',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Enables procedural WebAudio synth sound feedback for interactive triggers.',
+      },
+      {
+        name: 'shakeIntensity / hitstopMs (MotionStage)',
+        type: 'number',
+        defaultValue: '0',
+        description: 'Triggers deterministic damped camera shake or impact freeze frames.',
+      },
+      {
+        name: 'splitBy (KineticText)',
+        type: "'word' | 'char'",
+        defaultValue: "'word'",
+        description: 'Controls staggered word or character headline entrance.',
+      },
+    ],
+    tokens: ['--mw-motion-scale', '--mw-motion-fast', '--mw-motion-normal', '--mw-motion-ease-emphasis'],
+  },
+  {
+    id: 'motion-timeline',
+    name: 'MotionTimeline',
+    category: 'Motion',
+    importSnippet:
+      "import { MotionTimeline, MOTION_EASING_PRESETS, applyEasingPresetToKeyframes, type MotionTimelineKeyframe } from '@moonwitness/ui/motion';",
+    summary:
+      'Interactive SVG keyframe progress visualizer with per-segment easing curve paths, a built-in 18-curve easing preset library (ease-in-out-back, elastic, spring, bounce, stepped), live scrubbing, and play/pause transport.',
+    props: [
+      {
+        name: 'keyframes',
+        type: 'readonly MotionTimelineKeyframe[]',
+        defaultValue: 'DEFAULT_MOTION_TIMELINE_KEYFRAMES',
+        description: 'Ordered keyframe stops with normalized time (at: 0..1), value (0..1), and segment easing curve.',
+      },
+      {
+        name: 'durationMs',
+        type: 'number',
+        defaultValue: '1600',
+        description: 'Total animation timeline duration in milliseconds.',
+      },
+      {
+        name: 'playing / defaultPlaying',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Controls playback state for the play/pause transport button and requestAnimationFrame loop.',
+      },
+      {
+        name: 'progress / onProgressChange',
+        type: 'number / (progress: number) => void',
+        defaultValue: '0',
+        description: 'Normalized timeline progress (0..1) synced across SVG easing paths, playhead, and scrubber.',
+      },
+      {
+        name: 'showPresetLibrary / defaultApplyScope',
+        type: "boolean / 'all' | 'segment'",
+        defaultValue: "false / 'all'",
+        description: 'Displays the categorized SVG easing preset library (Standard, Back & Overshoot, Physics, Stepped) to update all segments or the active segment instantly.',
+      },
+      {
+        name: 'onApplyEasingPreset',
+        type: '(easing, scope, segmentIndex) => void',
+        defaultValue: 'uncontrolled',
+        description: 'Optional controlled callback invoked when a preset curve is selected; omit for built-in uncontrolled timeline updates.',
+      },
+    ],
+    tokens: ['--mw-magenta-readable', '--mw-primary', '--mw-border-strong', '--mw-shadow-ink'],
+  },
+  {
+    id: 'game-hud-kit',
+    name: 'StatGauge & DialogueBox',
+    category: 'Game',
+    importSnippet:
+      "import { StatGauge, DialogueBox, InventoryGrid, ActionHotbar, ComboCounter, RadialMenu, useGamepadNavigation } from '@moonwitness/ui/game';",
+    summary:
+      'Game HUD suite with delayed-trail HP/MP gauges, typewriter dialogue trees, keyboard/gamepad roving focus, cooldown hotbars, and radial command wheels.',
+    props: [
+      {
+        name: 'tone (StatGauge)',
+        type: "'hp' | 'mp' | 'xp' | 'shield' | 'stamina'",
+        defaultValue: "'hp'",
+        description: 'Semantic resource bar styling with animated delayed damage trail.',
+      },
+      {
+        name: 'choices (DialogueBox)',
+        type: 'readonly { id: string; label: string; hint?: string }[]',
+        defaultValue: 'undefined',
+        description: 'Branching dialogue choices selectable via click or numeric/keyboard focus.',
+      },
+      {
+        name: 'cooldownProgress (ActionHotbar)',
+        type: 'number',
+        defaultValue: '0',
+        description: 'Displays cooldown overlay (0..1) and hotkey badge on skill slots.',
+      },
+      {
+        name: 'count (ComboCounter)',
+        type: 'number',
+        defaultValue: 'required',
+        description: 'Auto-resolves style rank tiers (C → B → A → S → SS → SSS) with decay bar.',
+      },
+    ],
+    tokens: ['--mw-error', '--mw-info', '--mw-success', '--mw-warning', '--mw-magenta'],
+  },
+  {
+    id: 'cartoon-studio-kit',
+    name: 'CartoonRig & StoryboardPlayer',
+    category: 'Cartoon',
+    importSnippet:
+      "import { CartoonRig, OnomatopoeiaSFX, SmearFrame, ImpactFlash, StoryboardPlayer, useLipSync } from '@moonwitness/ui/cartoon';",
+    summary:
+      '2D cartoon puppet rig with mood/phoneme lip sync, squash-stretch triggers, comic SFX callouts, smear frames, and beat-by-beat storyboard playback.',
+    props: [
+      {
+        name: 'mood (CartoonRig)',
+        type: "'neutral' | 'happy' | 'surprised' | 'determined'",
+        defaultValue: "'neutral'",
+        description: 'Updates expressive brow and eye geometry.',
+      },
+      {
+        name: 'phoneme (CartoonRig)',
+        type: "'closed' | 'small' | 'wide' | 'o-shape'",
+        defaultValue: "'closed'",
+        description: 'Pairs with useLipSync() to animate speech mouth shapes.',
+      },
+      {
+        name: 'breathing / bounceWalk (CartoonRig)',
+        type: 'boolean',
+        defaultValue: 'true / false',
+        description: 'Drives idle squash-stretch breathing or bounce walk loop.',
+      },
+      {
+        name: 'beats (StoryboardPlayer)',
+        type: 'readonly StoryboardBeat[]',
+        defaultValue: 'required',
+        description: 'Scene timeline with camera zoom/pan, SFX callouts, and 0.5x–2x scrubbing.',
+      },
+    ],
+    tokens: ['--mw-yellow', '--mw-cyan', '--mw-shadow-comic', '--mw-font-display'],
+  },
+  {
+    id: 'starter-templates',
+    name: 'Starter Templates',
+    category: 'Templates',
+    importSnippet:
+      "import { WebLandingTemplate, AppCommandTemplate, GameBattleTemplate, CartoonStudioTemplate } from '@moonwitness/ui/templates';",
+    summary:
+      'Drop-in animated starter compositions for marketing landing pages, SaaS command shells, RPG battle HUDs, and 2D cartoon cutscene studios.',
+    props: [
+      {
+        name: 'WebLandingTemplate',
+        type: '() => JSX.Element',
+        defaultValue: 'zero-config',
+        description: 'Kinetic hero, animated KPI counters, marquee ribbon, scroll-reveal bento, and morph CTA.',
+      },
+      {
+        name: 'AppCommandTemplate',
+        type: '() => JSX.Element',
+        defaultValue: 'zero-config',
+        description: 'Master-detail interactive workspace with animated inspector presence and screen transitions.',
+      },
+      {
+        name: 'GameBattleTemplate',
+        type: '() => JSX.Element',
+        defaultValue: 'zero-config',
+        description: 'Full interactive battle arena with floating damage numbers, combo rank, radial wheel, and pause overlay.',
+      },
+      {
+        name: 'CartoonStudioTemplate',
+        type: '() => JSX.Element',
+        defaultValue: 'zero-config',
+        description: 'Interactive 4-beat animated cartoon short with live scrubber, lip-sync puppet, and impact flashes.',
+      },
+    ],
+    tokens: ['--mw-background', '--mw-surface', '--mw-primary', '--mw-border-strong'],
+  },
+  {
+    id: 'character-registry',
+    name: 'CHARACTER_REGISTRY (30)',
+    category: 'Cartoon',
+    importSnippet:
+      "import { CHARACTER_REGISTRY, CHARACTER_FACTIONS, getCharacterById, filterCharacters, rollGachaCharacter } from '@moonwitness/ui';",
+    summary:
+      'Centralized 30-character roster across 6 factions (25 playable heroes + 5 Eclipse raid bosses) with procedural cel-shaded visual DNA, RPG stats, JP/EN ultimate skills, and signature voicePitch.',
+    props: [
+      {
+        name: 'CHARACTER_REGISTRY',
+        type: 'readonly CharacterProfile[]',
+        defaultValue: '30 characters',
+        description: 'Frozen master list across Signal Riot, Neon Arcade, Arcana Blade, Mecha Orbit, Toon Squad, and Eclipse Bosses.',
+      },
+      {
+        name: 'filterCharacters(options)',
+        type: '(filter: { faction?, element?, role?, rarity?, isBoss?, query? }) => CharacterProfile[]',
+        defaultValue: 'helper',
+        description: 'Filters the 30-character roster by faction, element, role, rarity, boss flag, or free-text query.',
+      },
+      {
+        name: 'rollGachaCharacter(seed?)',
+        type: '(seed?: number) => CharacterProfile',
+        defaultValue: 'weighted roll',
+        description: 'Deterministic rarity-weighted summon roll for LootRevealCard and boss victory drops.',
+      },
+    ],
+    tokens: ['--mw-magenta', '--mw-cyan', '--mw-yellow', '--mw-primary'],
+  },
+  {
+    id: 'dna-icon-presets',
+    name: 'DnaIcon & GENRE_DNA_PRESETS',
+    category: 'Theme',
+    importSnippet:
+      "import { DnaIcon, GENRE_DNA_PRESETS, applyGenreDnaAttribute } from '@moonwitness/ui';\nimport { KatanaIcon } from '@moonwitness/ui/icons';",
+    summary:
+      'Stylizes any of the 120 typed SVG icons in wireframe, cel-ink halftone, duotone, or manga sticker treatments, paired with 5 atomic Genre DNA Presets.',
+    props: [
+      {
+        name: 'treatment (DnaIcon)',
+        type: "'wireframe' | 'cel-ink' | 'duotone' | 'sticker'",
+        defaultValue: "'cel-ink'",
+        description: 'Applies MoonWitness cel-shaded outline, halftone backing, duotone tint, or die-cut sticker styling.',
+      },
+      {
+        name: 'tone (DnaIcon)',
+        type: "'primary' | 'magenta' | 'cyan' | 'violet' | 'success' | 'warning' | 'error' | 'neutral'",
+        defaultValue: "'primary'",
+        description: 'Selects semantic accent palette mapped strictly to CSS variables.',
+      },
+      {
+        name: 'GENRE_DNA_PRESETS',
+        type: 'readonly GenreDnaPreset[]',
+        defaultValue: '5 presets',
+        description: 'Atomic theme bundles (Signal Riot Zine, Shonen Anime, Arcade Fighter, Cozy JRPG, Saturday Cartoon).',
+      },
+    ],
+    tokens: ['--mw-dna-ink-width', '--mw-dna-shadow-offset', '--mw-dna-skew', '--mw-dna-halftone-opacity'],
+  },
+  {
+    id: 'anime-stage-suite',
+    name: 'AnimeCutIn & VisualNovelStage',
+    category: 'Cartoon',
+    importSnippet:
+      "import { AnimeCutIn, AnimeEmoteBubble, VisualNovelStage, EpisodeTitleCard } from '@moonwitness/ui/cartoon';",
+    summary:
+      'Full anime cutscene kit: diagonal slash Ultimate Cut-In banners with JP/EN callouts, floating manga emote bubbles, 3-slot Visual Novel dialogue stage, and episodic title cards.',
+    props: [
+      {
+        name: 'characterId (AnimeCutIn)',
+        type: 'string',
+        defaultValue: "'kuro-signal'",
+        description: 'Auto-hydrates cel-shaded portrait, JP callout, ultimate skill title, and voicePitch SFX.',
+      },
+      {
+        name: 'kind (AnimeEmoteBubble)',
+        type: "'sweatdrop' | 'anger' | 'shock' | 'sparkle' | 'question' | 'exclaim'",
+        defaultValue: 'required',
+        description: 'Renders classic manga/anime reaction glyphs anchored above rigs or portraits.',
+      },
+      {
+        name: 'castIds / lines (VisualNovelStage)',
+        type: 'readonly string[] / readonly VisualNovelLine[]',
+        defaultValue: 'required',
+        description: '3-position left/center/right character stage with active-speaker focus and branching choices.',
+      },
+    ],
+    tokens: ['--mw-dna-speedline-opacity', '--mw-magenta', '--mw-yellow', '--mw-shadow-comic'],
+  },
+  {
+    id: 'game-hud-expansion',
+    name: 'BossHealthBar, TurnOrder & SkillTree',
+    category: 'Game',
+    importSnippet:
+      "import { BossHealthBar, TurnOrderStrip, LootRevealCard, AchievementToast, TacticalRadar, SkillTreeGraph } from '@moonwitness/ui/game';",
+    summary:
+      'RPG & Arcade HUD expansion: multi-phase boss health bars with stagger break, ATB turn order timeline, gacha loot reveal cards, trophy toasts, tactical radar minimap, and SVG skill trees.',
+    props: [
+      {
+        name: 'phases / stagger (BossHealthBar)',
+        type: 'number / number (0..100)',
+        defaultValue: '3 / 0',
+        description: 'Renders segmented phase pips, delayed damage trail, and BREAK state banner at 100% stagger.',
+      },
+      {
+        name: 'entries (TurnOrderStrip)',
+        type: 'readonly TurnOrderEntry[]',
+        defaultValue: 'required',
+        description: 'Displays upcoming ally/enemy turn cards with miniature cel-shaded portraits and AV countdown.',
+      },
+      {
+        name: 'nodes / onUnlockNode (SkillTreeGraph)',
+        type: 'readonly SkillTreeNode[] / (node) => void',
+        defaultValue: 'required',
+        description: 'Interactive SVG-connected talent graph with locked, available, and unlocked states.',
+      },
+    ],
+    tokens: ['--mw-error', '--mw-warning', '--mw-cyan', '--mw-success'],
   },
 ];
 
