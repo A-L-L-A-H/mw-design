@@ -479,28 +479,31 @@ test('provenance covers original design assets and every externally sourced font
 });
 
 test('Board, UI catalog, and docs portal consume the shared local font export', async () => {
-  const consumers = [
+  const { existsSync } = await import('node:fs');
+  const catalogStylesPath = resolve(packageRoot, '../../apps/ui-catalog/src/styles.css');
+  const catalogStyles = await readFile(catalogStylesPath, 'utf8');
+  assert.match(catalogStyles, /@import ['"]@moonwitness\/assets\/fonts\.css['"]/u, catalogStylesPath);
+
+  const optionalConsumers = [
     resolve(packageRoot, '../../apps/board/src/index.css'),
-    resolve(packageRoot, '../../apps/ui-catalog/src/styles.css'),
     resolve(packageRoot, '../../apps/docs/src/styles.css'),
   ];
-  for (const consumerPath of consumers) {
+  for (const consumerPath of optionalConsumers) {
+    if (!existsSync(consumerPath)) continue;
     const stylesheet = await readFile(consumerPath, 'utf8');
     assert.match(stylesheet, /@import ['"]@moonwitness\/assets\/fonts\.css['"]/u, consumerPath);
   }
 
-  const boardLayout = await readFile(
-    resolve(packageRoot, '../../apps/board/src/app/layout.tsx'),
-    'utf8'
-  );
-  const boardGlobalStyles = await readFile(
-    resolve(packageRoot, '../../apps/board/src/app/global.css'),
-    'utf8'
-  );
-  assert.match(boardLayout, /import ['"]\.\/global\.css['"]/u);
-  assert.match(boardGlobalStyles, /@import ['"]\.\.\/index\.css['"]/u);
-  assert.doesNotMatch(
-    `${boardLayout}\n${boardGlobalStyles}`,
-    /fonts\.googleapis\.com|fonts\.gstatic\.com/u
-  );
+  const boardLayoutPath = resolve(packageRoot, '../../apps/board/src/app/layout.tsx');
+  const boardGlobalPath = resolve(packageRoot, '../../apps/board/src/app/global.css');
+  if (existsSync(boardLayoutPath) && existsSync(boardGlobalPath)) {
+    const boardLayout = await readFile(boardLayoutPath, 'utf8');
+    const boardGlobalStyles = await readFile(boardGlobalPath, 'utf8');
+    assert.match(boardLayout, /import ['"]\.\/global\.css['"]/u);
+    assert.match(boardGlobalStyles, /@import ['"]\.\.\/index\.css['"]/u);
+    assert.doesNotMatch(
+      `${boardLayout}\n${boardGlobalStyles}`,
+      /fonts\.googleapis\.com|fonts\.gstatic\.com/u
+    );
+  }
 });

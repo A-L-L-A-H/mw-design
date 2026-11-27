@@ -122,20 +122,164 @@ test('theme toggle changes the shared token map without hiding readable labels',
   page,
 }) => {
   await page.goto('./');
-  const initialBackground = await page
-    .locator('html')
-    .evaluate((element) => getComputedStyle(element).getPropertyValue('--mw-background').trim());
+  const readTokens = () =>
+    page.locator('html').evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        background: style.getPropertyValue('--mw-background').trim(),
+        foreground: style.getPropertyValue('--mw-foreground').trim(),
+        primary: style.getPropertyValue('--mw-primary').trim(),
+        frameWidth: style.getPropertyValue('--mw-frame-width').trim(),
+      };
+    });
+
+  const initialTokens = await readTokens();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const bodyTransition = await page.locator('body').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      property: style.transitionProperty,
+      duration: style.transitionDuration,
+    };
+  });
+  expect(bodyTransition.property).toContain('background-color');
+  expect(bodyTransition.property).toContain('color');
 
   await page.getByRole('button', { name: 'Use dark theme' }).click();
   await expect(page.locator('html')).toHaveClass(/dark/u);
-  const darkBackground = await page
-    .locator('html')
-    .evaluate((element) => getComputedStyle(element).getPropertyValue('--mw-background').trim());
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const darkTokens = await readTokens();
 
-  expect(initialBackground).not.toBe(darkBackground);
+  expect(initialTokens.background).not.toBe(darkTokens.background);
   await expect(page.getByText('Success', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Use high contrast theme' }).click();
+  await expect(page.locator('html')).toHaveClass(/high-contrast/u);
+  await expect(page.locator('html')).not.toHaveClass(/dark/u);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
+  const highContrastTokens = await readTokens();
+
+  expect(highContrastTokens.background).toBe('#000000');
+  expect(highContrastTokens.foreground).toBe('#ffffff');
+  expect(highContrastTokens.primary).toBe('#ffe600');
+  expect(highContrastTokens.frameWidth).toBe('3px');
+  await expect(page.getByText('Success', { exact: true })).toBeVisible();
+
   await page.getByRole('button', { name: 'Use light theme' }).click();
   await expect(page.locator('html')).not.toHaveClass(/dark/u);
+  await expect(page.locator('html')).not.toHaveClass(/high-contrast/u);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme-transitioning', 'true');
+  const restoredTokens = await readTokens();
+  expect(restoredTokens.background).toBe(initialTokens.background);
+});
+
+test('sidebar search filters components by name for quick access and resets cleanly', async ({
+  page,
+}) => {
+  await page.goto('./');
+  const navigation = page.getByRole('navigation', { name: 'Component sections' });
+  const initialCount = await navigation.getByRole('link').count();
+  expect(initialCount).toBeGreaterThan(5);
+
+  const searchInput = page.getByRole('searchbox', { name: 'Filter components' });
+  await expect(searchInput).not.toBeFocused();
+  await page.keyboard.press('Control+k');
+  await expect(searchInput).toBeFocused();
+
+  await searchInput.fill('KanbanBoard');
+  await expect(navigation.getByRole('link')).toHaveCount(1);
+  await expect(navigation.getByRole('link').first()).toContainText('Data display');
+  await expect(navigation.getByRole('link').first()).toContainText('KanbanBoard');
+
+  await navigation.getByRole('link').first().click();
+  await expect(page).toHaveURL(/#data-display$/u);
+
+  await page.keyboard.press('Meta+k');
+  await expect(searchInput).toBeFocused();
+
+  await searchInput.fill('nonexistent-widget-xyz');
+  await expect(navigation.getByRole('link')).toHaveCount(0);
+  await expect(navigation.getByText('No matching components')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Clear component filter' }).click();
+  await expect(searchInput).toHaveValue('');
+  await expect(navigation.getByRole('link')).toHaveCount(initialCount);
+});
+
+test('component examples provide a copy button for CSS variables and Tailwind class structure', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    let clipboardText = '';
+    Object.defineProperty(window, '__copiedCatalogSnippet', {
+      get: () => clipboardText,
+      set: (value: string) => {
+        clipboardText = value;
+      },
+      configurable: true,
+    });
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: async (text: string) => {
+          clipboardText = text;
+        },
+      },
+      configurable: true,
+    });
+  });
+
+  await page.goto('./');
+  const examples = page.locator('.catalog-example');
+  const exampleCount = await examples.count();
+  expect(exampleCount).toBeGreaterThan(0);
+  await expect(page.getByTestId('copy-example-styles')).toHaveCount(exampleCount);
+
+  const buttonCopy = page.getByRole('button', {
+    name: 'Copy CSS variables and Tailwind classes for Button variants and sizes',
+  });
+  await buttonCopy.click();
+  await expect(buttonCopy).toHaveAttribute('data-copied', 'true');
+  const copied = await page.evaluate(
+    () => (window as unknown as { __copiedCatalogSnippet?: string }).__copiedCatalogSnippet ?? ''
+  );
+  expect(copied).toContain('--mw-primary:');
+  expect(copied).toContain('className=');
+  expect(copied).toContain('.mw-ui-button');
+});
+
+test('interactive playground updates component preview and JSX output in real time', async ({
+  page,
+}) => {
+  await page.goto('./#playground');
+  const playground = page.getByTestId('component-playground');
+  await expect(playground).toBeVisible();
+
+  const preview = playground.getByTestId('playground-preview');
+  const jsxOutput = playground.getByTestId('playground-jsx-output');
+
+  const previewButton = preview.getByRole('button', { name: 'Launch action' });
+  await expect(previewButton).toHaveAttribute('data-variant', 'default');
+  await expect(previewButton).toHaveAttribute('data-size', 'default');
+
+  await playground.getByRole('button', { name: 'magenta', exact: true }).click();
+  await playground.getByRole('button', { name: 'lg', exact: true }).click();
+  await playground.getByRole('button', { name: 'brush', exact: true }).click();
+  await playground.getByLabel('Disabled state').check();
+
+  await expect(previewButton).toHaveAttribute('data-variant', 'magenta');
+  await expect(previewButton).toHaveAttribute('data-size', 'lg');
+  await expect(previewButton).toHaveAttribute('data-treatment', 'brush');
+  await expect(previewButton).toBeDisabled();
+  await expect(jsxOutput).toContainText('variant="magenta"');
+  await expect(jsxOutput).toContainText('size="lg"');
+  await expect(jsxOutput).toContainText('treatment="brush"');
+  await expect(jsxOutput).toContainText('disabled');
+
+  await playground.getByRole('button', { name: 'Field & Input', exact: true }).click();
+  await playground.getByLabel('Validation error state').check();
+  await expect(preview.getByRole('alert')).toContainText('Use lowercase letters');
+  await expect(jsxOutput).toContainText('error=');
 });
 
 test('brand, typography, and homepage proof use canonical assets and correct spelling', async ({

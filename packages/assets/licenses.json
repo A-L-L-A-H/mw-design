@@ -632,7 +632,7 @@
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
-      "modifications": "Direct AI full-body standing master for kuro-signal (normalized 1024x1536 RGB contain on #ffffff).",
+      "modifications": "Direct AI full-body standing master for kuro-signal.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -647,12 +647,22 @@
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
     {
+      "path": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI angry/determined bust portrait master for kuro-signal.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png",
       "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
-      "modifications": "Direct AI celebrating bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).",
+      "modifications": "Direct AI celebrating bust portrait master for kuro-signal.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -662,7 +672,7 @@
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
-      "modifications": "Direct AI excited bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).",
+      "modifications": "Direct AI excited bust portrait master for kuro-signal.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -672,7 +682,17 @@
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
-      "modifications": "Direct AI happy bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).",
+      "modifications": "Direct AI happy bust portrait master for kuro-signal.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI sad/teary bust portrait master for kuro-signal.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -682,7 +702,37 @@
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
-      "modifications": "Direct AI thinking bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).",
+      "modifications": "Direct AI thinking bust portrait master for kuro-signal.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI dynamic full-body running/action master for kuro-signal.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI full-body seated on crate with handheld signal deck master for kuro-signal.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI full-body friendly waving master for kuro-signal.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -693,6 +743,16 @@
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
       "modifications": "Direct AI 1376x768 narrative scene master for empty-signal-static.",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/scene-error-static-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation for Signal Riot error/offline/glitch scene states",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI narrative scene master for rooftop CRT static & antenna glitch.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
@@ -733,6 +793,16 @@
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
       "modifications": "Direct AI calm bust portrait master for walter-white (512x512).",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI cel-shaded portrait master unified with Signal Riot art direction",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI cel-shaded bust portrait master on #ffffff for transparent walter-white cutouts.",
       "status": "approved",
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },

@@ -8,16 +8,20 @@ import { atomicWrite } from './atomic-write.mjs';
 import { replaceGeneratedAssets } from './manifest-ownership.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const repoRoot = resolve(packageRoot, '../..');
 
 const INK = '#0d0d0d';
 const PAPER = '#f3efe4';
 const NIGHT = '#0e0e10';
 const CHARCOAL = '#17171a';
+const SLATE = '#262833';
 const YELLOW = '#ffe031';
+const YELLOW_SHADE = '#d9b514';
 const MAGENTA = '#ff2e88';
+const MAGENTA_SHADE = '#b8175d';
 const CYAN = '#00b8f0';
+const CYAN_SHADE = '#007fa8';
 const VIOLET = '#c084fc';
+const VIOLET_SHADE = '#7e4cc4';
 
 function assetSlug(filePath) {
   return filePath
@@ -27,9 +31,10 @@ function assetSlug(filePath) {
 }
 
 /**
- * Remove exterior near-white backdrop using 4-edge BFS flood-fill with 1px
- * anti-aliased edge feathering so interior whites (eyes, teeth, bandage,
- * Vesper's silver-cream hair) remain strictly opaque (alpha === 255).
+ * Remove exterior near-white backdrop using 4-edge BFS flood-fill with smooth
+ * 2px anti-aliased edge feathering & white-fringe decontamination so cutouts sit
+ * cleanly on both dark (#09090b) and light (#f3efe4) surfaces while interior
+ * whites (eyes, teeth, bandages, Vesper's silver-cream hair) stay strictly opaque.
  */
 export async function floodFillCutout(input, extractRect = null) {
   let pipeline = sharp(input).ensureAlpha();
@@ -42,8 +47,14 @@ export async function floodFillCutout(input, extractRect = null) {
   let head = 0;
   let tail = 0;
 
-  const isNearWhite = (offset) =>
-    data[offset] > 240 && data[offset + 1] > 240 && data[offset + 2] > 240;
+  const isNearWhite = (offset) => {
+    const r = data[offset];
+    const g = data[offset + 1];
+    const b = data[offset + 2];
+    const maxC = Math.max(r, g, b);
+    const minC = Math.min(r, g, b);
+    return r > 234 && g > 234 && b > 234 && maxC - minC < 24;
+  };
 
   const enqueue = (x, y) => {
     const pixel = y * width + x;
@@ -72,6 +83,8 @@ export async function floodFillCutout(input, extractRect = null) {
     if (y < height - 1) enqueue(x, y + 1);
   }
 
+  // Pass 1: clear exterior pixels & identify 1px boundary ring
+  const edgeRing1 = new Uint8Array(total);
   for (let pixel = 0; pixel < total; pixel += 1) {
     const offset = pixel * 4;
     if (visited[pixel]) {
@@ -86,11 +99,45 @@ export async function floodFillCutout(input, extractRect = null) {
       (y > 0 && visited[pixel - width]) ||
       (y < height - 1 && visited[pixel + width]);
     if (touchesExterior) {
-      const luminance = (data[offset] + data[offset + 1] + data[offset + 2]) / 3;
-      if (luminance > 195) {
-        const feathered = Math.round(255 - (luminance - 195) * 4.2);
-        data[offset + 3] = Math.max(0, Math.min(255, feathered));
+      edgeRing1[pixel] = 1;
+    }
+  }
+
+  // Pass 2: smooth luminance-weighted feathering + white-fringe decontamination on 1px & 2px rim
+  for (let pixel = 0; pixel < total; pixel += 1) {
+    if (visited[pixel]) continue;
+    const offset = pixel * 4;
+    const r = data[offset];
+    const g = data[offset + 1];
+    const b = data[offset + 2];
+    const luminance = (r + g + b) / 3;
+    const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+
+    if (edgeRing1[pixel]) {
+      if (luminance > 170 && chroma < 38) {
+        const alpha = Math.max(0, Math.min(255, Math.round(255 - (luminance - 170) * 3.8)));
+        data[offset + 3] = alpha;
+        // Decontaminate white matte halo toward crisp ink
+        if (alpha > 0 && alpha < 235) {
+          const factor = Math.max(0.2, alpha / 255);
+          data[offset] = Math.round(r * factor);
+          data[offset + 1] = Math.round(g * factor);
+          data[offset + 2] = Math.round(b * factor);
+        }
       }
+      continue;
+    }
+
+    const x = pixel % width;
+    const y = (pixel - x) / width;
+    const touchesRing1 =
+      (x > 0 && edgeRing1[pixel - 1]) ||
+      (x < width - 1 && edgeRing1[pixel + 1]) ||
+      (y > 0 && edgeRing1[pixel - width]) ||
+      (y < height - 1 && edgeRing1[pixel + width]);
+    if (touchesRing1 && luminance > 215 && chroma < 28) {
+      const alpha = Math.max(0, Math.min(255, Math.round(255 - (luminance - 215) * 4.5)));
+      data[offset + 3] = alpha;
     }
   }
 
@@ -145,6 +192,17 @@ const EXPRESSION_MASTERS = {
   excited: 'source/artwork/riot-universe/kuro-signal-portrait-excited-master.png',
   thinking: 'source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png',
   celebrating: 'source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png',
+  angry: 'source/artwork/riot-universe/kuro-signal-portrait-angry-master.png',
+  sad: 'source/artwork/riot-universe/kuro-signal-portrait-sad-master.png',
+};
+
+const POSE_MASTERS = {
+  front: 'source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png',
+  side: 'source/artwork/riot-universe/kuro-signal-model-sheet-master.png',
+  threeQuarter: 'source/artwork/riot-universe/kuro-signal-model-sheet-master.png',
+  running: 'source/artwork/riot-universe/kuro-signal-pose-running-master.png',
+  sitting: 'source/artwork/riot-universe/kuro-signal-pose-sitting-master.png',
+  waving: 'source/artwork/riot-universe/kuro-signal-pose-waving-master.png',
 };
 
 const EXPRESSIONS = [
@@ -152,153 +210,149 @@ const EXPRESSIONS = [
     slug: 'happy',
     masterKey: 'happy',
     tilt: 0,
-    scale: 1,
+    scale: 1.0,
     offsetY: 0,
     overlay: `
-      <path d="${starPath(426, 98, 22, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <circle cx="94" cy="144" r="10" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-      <path d="M 412 162 q 24 -12 42 4" fill="none" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>
+      <path d="${starPath(428, 98, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="92" cy="144" r="9" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'excited',
     masterKey: 'excited',
-    tilt: -3,
-    scale: 1.04,
-    offsetY: -8,
+    tilt: -2,
+    scale: 1.03,
+    offsetY: -6,
     overlay: `
-      <path d="${starPath(96, 108, 28, 9, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(426, 96, 30, 10, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(442, 228, 18, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-      <path d="M 52 204 L 88 214 M 44 252 L 82 248 M 426 178 L 464 168 M 436 274 L 474 282" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/>
+      <path d="${starPath(94, 108, 26, 9, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+      <path d="${starPath(428, 96, 28, 9, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
+      <path d="${starPath(442, 224, 16, 5.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 52 204 L 84 214 M 44 252 L 78 248 M 428 178 L 462 168" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'laughing',
     masterKey: 'excited',
     tilt: 4,
-    scale: 1.03,
-    offsetY: -6,
+    scale: 1.02,
+    offsetY: -4,
     overlay: `
-      <path d="M 68 158 Q 92 132 118 154 M 62 186 Q 88 164 114 182" fill="none" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/>
-      <path d="${starPath(418, 114, 24, 8, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 404 188 L 448 168 M 412 214 L 458 206 M 404 240 L 444 244" stroke="${MAGENTA}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 68 158 Q 90 134 114 154 M 62 186 Q 86 164 110 182" fill="none" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="${starPath(420, 114, 22, 8, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+      <path d="M 406 188 L 448 168 M 414 214 L 456 206" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'angry',
-    masterKey: 'happy',
+    masterKey: 'angry',
     tilt: -2,
-    scale: 1.05,
-    offsetY: 4,
-    tint: { saturation: 1.12, brightness: 0.96 },
+    scale: 1.04,
+    offsetY: 2,
     overlay: `
-      <path d="M 382 104 Q 402 126 382 146 M 426 104 Q 406 126 426 146 M 384 102 Q 404 122 424 102 M 384 148 Q 404 128 424 148" fill="none" stroke="${MAGENTA}" stroke-width="7" stroke-linecap="round"/>
-      <path d="M 46 118 L 96 144 M 40 166 L 92 174 M 426 176 L 472 152 M 432 222 L 476 218" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>
-      <polygon points="82,92 106,120 74,128" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
+      <path d="M 386 102 Q 404 122 386 142 M 426 102 Q 408 122 426 142 M 388 100 Q 406 118 424 100 M 388 144 Q 406 126 424 144" fill="none" stroke="${MAGENTA}" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M 48 118 L 90 142 M 42 166 L 86 172 M 430 176 L 470 154" stroke="${INK}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="${starPath(84, 96, 18, 6, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'confused',
     masterKey: 'thinking',
-    tilt: 6,
-    scale: 0.97,
+    tilt: 5,
+    scale: 0.98,
     offsetY: 4,
     overlay: `
-      <path d="M 392 128 C 392 92 446 92 446 122 C 446 146 418 152 418 176" fill="none" stroke="${CYAN}" stroke-width="9" stroke-linecap="round"/>
-      <circle cx="418" cy="198" r="6.5" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-      <path d="M 86 154 C 72 154 72 182 94 182 C 110 182 110 160 98 160" fill="none" stroke="${VIOLET}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 396 126 C 396 92 444 92 444 120 C 444 142 420 148 420 170" fill="none" stroke="${CYAN}" stroke-width="8.5" stroke-linecap="round"/>
+      <circle cx="420" cy="192" r="6" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 88 156 C 74 156 74 182 94 182 C 108 182 108 162 98 162" fill="none" stroke="${VIOLET}" stroke-width="4.5" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'thinking',
     masterKey: 'thinking',
-    tilt: -4,
-    scale: 0.98,
+    tilt: -2,
+    scale: 0.99,
     offsetY: 2,
     overlay: `
-      <circle cx="382" cy="182" r="9" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
-      <circle cx="408" cy="152" r="14" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 382 104 C 382 78 416 74 428 92 C 446 84 468 102 458 122 C 468 138 446 156 426 148 C 406 156 382 138 392 122 C 378 116 378 108 382 104 Z" fill="${PAPER}" stroke="${INK}" stroke-width="4.5"/>
-      <circle cx="410" cy="118" r="5" fill="${CYAN}"/>
-      <circle cx="426" cy="118" r="5" fill="${MAGENTA}"/>
-      <circle cx="442" cy="118" r="5" fill="${YELLOW}"/>
+      <circle cx="386" cy="180" r="8" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/>
+      <circle cx="410" cy="152" r="12" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
+      <path d="M 386 106 C 386 82 416 78 428 94 C 446 86 466 104 456 122 C 466 138 446 154 426 146 C 408 154 386 138 394 122 C 382 116 382 110 386 106 Z" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="410" cy="118" r="4.5" fill="${CYAN}"/>
+      <circle cx="424" cy="118" r="4.5" fill="${MAGENTA}"/>
+      <circle cx="438" cy="118" r="4.5" fill="${YELLOW}"/>
     `,
   },
   {
     slug: 'surprised',
     masterKey: 'excited',
     tilt: 0,
-    scale: 1.06,
-    offsetY: -10,
+    scale: 1.05,
+    offsetY: -8,
     overlay: `
-      <path d="M 418 76 L 424 146" stroke="${YELLOW}" stroke-width="11" stroke-linecap="round"/>
-      <circle cx="424" cy="172" r="7" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 58 120 L 98 148 M 44 176 L 86 184 M 62 232 L 96 218 M 426 210 L 470 198 M 424 248 L 468 256" stroke="${CYAN}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 420 76 L 424 142" stroke="${YELLOW}" stroke-width="10" stroke-linecap="round"/>
+      <circle cx="424" cy="168" r="6.5" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 58 122 L 94 148 M 46 176 L 84 184 M 428 206 L 468 196" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'sad',
-    masterKey: 'thinking',
-    tilt: -5,
-    scale: 0.95,
-    offsetY: 14,
-    tint: { saturation: 0.72, brightness: 0.9 },
+    masterKey: 'sad',
+    tilt: -3,
+    scale: 0.98,
+    offsetY: 8,
+    tint: { saturation: 0.88, brightness: 0.96 },
     overlay: `
-      <path d="M 384 96 C 368 96 364 114 374 122 C 366 134 380 148 396 142 C 410 150 432 146 436 132 C 452 132 456 110 440 104 C 436 86 402 82 384 96 Z" fill="#475569" stroke="${INK}" stroke-width="4.5"/>
-      <path d="M 384 156 L 378 178 M 408 160 L 402 184 M 430 156 L 424 178" stroke="${CYAN}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M 388 94 C 374 94 370 110 378 118 C 372 130 384 142 398 136 C 410 144 430 140 434 128 C 448 128 452 108 438 102 C 434 86 404 82 388 94 Z" fill="#475569" stroke="${INK}" stroke-width="4"/>
+      <path d="M 390 150 L 384 170 M 412 154 L 406 176 M 432 150 L 426 170" stroke="${CYAN}" stroke-width="4" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'crying',
-    masterKey: 'thinking',
-    tilt: 5,
-    scale: 0.96,
-    offsetY: 10,
-    tint: { saturation: 0.8, brightness: 0.93 },
+    masterKey: 'sad',
+    tilt: 3,
+    scale: 1.0,
+    offsetY: 6,
+    tint: { saturation: 0.92, brightness: 0.97 },
     overlay: `
-      <path d="M 102 168 C 86 196 86 216 102 222 C 118 216 118 196 102 168 Z" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 412 152 C 396 180 396 200 412 206 C 428 200 428 180 412 152 Z" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 88 242 Q 104 256 118 242 M 398 228 Q 414 242 428 228" fill="none" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 102 180 C 92 200 92 214 102 218 C 112 214 112 200 102 180 Z" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 416 154 C 406 174 406 188 416 192 C 426 188 426 174 416 154 Z" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'sleepy',
-    masterKey: 'thinking',
-    tilt: 7,
-    scale: 0.96,
-    offsetY: 12,
-    tint: { saturation: 0.85, brightness: 0.92 },
+    masterKey: 'sad',
+    tilt: 6,
+    scale: 0.97,
+    offsetY: 10,
+    tint: { saturation: 0.84, brightness: 0.94 },
     overlay: `
-      <path d="M 412 96 A 26 26 0 1 0 442 132 A 20 20 0 1 1 412 96 Z" fill="${VIOLET}" stroke="${INK}" stroke-width="4"/>
-      <circle cx="378" cy="158" r="8" fill="${VIOLET}" fill-opacity="0.7" stroke="${INK}" stroke-width="3.5"/>
-      <circle cx="398" cy="134" r="11" fill="${CYAN}" fill-opacity="0.7" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 412 96 A 24 24 0 1 0 440 130 A 18 18 0 1 1 412 96 Z" fill="${VIOLET}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="380" cy="156" r="7.5" fill="${VIOLET}" fill-opacity="0.75" stroke="${INK}" stroke-width="3"/>
+      <circle cx="398" cy="134" r="10" fill="${CYAN}" fill-opacity="0.75" stroke="${INK}" stroke-width="3"/>
     `,
   },
   {
     slug: 'curious',
     masterKey: 'thinking',
-    tilt: -6,
-    scale: 1,
+    tilt: -5,
+    scale: 1.0,
     offsetY: 0,
     overlay: `
-      <circle cx="136" cy="96" r="18" fill="none" stroke="${CYAN}" stroke-width="4.5" stroke-dasharray="8 6"/>
-      <circle cx="136" cy="96" r="30" fill="none" stroke="${CYAN}" stroke-width="3.5" stroke-opacity="0.75"/>
-      <path d="${starPath(420, 128, 20, 7, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <circle cx="128" cy="96" r="16" fill="none" stroke="${CYAN}" stroke-width="4" stroke-dasharray="7 5"/>
+      <circle cx="128" cy="96" r="28" fill="none" stroke="${CYAN}" stroke-width="3" stroke-opacity="0.7"/>
+      <path d="${starPath(422, 128, 18, 6.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'celebrating',
     masterKey: 'celebrating',
-    tilt: 3,
-    scale: 1.04,
-    offsetY: -8,
+    tilt: 2,
+    scale: 1.03,
+    offsetY: -6,
     overlay: `
-      <path d="${starPath(94, 102, 24, 8, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(424, 106, 26, 9, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
-      <rect x="64" y="182" width="18" height="10" rx="2" fill="${CYAN}" stroke="${INK}" stroke-width="3" transform="rotate(-24 73 187)"/>
-      <rect x="424" y="188" width="18" height="10" rx="2" fill="${YELLOW}" stroke="${INK}" stroke-width="3" transform="rotate(28 433 193)"/>
-      <path d="M 102 150 Q 134 110 148 158 M 390 158 Q 408 114 438 156" fill="none" stroke="${YELLOW}" stroke-width="5" stroke-linecap="round"/>
+      <path d="${starPath(94, 102, 22, 7.5, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+      <path d="${starPath(424, 106, 24, 8, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
+      <rect x="64" y="182" width="16" height="9" rx="2" fill="${CYAN}" stroke="${INK}" stroke-width="3" transform="rotate(-24 72 186)"/>
+      <rect x="426" y="188" width="16" height="9" rx="2" fill="${YELLOW}" stroke="${INK}" stroke-width="3" transform="rotate(28 434 192)"/>
     `,
   },
   {
@@ -308,43 +362,43 @@ const EXPRESSIONS = [
     scale: 0.98,
     offsetY: 6,
     overlay: `
-      <path d="M 404 128 C 392 152 392 170 404 176 C 416 170 416 152 404 128 Z" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
-      <path d="M 78 148 L 106 164 M 74 170 L 102 186 M 414 196 L 444 182 M 418 218 L 448 204" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 406 126 C 396 148 396 164 406 170 C 416 164 416 148 406 126 Z" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 78 152 L 104 166 M 74 172 L 100 186" stroke="${MAGENTA}" stroke-width="4.5" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'determined',
-    masterKey: 'excited',
-    tilt: -2,
+    masterKey: 'angry',
+    tilt: 1,
     scale: 1.03,
     offsetY: -4,
     overlay: `
-      <path d="M 42 96 L 116 138 M 36 144 L 106 170 M 468 98 L 396 136 M 474 146 L 406 172" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/>
-      <path d="M 382 192 L 424 186 L 404 216 L 434 214 L 392 252 L 404 224 L 378 226 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 44 98 L 108 134 M 40 144 L 100 166 M 466 100 L 402 134" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 388 188 L 428 182 L 408 210 L 436 208 L 396 244 L 408 218 L 384 220 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'victory',
     masterKey: 'celebrating',
     tilt: 2,
-    scale: 1.05,
-    offsetY: -10,
+    scale: 1.04,
+    offsetY: -8,
     overlay: `
-      <path d="M 378 144 L 390 92 L 414 118 L 438 92 L 450 144 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round"/>
-      <path d="${starPath(98, 108, 22, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(434, 198, 18, 6, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 380 142 L 392 94 L 414 118 L 436 94 L 448 142 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      <path d="${starPath(98, 108, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(436, 196, 16, 5.5, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'disappointed',
-    masterKey: 'thinking',
+    masterKey: 'sad',
     tilt: -4,
-    scale: 0.95,
-    offsetY: 14,
-    tint: { saturation: 0.65, brightness: 0.88 },
+    scale: 0.96,
+    offsetY: 12,
+    tint: { saturation: 0.72, brightness: 0.91 },
     overlay: `
-      <path d="M 392 92 L 392 172 M 414 86 L 414 166 M 436 96 L 436 174" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
-      <path d="M 68 134 Q 88 118 108 134" fill="none" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 396 92 L 396 164 M 416 86 L 416 158 M 436 96 L 436 166" stroke="#64748b" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 70 134 Q 88 120 106 134" fill="none" stroke="#64748b" stroke-width="4.5" stroke-linecap="round"/>
     `,
   },
 ];
@@ -355,147 +409,173 @@ const POSES = [
     view: 'front',
     tilt: 0,
     offsetY: 0,
-    backFx: `<ellipse cx="256" cy="726" rx="142" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
-    frontFx: `<path d="${starPath(412, 134, 18, 6, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>`,
+    backFx: `<ellipse cx="256" cy="722" rx="136" ry="16" fill="${INK}" fill-opacity="0.22"/>`,
+    frontFx: `<path d="${starPath(416, 134, 17, 6, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>`,
   },
   {
     slug: 'sitting',
-    view: 'threeQuarter',
-    tilt: -4,
-    offsetY: -22,
-    backFx: `
-      <rect x="132" y="546" width="248" height="168" rx="12" fill="${CHARCOAL}" stroke="${INK}" stroke-width="6"/>
-      <path d="M 132 586 H 380 M 156 586 L 238 714 M 356 586 L 274 714" stroke="${CYAN}" stroke-width="4.5" stroke-opacity="0.75"/>
-      <ellipse cx="256" cy="728" rx="156" ry="18" fill="${INK}" fill-opacity="0.24"/>
-    `,
-    frontFx: `<circle cx="386" cy="142" r="14" fill="none" stroke="${CYAN}" stroke-width="4"/>`,
+    view: 'sitting',
+    tilt: 0,
+    offsetY: 8,
+    backFx: `<ellipse cx="256" cy="718" rx="164" ry="18" fill="${INK}" fill-opacity="0.24"/>`,
+    frontFx: `<circle cx="404" cy="146" r="12" fill="none" stroke="${CYAN}" stroke-width="3.5"/>`,
   },
   {
     slug: 'walking',
-    view: 'threeQuarter',
-    tilt: -5,
-    offsetY: -4,
+    view: 'running',
+    tilt: -4,
+    offsetY: 6,
     backFx: `
-      <ellipse cx="256" cy="724" rx="146" ry="16" fill="${INK}" fill-opacity="0.2"/>
-      <path d="M 74 696 Q 96 672 126 686 Q 144 668 168 692" fill="none" stroke="${PAPER}" stroke-width="6" stroke-linecap="round"/>
-      <path d="M 74 696 Q 96 672 126 686 Q 144 668 168 692" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="256" cy="720" rx="152" ry="16" fill="${INK}" fill-opacity="0.2"/>
+      <path d="M 64 684 Q 88 662 116 676 Q 132 660 156 680" fill="none" stroke="${PAPER}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 64 684 Q 88 662 116 676 Q 132 660 156 680" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
     `,
-    frontFx: `<path d="M 64 360 L 122 360 M 54 392 L 114 392" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/>`,
+    frontFx: `<path d="M 52 346 L 106 346 M 44 376 L 96 376" stroke="${CYAN}" stroke-width="4.5" stroke-linecap="round"/>`,
   },
   {
     slug: 'running',
-    view: 'side',
-    tilt: 10,
-    offsetY: -12,
+    view: 'running',
+    tilt: 2,
+    offsetY: -8,
     backFx: `
-      <path d="M 28 240 L 154 240 M 18 320 L 138 320 M 42 420 L 166 420 M 24 530 L 146 530" stroke="${MAGENTA}" stroke-width="7" stroke-linecap="round"/>
-      <path d="M 44 276 L 148 276 M 32 476 L 142 476" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="256" cy="726" rx="140" ry="14" fill="${INK}" fill-opacity="0.18"/>
+      <path d="M 24 250 L 122 250 M 18 332 L 108 332 M 36 440 L 130 440" stroke="${MAGENTA}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/>
+      <path d="M 38 286 L 116 286 M 28 486 L 112 486" stroke="${CYAN}" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.85"/>
     `,
-    frontFx: `<path d="${starPath(432, 168, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>`,
+    frontFx: `<path d="${starPath(440, 166, 18, 6.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>`,
   },
   {
     slug: 'jumping',
-    view: 'front',
-    tilt: -4,
-    offsetY: -54,
+    view: 'running',
+    tilt: -8,
+    offsetY: -44,
     backFx: `
-      <ellipse cx="256" cy="734" rx="108" ry="13" fill="${INK}" fill-opacity="0.16"/>
-      <path d="M 118 688 Q 256 624 394 688" fill="none" stroke="${YELLOW}" stroke-width="7" stroke-linecap="round"/>
-      <path d="M 96 540 L 96 640 M 416 540 L 416 640" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="256" cy="734" rx="108" ry="12" fill="${INK}" fill-opacity="0.16"/>
+      <path d="M 118 688 Q 256 626 394 688" fill="none" stroke="${YELLOW}" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M 94 550 L 94 636 M 418 550 L 418 636" stroke="${CYAN}" stroke-width="4.5" stroke-linecap="round"/>
     `,
     frontFx: `
-      <path d="${starPath(96, 128, 22, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(418, 146, 20, 7, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
+      <path d="${starPath(94, 128, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(422, 146, 18, 6.5, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'waving',
-    view: 'front',
-    tilt: 3,
-    offsetY: -6,
-    backFx: `<ellipse cx="256" cy="726" rx="140" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    view: 'waving',
+    tilt: 0,
+    offsetY: 0,
+    backFx: `<ellipse cx="256" cy="722" rx="136" ry="16" fill="${INK}" fill-opacity="0.22"/>`,
     frontFx: `
-      <path d="M 88 186 Q 68 148 92 118 M 70 198 Q 44 148 74 106" fill="none" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/>
-      <path d="${starPath(412, 124, 18, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 86 196 Q 66 158 90 128 M 68 206 Q 44 158 72 116" fill="none" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="${starPath(418, 128, 18, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     slug: 'pointing',
-    view: 'front',
-    tilt: 4,
-    offsetY: -4,
-    backFx: `<ellipse cx="256" cy="726" rx="138" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    view: 'waving',
+    tilt: 3,
+    offsetY: -2,
+    backFx: `<ellipse cx="256" cy="722" rx="136" ry="16" fill="${INK}" fill-opacity="0.22"/>`,
     frontFx: `
-      <path d="M 358 318 L 464 294 L 444 274 M 464 294 L 444 316" fill="none" stroke="${YELLOW}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="${starPath(462, 248, 16, 5, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3"/>
+      <path d="M 366 304 L 460 282 L 442 264 M 460 282 L 442 302" fill="none" stroke="${YELLOW}" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${starPath(458, 238, 15, 5, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3"/>
     `,
   },
   {
     slug: 'reading',
-    view: 'threeQuarter',
-    tilt: 2,
-    offsetY: -8,
-    backFx: `<ellipse cx="256" cy="726" rx="142" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    view: 'sitting',
+    tilt: -2,
+    offsetY: 8,
+    backFx: `<ellipse cx="256" cy="718" rx="164" ry="18" fill="${INK}" fill-opacity="0.24"/>`,
     frontFx: `
-      <path d="M 294 338 L 366 318 L 418 336 L 346 358 Z" fill="${PAPER}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
-      <path d="M 346 358 L 418 336 L 418 424 L 346 446 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
-      <path d="M 294 338 L 346 358 L 346 446 L 294 426 Z" fill="${PAPER}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="${starPath(412, 166, 18, 6, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 378 242 Q 408 228 434 246 M 384 264 Q 412 252 436 266" fill="none" stroke="${CYAN}" stroke-width="4" stroke-linecap="round"/>
     `,
   },
   {
     slug: 'gaming',
-    view: 'front',
-    tilt: -2,
-    offsetY: -4,
-    backFx: `<ellipse cx="256" cy="726" rx="144" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    view: 'sitting',
+    tilt: 2,
+    offsetY: 6,
+    backFx: `
+      <ellipse cx="256" cy="718" rx="164" ry="18" fill="${INK}" fill-opacity="0.24"/>
+      ${halftoneDots(4, 3, 54, 156, 18, 2.5, MAGENTA, 0.35)}
+    `,
     frontFx: `
-      <rect x="196" y="346" width="120" height="64" rx="18" fill="${CHARCOAL}" stroke="${INK}" stroke-width="5"/>
-      <rect x="228" y="358" width="56" height="34" rx="4" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-      <circle cx="214" cy="378" r="8" fill="${YELLOW}"/>
-      <circle cx="298" cy="370" r="5" fill="${MAGENTA}"/>
-      <circle cx="298" cy="386" r="5" fill="${YELLOW}"/>
+      <path d="${starPath(424, 248, 18, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(88, 224, 15, 5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>
     `,
   },
   {
     slug: 'working',
-    view: 'side',
-    tilt: 5,
-    offsetY: -6,
-    backFx: `<ellipse cx="256" cy="726" rx="138" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    view: 'sitting',
+    tilt: 0,
+    offsetY: 8,
+    backFx: `<ellipse cx="256" cy="718" rx="164" ry="18" fill="${INK}" fill-opacity="0.24"/>`,
     frontFx: `
-      <rect x="318" y="376" width="96" height="62" rx="8" fill="${CHARCOAL}" stroke="${INK}" stroke-width="5"/>
-      <rect x="330" y="388" width="72" height="32" rx="4" fill="${CYAN}" stroke="${INK}" stroke-width="3"/>
-      <path d="M 336 404 L 352 396 L 366 412 L 382 394 L 396 404" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="412" cy="212" r="16" fill="none" stroke="${CYAN}" stroke-width="4" stroke-dasharray="8 6"/>
+      <circle cx="412" cy="212" r="28" fill="none" stroke="${YELLOW}" stroke-width="3" stroke-opacity="0.8"/>
     `,
   },
   {
     slug: 'holding-objects',
     view: 'front',
     tilt: 0,
-    offsetY: -6,
-    backFx: `<ellipse cx="256" cy="726" rx="146" ry="18" fill="${INK}" fill-opacity="0.22"/>`,
+    offsetY: 0,
+    backFx: `<ellipse cx="256" cy="722" rx="140" ry="16" fill="${INK}" fill-opacity="0.22"/>`,
     frontFx: `
-      <rect x="184" y="332" width="144" height="104" rx="10" fill="${YELLOW}" stroke="${INK}" stroke-width="5.5"/>
-      <path d="M 184 368 H 328 M 256 332 V 436" stroke="${INK}" stroke-width="4.5"/>
-      <path d="M 232 384 L 244 362 L 256 376 L 268 362 L 280 384 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <g transform="translate(334, 286)">
+        <rect x="4" y="6" width="112" height="82" rx="10" fill="${INK}" fill-opacity="0.45"/>
+        <rect x="0" y="0" width="112" height="82" rx="10" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/>
+        <path d="M 0 28 H 112 M 56 0 V 82" stroke="${INK}" stroke-width="4"/>
+        <path d="M 38 42 L 46 24 L 56 36 L 66 24 L 74 42 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="3"/>
+      </g>
     `,
   },
   {
     slug: 'celebrating',
-    view: 'front',
-    tilt: 3,
-    offsetY: -36,
+    view: 'waving',
+    tilt: 2,
+    offsetY: -22,
     backFx: `
-      <ellipse cx="256" cy="730" rx="124" ry="15" fill="${INK}" fill-opacity="0.18"/>
-      <path d="M 88 210 L 146 248 M 424 210 L 366 248 M 82 320 L 144 330 M 430 320 L 368 330" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="256" cy="726" rx="124" ry="14" fill="${INK}" fill-opacity="0.18"/>
+      <path d="M 84 210 L 138 244 M 428 210 L 374 244 M 78 320 L 136 328 M 434 320 L 376 328" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
     `,
     frontFx: `
-      <path d="M 218 106 L 230 56 L 256 82 L 282 56 L 294 106 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round"/>
-      <path d="${starPath(96, 134, 24, 8, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
-      <path d="${starPath(416, 134, 24, 8, 5)}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
+      <path d="M 222 102 L 234 56 L 256 80 L 278 56 L 290 102 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      <path d="${starPath(94, 134, 22, 7.5, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(418, 134, 22, 7.5, 5)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
 ];
+
+// Scene masters that ALREADY illustrate Kuro / Vesper in-scene (never duplicate characters on top!)
+const MASTERS_WITH_CHARACTERS = new Set([
+  'scene-empty-signal-static-master.png',
+  'scene-onboarding-welcome-master.png',
+  'scene-quest-victory-master.png',
+]);
+
+// Compact comic medallion icon positioned in an unobstructed sky corner per scene master
+function stateBadge(accent, iconBody, master) {
+  let bx = 526;
+  let by = 26;
+  if (master === 'scene-empty-signal-static-master.png') {
+    bx = 32;
+    by = 28;
+  } else if (master === 'scene-onboarding-welcome-master.png') {
+    bx = 280;
+    by = 22;
+  }
+  return `
+    <g transform="translate(${bx}, ${by})">
+      <rect x="6" y="6" width="80" height="80" rx="14" fill="${INK}" fill-opacity="0.88"/>
+      <rect x="0" y="0" width="80" height="80" rx="14" fill="${CHARCOAL}" stroke="${INK}" stroke-width="4.5"/>
+      <rect x="4" y="4" width="72" height="72" rx="10" fill="none" stroke="${accent}" stroke-width="3"/>
+      <g transform="translate(40, 40) scale(0.92)">${iconBody}</g>
+    </g>
+  `;
+}
 
 const UI_STATES = [
   {
@@ -503,115 +583,104 @@ const UI_STATES = [
     master: 'scene-empty-signal-static-master.png',
     expr: 'thinking',
     accent: CYAN,
-    actor: 'kuro',
-    glyph:
-      '<rect x="260" y="138" width="120" height="86" rx="8" fill="#17171a" stroke="#0d0d0d" stroke-width="5"/><path d="M278 168h84M278 190h56" stroke="#00b8f0" stroke-width="5" stroke-linecap="round"/>',
+    actor: 'none',
+    badgeIcon: `<rect x="-20" y="-16" width="40" height="32" rx="4" fill="${NIGHT}" stroke="${CYAN}" stroke-width="3.5"/><path d="M-12 -4h24M-12 6h15" stroke="${CYAN}" stroke-width="3.5" stroke-linecap="round"/>`,
   },
   {
     slug: 'no-search-results',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'bg-riot-street-alley-master.png',
+    expr: 'confused',
     accent: YELLOW,
     actor: 'vesper',
-    glyph:
-      '<circle cx="312" cy="176" r="40" fill="#17171a" stroke="#ffe031" stroke-width="6"/><path d="M342 206l32 32M296 160l32 32M328 160l-32 32" stroke="#ffe031" stroke-width="6" stroke-linecap="round"/>',
+    badgeIcon: `<circle cx="-3" cy="-3" r="15" fill="none" stroke="${YELLOW}" stroke-width="4"/><path d="M8 8l12 12M-9 -9l12 12M3 -9l-12 12" stroke="${YELLOW}" stroke-width="3.5" stroke-linecap="round"/>`,
   },
   {
     slug: 'no-notifications',
     master: 'scene-empty-signal-static-master.png',
     expr: 'thinking',
     accent: VIOLET,
-    actor: 'kuro',
-    glyph:
-      '<path d="M320 132c-22 0-36 16-36 38v22l-12 16h96l-12-16v-22c0-22-14-38-36-38Z" fill="#17171a" stroke="#c084fc" stroke-width="5"/><path d="M274 134l92 84" stroke="#ff2e88" stroke-width="6" stroke-linecap="round"/>',
+    actor: 'none',
+    badgeIcon: `<path d="M0 -18c-9 0-15 7-15 16v9l-5 7h40l-5-7v-9c0-9-6-16-15-16Z" fill="none" stroke="${VIOLET}" stroke-width="3.5"/><path d="M-18 -18l36 34" stroke="${MAGENTA}" stroke-width="4" stroke-linecap="round"/>`,
   },
   {
     slug: 'empty-collection',
-    master: 'scene-empty-signal-static-master.png',
+    master: 'bg-riot-arcade-workbench-master.png',
     expr: 'thinking',
     accent: MAGENTA,
     actor: 'vesper',
-    glyph:
-      '<path d="M258 154h44l14 16h66v58H258Z" fill="#17171a" stroke="#ff2e88" stroke-width="5" stroke-linejoin="round"/><path d="M276 196h88" stroke="#f3efe4" stroke-width="4" stroke-dasharray="6 8"/>',
+    badgeIcon: `<path d="M-22 -12h16l6 6h22v22h-44Z" fill="none" stroke="${MAGENTA}" stroke-width="3.5" stroke-linejoin="round"/><path d="M-14 4h28" stroke="${PAPER}" stroke-width="3" stroke-dasharray="4 5"/>`,
   },
   {
     slug: 'no-favorites',
     master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    expr: 'sad',
     accent: MAGENTA,
-    actor: 'kuro',
-    glyph: `<path d="${starPath(320, 182, 46, 20, 5)}" fill="#17171a" stroke="#ff2e88" stroke-width="5.5"/>`,
+    actor: 'none',
+    badgeIcon: `<path d="${starPath(0, 0, 21, 9, 5)}" fill="none" stroke="${MAGENTA}" stroke-width="3.5"/>`,
   },
   {
     slug: 'no-messages',
-    master: 'scene-empty-signal-static-master.png',
+    master: 'bg-riot-arcade-workbench-master.png',
     expr: 'thinking',
     accent: CYAN,
     actor: 'kuro',
-    glyph:
-      '<rect x="258" y="144" width="124" height="82" rx="8" fill="#17171a" stroke="#00b8f0" stroke-width="5"/><path d="M262 148l58 44 58-44" fill="none" stroke="#00b8f0" stroke-width="5"/>',
+    badgeIcon: `<rect x="-22" y="-15" width="44" height="30" rx="4" fill="none" stroke="${CYAN}" stroke-width="3.5"/><path d="M-20 -13l20 15 20-15" fill="none" stroke="${CYAN}" stroke-width="3.5"/>`,
   },
   {
     slug: 'no-activity',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'bg-riot-arcade-workbench-master.png',
+    expr: 'sleepy',
     accent: YELLOW,
     actor: 'vesper',
-    glyph:
-      '<path d="M248 188h36l16-34 22 64 18-30h52" fill="none" stroke="#ffe031" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>',
+    badgeIcon: `<path d="M-24 2h12l6-14 8 26 7-12h15" fill="none" stroke="${YELLOW}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`,
   },
   {
     slug: 'first-time',
     master: 'scene-onboarding-welcome-master.png',
     expr: 'excited',
     accent: YELLOW,
-    actor: 'both',
-    glyph: `<path d="${starPath(320, 176, 42, 14, 4)}" fill="#ffe031" stroke="#0d0d0d" stroke-width="5"/>`,
+    actor: 'none',
+    badgeIcon: `<path d="${starPath(0, 0, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="2.5"/>`,
   },
   {
     slug: 'loading',
     master: 'bg-riot-arcade-workbench-master.png',
-    expr: 'thinking',
+    expr: 'curious',
     accent: CYAN,
     actor: 'kuro',
-    glyph:
-      '<circle cx="320" cy="180" r="42" fill="none" stroke="#17171a" stroke-width="10"/><path d="M320 138a42 42 0 0 1 42 42" fill="none" stroke="#00b8f0" stroke-width="10" stroke-linecap="round"/><circle cx="320" cy="180" r="14" fill="#ffe031"/>',
+    badgeIcon: `<circle cx="0" cy="0" r="18" fill="none" stroke="${SLATE}" stroke-width="5"/><path d="M0 -18a18 18 0 0 1 18 18" fill="none" stroke="${CYAN}" stroke-width="5" stroke-linecap="round"/><circle cx="0" cy="0" r="6" fill="${YELLOW}"/>`,
   },
   {
     slug: 'success',
     master: 'scene-quest-victory-master.png',
     expr: 'celebrating',
     accent: YELLOW,
-    actor: 'kuro',
-    glyph:
-      '<circle cx="320" cy="180" r="44" fill="#ffe031" stroke="#0d0d0d" stroke-width="6"/><path d="M298 180l16 16 32-36" fill="none" stroke="#0d0d0d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>',
+    actor: 'none',
+    badgeIcon: `<circle cx="0" cy="0" r="20" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/><path d="M-9 0l6 7 13-14" fill="none" stroke="${INK}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>`,
   },
   {
     slug: 'error',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'scene-error-static-master.png',
+    expr: 'angry',
     accent: MAGENTA,
     actor: 'kuro',
-    glyph:
-      '<polygon points="320,132 370,222 270,222" fill="#ff2e88" stroke="#0d0d0d" stroke-width="6" stroke-linejoin="round"/><path d="M320 162v28" stroke="#0d0d0d" stroke-width="7" stroke-linecap="round"/><circle cx="320" cy="204" r="4.5" fill="#0d0d0d"/>',
+    badgeIcon: `<polygon points="0,-20 22,18 -22,18" fill="${MAGENTA}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M0 -7v12" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><circle cx="0" cy="11" r="2.5" fill="${INK}"/>`,
   },
   {
     slug: 'offline',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'scene-error-static-master.png',
+    expr: 'sad',
     accent: CYAN,
     actor: 'kuro',
-    glyph:
-      '<path d="M266 168a76 76 0 0 1 108 0M284 190a50 50 0 0 1 72 0" fill="none" stroke="#00b8f0" stroke-width="6" stroke-linecap="round"/><path d="M276 138l88 86" stroke="#ff2e88" stroke-width="7" stroke-linecap="round"/>',
+    badgeIcon: `<path d="M-20 -4a28 28 0 0 1 40 0M-12 6a18 18 0 0 1 24 0" fill="none" stroke="${CYAN}" stroke-width="3.5" stroke-linecap="round"/><path d="M-16 -16l32 32" stroke="${MAGENTA}" stroke-width="4" stroke-linecap="round"/>`,
   },
   {
     slug: 'network-disconnected',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'scene-error-static-master.png',
+    expr: 'confused',
     accent: MAGENTA,
     actor: 'vesper',
-    glyph:
-      '<path d="M256 184h42m44 0h42" stroke="#00b8f0" stroke-width="7" stroke-linecap="round"/><rect x="294" y="164" width="16" height="40" rx="3" fill="#ff2e88" stroke="#0d0d0d" stroke-width="4"/><rect x="330" y="164" width="16" height="40" rx="3" fill="#ffe031" stroke="#0d0d0d" stroke-width="4"/>',
+    badgeIcon: `<path d="M-22 0h12m20 0h12" stroke="${CYAN}" stroke-width="4" stroke-linecap="round"/><rect x="-10" y="-10" width="8" height="20" rx="2" fill="${MAGENTA}"/><rect x="2" y="-10" width="8" height="20" rx="2" fill="${YELLOW}"/>`,
   },
   {
     slug: 'maintenance',
@@ -619,106 +688,95 @@ const UI_STATES = [
     expr: 'thinking',
     accent: YELLOW,
     actor: 'vesper',
-    glyph:
-      '<circle cx="320" cy="180" r="36" fill="#17171a" stroke="#ffe031" stroke-width="7" stroke-dasharray="14 8"/><circle cx="320" cy="180" r="14" fill="#ffe031" stroke="#0d0d0d" stroke-width="4"/>',
+    badgeIcon: `<circle cx="0" cy="0" r="16" fill="none" stroke="${YELLOW}" stroke-width="5" stroke-dasharray="8 5"/><circle cx="0" cy="0" r="6" fill="${YELLOW}"/>`,
   },
   {
     slug: 'access-denied',
-    master: 'bg-riot-street-alley-master.png',
-    expr: 'thinking',
+    master: 'scene-error-static-master.png',
+    expr: 'angry',
     accent: MAGENTA,
     actor: 'vesper',
-    glyph:
-      '<rect x="282" y="168" width="76" height="58" rx="8" fill="#17171a" stroke="#ff2e88" stroke-width="6"/><path d="M298 168v-18a22 22 0 0 1 44 0v18" fill="none" stroke="#ff2e88" stroke-width="6"/>',
+    badgeIcon: `<rect x="-16" y="-4" width="32" height="24" rx="4" fill="none" stroke="${MAGENTA}" stroke-width="3.5"/><path d="M-10 -4v-8a10 10 0 0 1 20 0v8" fill="none" stroke="${MAGENTA}" stroke-width="3.5"/>`,
   },
   {
     slug: 'not-found',
     master: 'bg-riot-street-alley-master.png',
-    expr: 'thinking',
+    expr: 'confused',
     accent: VIOLET,
     actor: 'kuro',
-    glyph:
-      '<circle cx="320" cy="180" r="44" fill="#17171a" stroke="#c084fc" stroke-width="6" stroke-dasharray="16 8"/><path d="M298 158l44 44M342 158l-44 44" stroke="#ffe031" stroke-width="7" stroke-linecap="round"/>',
+    badgeIcon: `<circle cx="0" cy="0" r="19" fill="none" stroke="${VIOLET}" stroke-width="3.5" stroke-dasharray="8 5"/><path d="M-9 -9l18 18M9 -9l-18 18" stroke="${YELLOW}" stroke-width="4" stroke-linecap="round"/>`,
   },
   {
     slug: 'unexpected-failure',
-    master: 'scene-empty-signal-static-master.png',
-    expr: 'thinking',
+    master: 'scene-error-static-master.png',
+    expr: 'angry',
     accent: MAGENTA,
     actor: 'kuro',
-    glyph:
-      '<path d="M326 128l-34 52h32l-12 46 38-58h-32Z" fill="#ff2e88" stroke="#0d0d0d" stroke-width="5" stroke-linejoin="round"/>',
+    badgeIcon: `<path d="M4 -22l-16 24h14l-6 20 18-26h-14Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
   },
   {
     slug: 'welcome',
     master: 'scene-onboarding-welcome-master.png',
     expr: 'excited',
     accent: YELLOW,
-    actor: 'both',
-    glyph:
-      '<path d="M276 218v-72l44-24 44 24v72Z" fill="#17171a" stroke="#ffe031" stroke-width="5"/><circle cx="344" cy="184" r="5" fill="#ffe031"/>',
+    actor: 'none',
+    badgeIcon: `<path d="M-18 16v-26l18-10 18 10v26Z" fill="none" stroke="${YELLOW}" stroke-width="3.5" stroke-linejoin="round"/><circle cx="8" cy="4" r="3" fill="${YELLOW}"/>`,
   },
   {
     slug: 'onboarding',
     master: 'scene-onboarding-welcome-master.png',
     expr: 'excited',
     accent: CYAN,
-    actor: 'both',
-    glyph:
-      '<circle cx="320" cy="180" r="42" fill="#17171a" stroke="#00b8f0" stroke-width="6"/><polygon points="320,146 334,180 320,214 306,180" fill="#ffe031" stroke="#0d0d0d" stroke-width="3.5"/>',
+    actor: 'none',
+    badgeIcon: `<circle cx="0" cy="0" r="18" fill="none" stroke="${CYAN}" stroke-width="3.5"/><polygon points="0,-13 7,0 0,13 -7,0" fill="${YELLOW}" stroke="${INK}" stroke-width="2"/>`,
   },
   {
     slug: 'discover',
-    master: 'scene-onboarding-welcome-master.png',
-    expr: 'excited',
+    master: 'bg-riot-street-alley-master.png',
+    expr: 'curious',
     accent: CYAN,
     actor: 'kuro',
-    glyph:
-      '<circle cx="320" cy="180" r="42" fill="#17171a" stroke="#00b8f0" stroke-width="5"/><circle cx="320" cy="180" r="22" fill="none" stroke="#ff2e88" stroke-width="4"/><circle cx="320" cy="180" r="7" fill="#ffe031"/>',
+    badgeIcon: `<circle cx="0" cy="0" r="18" fill="none" stroke="${CYAN}" stroke-width="3"/><circle cx="0" cy="0" r="10" fill="none" stroke="${MAGENTA}" stroke-width="2.5"/><circle cx="0" cy="0" r="4" fill="${YELLOW}"/>`,
   },
   {
     slug: 'explore',
-    master: 'scene-onboarding-welcome-master.png',
+    master: 'bg-riot-street-alley-master.png',
     expr: 'happy',
     accent: VIOLET,
     actor: 'vesper',
-    glyph:
-      '<polygon points="274,218 302,146 368,142 340,214" fill="#17171a" stroke="#c084fc" stroke-width="5"/><circle cx="320" cy="180" r="12" fill="#00b8f0"/>',
+    badgeIcon: `<polygon points="-18,16 -8,-14 18,-16 8,14" fill="none" stroke="${VIOLET}" stroke-width="3.5" stroke-linejoin="round"/><circle cx="0" cy="0" r="5" fill="${CYAN}"/>`,
   },
   {
     slug: 'profile',
-    master: 'scene-onboarding-welcome-master.png',
+    master: 'bg-riot-arcade-workbench-master.png',
     expr: 'happy',
     accent: YELLOW,
     actor: 'kuro',
-    glyph:
-      '<rect x="266" y="138" width="108" height="84" rx="10" fill="#17171a" stroke="#ffe031" stroke-width="5"/><circle cx="320" cy="168" r="14" fill="#ff2e88"/><path d="M294 206c6-16 46-16 52 0" fill="#00b8f0"/>',
+    badgeIcon: `<circle cx="0" cy="-6" r="8" fill="${MAGENTA}"/><path d="M-14 16c3-10 25-10 28 0" fill="${CYAN}"/>`,
   },
   {
     slug: 'achievement',
     master: 'scene-quest-victory-master.png',
     expr: 'celebrating',
     accent: YELLOW,
-    actor: 'kuro',
-    glyph:
-      '<path d="M286 142h68v34c0 22-16 34-34 38-18-4-34-16-34-38Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="5"/><path d="M302 224h36" stroke="#ffe031" stroke-width="8" stroke-linecap="round"/>',
+    actor: 'none',
+    badgeIcon: `<path d="M-16 -16h32v16c0 10-7 16-16 18-9-2-16-8-16-18Z" fill="${YELLOW}" stroke="${INK}" stroke-width="2.5"/><path d="M-8 22h16" stroke="${YELLOW}" stroke-width="4" stroke-linecap="round"/>`,
   },
   {
     slug: 'completion',
     master: 'scene-quest-victory-master.png',
     expr: 'celebrating',
     accent: CYAN,
-    actor: 'both',
-    glyph:
-      '<path d="M284 136v96M284 138l72 18-72 24Z" fill="#00b8f0" stroke="#00b8f0" stroke-width="6" stroke-linejoin="round"/>',
+    actor: 'none',
+    badgeIcon: `<path d="M-12 -18v38M-12 -16l28 8-28 10Z" fill="${CYAN}" stroke="${CYAN}" stroke-width="3" stroke-linejoin="round"/>`,
   },
   {
     slug: 'celebration',
     master: 'scene-quest-victory-master.png',
     expr: 'celebrating',
     accent: MAGENTA,
-    actor: 'both',
-    glyph: `<path d="${starPath(320, 178, 44, 16, 5)}" fill="#ffe031" stroke="#0d0d0d" stroke-width="5"/><path d="${starPath(260, 142, 16, 6, 4)}" fill="#ff2e88"/><path d="${starPath(380, 146, 16, 6, 4)}" fill="#00b8f0"/>`,
+    actor: 'none',
+    badgeIcon: `<path d="${starPath(0, 0, 19, 7.5, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="2.5"/><circle cx="-16" cy="-14" r="3.5" fill="${MAGENTA}"/><circle cx="16" cy="-12" r="3.5" fill="${CYAN}"/>`,
   },
 ];
 
@@ -726,64 +784,165 @@ const STICKERS = [
   {
     slug: 'speech-bubble-shout',
     title: 'Riot shout speech bubble sticker',
-    body: `<polygon points="128,18 158,58 210,32 198,84 242,108 200,136 226,184 172,174 166,228 124,188 78,236 86,178 24,186 58,136 18,104 68,84 52,32 104,58" fill="${YELLOW}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/><polygon points="128,44 150,74 188,54 180,94 212,112 182,132 198,164 160,158 154,196 124,168 92,202 98,162 54,166 78,132 48,108 86,94 74,54 112,74" fill="${PAPER}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`,
+    body: `
+      <polygon points="134,24 164,64 216,38 204,90 246,114 206,142 232,190 178,180 172,234 130,194 84,242 92,184 30,192 64,142 24,110 74,90 58,38 110,64" fill="${INK}" fill-opacity="0.9"/>
+      <polygon points="128,18 158,58 210,32 198,84 242,108 200,136 226,184 172,174 166,228 124,188 78,236 86,178 24,186 58,136 18,104 68,84 52,32 104,58" fill="${YELLOW}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <polygon points="128,38 152,70 194,50 184,92 218,110 186,132 204,168 164,160 158,200 124,170 90,206 96,164 50,168 76,132 44,106 84,92 70,50 112,70" fill="${MAGENTA}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      <polygon points="128,54 146,80 178,64 172,98 198,112 174,128 186,154 156,148 150,180 124,158 98,184 102,152 68,154 88,128 62,108 94,98 84,64 114,80" fill="${PAPER}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      ${halftoneDots(4, 3, 102, 106, 16, 2, INK, 0.14)}
+    `,
   },
   {
     slug: 'speech-bubble-thought',
     title: 'Thought cloud sticker',
-    body: `<path d="M 74 152 C 42 152 28 118 52 94 C 44 62 78 38 112 52 C 134 26 182 32 194 64 C 228 66 238 108 214 132 C 228 158 200 184 172 172 C 150 186 112 180 100 162 C 90 162 82 158 74 152 Z" fill="${PAPER}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/><circle cx="72" cy="196" r="14" fill="${CYAN}" stroke="${INK}" stroke-width="6"/><circle cx="46" cy="224" r="9" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/>`,
+    body: `
+      <path d="M 80 158 C 48 158 34 124 58 100 C 50 68 84 44 118 58 C 140 32 188 38 200 70 C 234 72 244 114 220 138 C 234 164 206 190 178 178 C 156 192 118 186 106 168 C 96 168 88 164 80 158 Z" fill="${INK}"/>
+      <path d="M 74 152 C 42 152 28 118 52 94 C 44 62 78 38 112 52 C 134 26 182 32 194 64 C 228 66 238 108 214 132 C 228 158 200 184 172 172 C 150 186 112 180 100 162 C 90 162 82 158 74 152 Z" fill="${PAPER}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M 68 142 C 96 162 158 172 198 148 C 216 138 220 112 208 94 C 212 126 178 152 130 150 C 102 148 82 144 68 142 Z" fill="${CYAN}" fill-opacity="0.22"/>
+      ${halftoneDots(5, 2, 92, 96, 18, 2.2, CYAN, 0.25)}
+      <path d="M 74 82 C 88 64 118 60 134 72" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="72" cy="196" r="14" fill="${CYAN}" stroke="${INK}" stroke-width="6"/>
+      <circle cx="46" cy="224" r="9" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/>
+    `,
   },
   {
     slug: 'comic-boom',
     title: 'Comic impact burst sticker',
-    body: `<path d="${starPath(128, 128, 114, 58, 10)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/><path d="${starPath(128, 128, 76, 36, 10)}" fill="${YELLOW}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/><circle cx="128" cy="128" r="22" fill="${PAPER}" stroke="${INK}" stroke-width="5"/>`,
+    body: `
+      <path d="${starPath(134, 134, 112, 56, 10)}" fill="${INK}"/>
+      <path d="${starPath(128, 128, 112, 56, 10)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <path d="${starPath(128, 128, 96, 48, 10)}" fill="none" stroke="${MAGENTA_SHADE}" stroke-width="5" stroke-dasharray="10 8"/>
+      <path d="${starPath(128, 128, 76, 36, 10)}" fill="${YELLOW}" stroke="${INK}" stroke-width="5.5" stroke-linejoin="round"/>
+      <path d="${starPath(128, 128, 46, 22, 8)}" fill="${CYAN}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="128" cy="128" r="22" fill="${PAPER}" stroke="${INK}" stroke-width="5"/>
+      <circle cx="122" cy="122" r="6" fill="#ffffff"/>
+    `,
   },
   {
     slug: 'lightning-bolt',
     title: 'Signal lightning bolt sticker',
-    body: `<polygon points="154,16 58,138 118,138 98,240 198,112 138,112" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><polygon points="144,44 82,126 126,126 112,202 176,122 132,122" fill="${CYAN}" fill-opacity="0.45"/>`,
+    body: `
+      <polygon points="160,22 64,144 124,144 104,244 204,118 144,118" fill="${INK}"/>
+      <polygon points="154,16 58,138 118,138 98,240 198,112 138,112" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <polygon points="154,16 138,112 198,112 98,240 128,138 134,94" fill="${YELLOW_SHADE}" fill-opacity="0.7"/>
+      <polygon points="142,46 84,126 116,126 108,166" fill="#ffffff" fill-opacity="0.65"/>
+      <path d="M 154 16 L 58 138 L 118 138 L 98 240 L 198 112 L 138 112 Z" fill="none" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <path d="${starPath(194, 52, 16, 5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+    `,
   },
   {
     slug: 'riot-star',
     title: 'Riot star sticker',
-    body: `<path d="${starPath(128, 128, 106, 44, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><path d="${starPath(128, 128, 54, 22, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`,
+    body: `
+      <path d="${starPath(134, 134, 106, 44, 5)}" fill="${INK}"/>
+      <path d="${starPath(128, 128, 106, 44, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <polygon points="128,22 154,92 128,128" fill="#ffffff" fill-opacity="0.45"/>
+      <polygon points="128,128 228,96 170,142 190,214 128,172" fill="${YELLOW_SHADE}" fill-opacity="0.65"/>
+      <path d="${starPath(128, 128, 106, 44, 5)}" fill="none" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <path d="${starPath(128, 128, 56, 24, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="5.5" stroke-linejoin="round"/>
+      <circle cx="128" cy="128" r="13" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
+    `,
   },
   {
     slug: 'street-flame',
     title: 'Street flame sticker',
-    body: `<path d="M 134 18 C 168 62 206 94 200 152 C 196 202 166 238 128 238 C 84 238 56 202 58 154 C 60 112 90 92 92 64 C 108 78 118 86 120 106 C 136 82 126 48 134 18 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/><path d="M 130 98 C 154 128 168 152 162 184 C 158 208 142 222 126 222 C 106 222 94 202 96 178 C 98 154 118 138 130 98 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/>`,
+    body: `
+      <path d="M 140 24 C 174 68 212 100 206 158 C 202 208 172 244 134 244 C 90 244 62 208 64 160 C 66 118 96 98 98 70 C 114 84 124 92 126 112 C 142 88 132 54 140 24 Z" fill="${INK}"/>
+      <path d="M 134 18 C 168 62 206 94 200 152 C 196 202 166 238 128 238 C 84 238 56 202 58 154 C 60 112 90 92 92 64 C 108 78 118 86 120 106 C 136 82 126 48 134 18 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M 130 88 C 158 122 174 150 166 186 C 162 212 146 226 128 226 C 104 226 90 204 92 178 C 94 150 116 132 130 88 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="5.5"/>
+      <path d="M 128 144 C 142 164 148 180 144 198 C 140 212 134 218 126 218 C 116 218 110 206 112 192 C 114 176 122 166 128 144 Z" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
+    `,
   },
   {
     slug: 'pixel-heart',
     title: 'Pixel heart sticker',
-    body: `<path d="M 48 56 H 104 V 80 H 152 V 56 H 208 V 112 H 184 V 144 H 160 V 176 H 136 V 208 H 120 V 176 H 96 V 144 H 72 V 112 H 48 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="miter"/><rect x="70" y="78" width="22" height="22" fill="${PAPER}"/>`,
+    body: `
+      <path d="M 54 62 H 110 V 86 H 158 V 62 H 214 V 118 H 190 V 150 H 166 V 182 H 142 V 214 H 126 V 182 H 102 V 150 H 78 V 118 H 54 Z" fill="${INK}"/>
+      <path d="M 48 56 H 104 V 80 H 152 V 56 H 208 V 112 H 184 V 144 H 160 V 176 H 136 V 208 H 120 V 176 H 96 V 144 H 72 V 112 H 48 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="8" stroke-linejoin="miter"/>
+      <path d="M 152 80 H 208 V 112 H 184 V 144 H 160 V 176 H 136 V 208 H 128 V 152 H 152 V 120 H 176 V 80 Z" fill="${MAGENTA_SHADE}" fill-opacity="0.72"/>
+      <rect x="68" y="76" width="24" height="24" fill="${PAPER}"/>
+      <rect x="92" y="100" width="14" height="14" fill="${YELLOW}"/>
+      <path d="M 48 56 H 104 V 80 H 152 V 56 H 208 V 112 H 184 V 144 H 160 V 176 H 136 V 208 H 120 V 176 H 96 V 144 H 72 V 112 H 48 Z" fill="none" stroke="${INK}" stroke-width="8" stroke-linejoin="miter"/>
+    `,
   },
   {
     slug: 'hand-arrow',
     title: 'Hand-inked arrow sticker',
-    body: `<path d="M 24 148 L 148 112 L 134 70 L 234 106 L 166 192 L 154 150 L 34 184 Z" fill="${CYAN}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>`,
+    body: `
+      <path d="M 30 154 L 154 118 L 140 76 L 240 112 L 172 198 L 160 156 L 40 190 Z" fill="${INK}"/>
+      <path d="M 24 148 L 148 112 L 134 70 L 234 106 L 166 192 L 154 150 L 34 184 Z" fill="${CYAN}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M 32 164 L 156 128 L 164 176 L 226 108 L 152 138 L 36 174 Z" fill="${CYAN_SHADE}" fill-opacity="0.7"/>
+      <path d="M 42 150 L 146 120" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-opacity="0.7"/>
+      <path d="M 24 148 L 148 112 L 134 70 L 234 106 L 166 192 L 154 150 L 34 184 Z" fill="none" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+    `,
   },
   {
     slug: 'paint-splash',
     title: 'Paint splash sticker',
-    body: `<path d="M 122 52 C 152 44 176 66 196 58 C 212 52 220 74 202 94 C 224 114 218 148 192 154 C 198 184 174 208 148 194 C 130 220 94 212 88 182 C 58 188 40 158 62 134 C 38 114 52 80 82 84 C 86 58 104 56 122 52 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7"/><circle cx="44" cy="54" r="14" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/><circle cx="216" cy="196" r="12" fill="${CYAN}" stroke="${INK}" stroke-width="5"/><circle cx="204" cy="40" r="9" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>`,
+    body: `
+      <path d="M 128 58 C 158 50 182 72 202 64 C 218 58 226 80 208 100 C 230 120 224 154 198 160 C 204 190 180 214 154 200 C 136 226 100 218 94 188 C 64 194 46 164 68 140 C 44 120 58 86 88 90 C 92 64 110 62 128 58 Z" fill="${INK}"/>
+      <path d="M 122 52 C 152 44 176 66 196 58 C 212 52 220 74 202 94 C 224 114 218 148 192 154 C 198 184 174 208 148 194 C 130 220 94 212 88 182 C 58 188 40 158 62 134 C 38 114 52 80 82 84 C 86 58 104 56 122 52 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7.5"/>
+      <path d="M 96 92 C 114 78 146 80 162 94" fill="none" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.65"/>
+      ${halftoneDots(4, 3, 98, 122, 16, 2.2, INK, 0.22)}
+      <circle cx="44" cy="54" r="15" fill="${YELLOW}" stroke="${INK}" stroke-width="5"/>
+      <circle cx="216" cy="196" r="13" fill="${CYAN}" stroke="${INK}" stroke-width="5"/>
+      <circle cx="206" cy="40" r="10" fill="${MAGENTA}" stroke="${INK}" stroke-width="4.5"/>
+    `,
   },
   {
     slug: 'motion-burst',
     title: 'Comic motion burst sticker',
-    body: `<path d="M 128 18 L 128 62 M 128 194 L 128 238 M 18 128 L 62 128 M 194 128 L 238 128 M 48 48 L 82 82 M 174 174 L 208 208 M 208 48 L 174 82 M 82 174 L 48 208" stroke="${INK}" stroke-width="14" stroke-linecap="round"/><path d="M 128 18 L 128 62 M 128 194 L 128 238 M 18 128 L 62 128 M 194 128 L 238 128 M 48 48 L 82 82 M 174 174 L 208 208 M 208 48 L 174 82 M 82 174 L 48 208" stroke="${YELLOW}" stroke-width="7" stroke-linecap="round"/><circle cx="128" cy="128" r="32" fill="${CYAN}" stroke="${INK}" stroke-width="7"/>`,
+    body: `
+      <path d="M 128 18 L 128 66 M 128 190 L 128 238 M 18 128 L 66 128 M 190 128 L 238 128 M 48 48 L 84 84 M 172 172 L 208 208 M 208 48 L 172 84 M 84 172 L 48 208" stroke="${INK}" stroke-width="16" stroke-linecap="round"/>
+      <path d="M 128 18 L 128 66 M 128 190 L 128 238 M 18 128 L 66 128 M 190 128 L 238 128 M 48 48 L 84 84 M 172 172 L 208 208 M 208 48 L 172 84 M 84 172 L 48 208" stroke="${YELLOW}" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="132" cy="132" r="36" fill="${INK}"/>
+      <circle cx="128" cy="128" r="36" fill="${CYAN}" stroke="${INK}" stroke-width="7"/>
+      <circle cx="128" cy="128" r="18" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="122" cy="122" r="5" fill="${MAGENTA}"/>
+    `,
   },
   {
     slug: 'torn-tape-x',
     title: 'Torn masking tape cross sticker',
-    body: `<path d="M 38 64 L 68 34 L 218 184 L 188 214 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/><path d="M 188 34 L 218 64 L 68 214 L 38 184 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/><circle cx="128" cy="124" r="10" fill="${PAPER}" stroke="${INK}" stroke-width="4"/>`,
+    body: `
+      <path d="M 42 70 L 74 38 L 224 188 L 192 220 Z" fill="${INK}"/>
+      <path d="M 192 38 L 224 70 L 74 220 L 42 188 Z" fill="${INK}"/>
+      <path d="M 38 64 L 54 54 L 68 34 L 218 184 L 204 196 L 188 214 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M 188 34 L 204 52 L 218 64 L 68 214 L 54 198 L 38 184 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M 64 56 L 192 184" stroke="${YELLOW_SHADE}" stroke-width="4" stroke-dasharray="10 8"/>
+      <path d="M 192 56 L 64 184" stroke="#ffffff" stroke-opacity="0.45" stroke-width="4" stroke-dasharray="10 8"/>
+      <circle cx="128" cy="124" r="14" fill="${PAPER}" stroke="${INK}" stroke-width="5"/>
+    `,
   },
   {
     slug: 'graffiti-crown',
     title: 'MoonWitness crown sticker',
-    body: `<path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><rect x="36" y="198" width="184" height="24" rx="6" fill="${MAGENTA}" stroke="${INK}" stroke-width="7"/>`,
+    body: `
+      <path d="M 36 200 L 50 70 L 102 128 L 134 52 L 166 128 L 218 70 L 232 200 Z" fill="${INK}"/>
+      <rect x="42" y="204" width="184" height="24" rx="6" fill="${INK}"/>
+      <path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M 128 46 L 160 122 L 212 64 L 226 194 H 128 Z" fill="${YELLOW_SHADE}" fill-opacity="0.55"/>
+      <path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="none" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+      <circle cx="128" cy="144" r="12" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="78" cy="156" r="8" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <circle cx="178" cy="156" r="8" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <rect x="36" y="198" width="184" height="24" rx="6" fill="${MAGENTA}" stroke="${INK}" stroke-width="7"/>
+    `,
   },
 ];
+
+function comicShieldBase(accent, accentShade, innerBody) {
+  return `
+    <polygon points="134,24 230,74 212,198 134,244 56,198 38,74" fill="${INK}"/>
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+    <polygon points="128,18 224,68 206,192 128,238" fill="${SLATE}" fill-opacity="0.55"/>
+    <polygon points="128,34 208,76 192,182 128,220 64,182 48,76" fill="none" stroke="${accent}" stroke-width="5.5" stroke-linejoin="round"/>
+    <polygon points="128,34 208,76 192,182 128,220" fill="none" stroke="${accentShade}" stroke-width="2.5" stroke-dasharray="8 6"/>
+    ${halftoneDots(5, 3, 86, 150, 18, 2, accent, 0.2)}
+    ${innerBody}
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="none" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/>
+  `;
+}
 
 const GAME_ASSETS = [
   {
@@ -792,7 +951,7 @@ const GAME_ASSETS = [
     h: 256,
     title: 'Kuro avatar medallion',
     avatarKey: 'kuro',
-    body: `<circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="96" fill="${CYAN}" fill-opacity="0.22" stroke="${YELLOW}" stroke-width="6"/><path d="M 80 186 C 84 146 172 146 176 186 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="6"/><circle cx="128" cy="110" r="40" fill="${PAPER}" stroke="${INK}" stroke-width="6"/><path d="M 88 106 C 92 64 164 64 168 106 L 154 96 L 138 108 L 122 94 L 104 108 Z" fill="${INK}"/>`,
+    body: `<circle cx="132" cy="132" r="112" fill="${INK}"/><circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="96" fill="${CYAN}" fill-opacity="0.22" stroke="${YELLOW}" stroke-width="6"/><path d="M 80 186 C 84 146 172 146 176 186 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="6"/><circle cx="128" cy="110" r="40" fill="${PAPER}" stroke="${INK}" stroke-width="6"/><path d="M 88 106 C 92 64 164 64 168 106 L 154 96 L 138 108 L 122 94 L 104 108 Z" fill="${INK}"/>`,
   },
   {
     slug: 'avatar-vesper',
@@ -800,84 +959,183 @@ const GAME_ASSETS = [
     h: 256,
     title: 'Vesper avatar medallion',
     avatarKey: 'vesper',
-    body: `<circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="96" fill="${VIOLET}" fill-opacity="0.22" stroke="${VIOLET}" stroke-width="6"/><path d="M 84 186 C 90 148 166 148 172 186 Z" fill="${CHARCOAL}" stroke="${INK}" stroke-width="6"/><circle cx="128" cy="112" r="38" fill="${PAPER}" stroke="${INK}" stroke-width="6"/><circle cx="110" cy="84" r="14" fill="${VIOLET}" stroke="${INK}" stroke-width="4"/><circle cx="146" cy="84" r="14" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>`,
+    body: `<circle cx="132" cy="132" r="112" fill="${INK}"/><circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="96" fill="${VIOLET}" fill-opacity="0.22" stroke="${VIOLET}" stroke-width="6"/><path d="M 84 186 C 90 148 166 148 172 186 Z" fill="${CHARCOAL}" stroke="${INK}" stroke-width="6"/><circle cx="128" cy="112" r="38" fill="${PAPER}" stroke="${INK}" stroke-width="6"/><circle cx="110" cy="84" r="14" fill="${VIOLET}" stroke="${INK}" stroke-width="4"/><circle cx="146" cy="84" r="14" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>`,
   },
   {
     slug: 'avatar-frame-riot',
     w: 256,
     h: 256,
     title: 'Signal Riot avatar frame',
-    body: `<circle cx="128" cy="128" r="112" fill="none" stroke="${INK}" stroke-width="16"/><circle cx="128" cy="128" r="112" fill="none" stroke="${YELLOW}" stroke-width="8" stroke-dasharray="48 16"/><circle cx="128" cy="128" r="98" fill="none" stroke="${MAGENTA}" stroke-width="5"/><path d="${starPath(206, 48, 22, 8, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>`,
+    body: `
+      <circle cx="128" cy="128" r="112" fill="none" stroke="${INK}" stroke-width="18"/>
+      <circle cx="128" cy="128" r="112" fill="none" stroke="${YELLOW}" stroke-width="9" stroke-dasharray="52 14"/>
+      <circle cx="128" cy="128" r="96" fill="none" stroke="${MAGENTA}" stroke-width="5"/>
+      <path d="${starPath(206, 48, 24, 8.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="4.5"/>
+      <path d="${starPath(48, 206, 18, 6, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+    `,
   },
   {
     slug: 'badge-signal-scout',
     w: 256,
     h: 256,
     title: 'Signal Scout badge',
-    body: `<polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><polygon points="128,36 206,78 190,180 128,218 66,180 50,78" fill="none" stroke="${CYAN}" stroke-width="5"/><circle cx="128" cy="132" r="44" fill="none" stroke="${CYAN}" stroke-width="6"/><circle cx="128" cy="132" r="22" fill="none" stroke="${YELLOW}" stroke-width="5"/><circle cx="128" cy="132" r="8" fill="${MAGENTA}"/>`,
+    body: comicShieldBase(
+      CYAN,
+      CYAN_SHADE,
+      `
+        <circle cx="128" cy="128" r="52" fill="${NIGHT}" stroke="${CYAN}" stroke-width="6"/>
+        <path d="M 128 76 V 180 M 76 128 H 180" stroke="${CYAN}" stroke-width="3" stroke-opacity="0.45"/>
+        <path d="M 128 128 L 166 94 A 52 52 0 0 1 180 128 Z" fill="${CYAN}" fill-opacity="0.35"/>
+        <circle cx="128" cy="128" r="28" fill="none" stroke="${YELLOW}" stroke-width="5" stroke-dasharray="12 6"/>
+        <circle cx="128" cy="128" r="10" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+        <path d="${starPath(162, 96, 14, 4.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>
+      `
+    ),
   },
   {
     slug: 'badge-archive-keeper',
     w: 256,
     h: 256,
     title: 'Archive Keeper badge',
-    body: `<polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><rect x="82" y="76" width="92" height="106" rx="8" fill="${PAPER}" stroke="${INK}" stroke-width="6"/><path d="M 100 104 H 156 M 100 126 H 156 M 100 148 H 138" stroke="${VIOLET}" stroke-width="7" stroke-linecap="round"/><rect x="148" y="64" width="32" height="18" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>`,
+    body: comicShieldBase(
+      VIOLET,
+      VIOLET_SHADE,
+      `
+        <rect x="84" y="76" width="94" height="108" rx="8" fill="${INK}"/>
+        <rect x="78" y="70" width="94" height="108" rx="8" fill="${PAPER}" stroke="${INK}" stroke-width="6"/>
+        <path d="M 78 70 H 98 V 178 H 78 Z" fill="${VIOLET}" stroke="${INK}" stroke-width="5"/>
+        <path d="M 110 100 H 158 M 110 122 H 158 M 110 144 H 142" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>
+        <path d="M 142 58 H 168 V 104 L 155 92 L 142 104 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round"/>
+      `
+    ),
   },
   {
     slug: 'badge-story-architect',
     w: 256,
     h: 256,
     title: 'Story Architect badge',
-    body: `<polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><path d="M 76 178 L 166 88 L 188 110 L 98 200 L 70 206 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/><path d="${starPath(94, 92, 22, 8, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>`,
+    body: comicShieldBase(
+      YELLOW,
+      YELLOW_SHADE,
+      `
+        <path d="M 78 184 L 156 82 L 190 116 L 106 196 L 68 206 Z" fill="${INK}"/>
+        <path d="M 74 176 L 154 78 L 188 112 L 102 192 L 66 200 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M 140 94 L 172 126" stroke="${INK}" stroke-width="6"/>
+        <path d="M 154 78 L 188 112 L 172 126 L 140 94 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M 74 176 L 102 192 L 66 200 Z" fill="${PAPER}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="72" cy="196" r="5" fill="${INK}"/>
+        <path d="${starPath(94, 88, 22, 7.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
+      `
+    ),
   },
   {
     slug: 'badge-zero-drift',
     w: 256,
     h: 256,
     title: 'Zero Drift badge',
-    body: `<polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9" stroke-linejoin="round"/><circle cx="128" cy="128" r="52" fill="${YELLOW}" stroke="${INK}" stroke-width="6"/><path d="M 100 128 L 120 148 L 160 104" fill="none" stroke="${INK}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>`,
+    body: comicShieldBase(
+      MAGENTA,
+      MAGENTA_SHADE,
+      `
+        <circle cx="132" cy="132" r="54" fill="${INK}"/>
+        <circle cx="128" cy="128" r="54" fill="${YELLOW}" stroke="${INK}" stroke-width="6.5"/>
+        <path d="M 128 74 A 54 54 0 0 1 182 128 H 128 Z" fill="#ffffff" fill-opacity="0.35"/>
+        <circle cx="128" cy="128" r="42" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="8 6"/>
+        <path d="M 98 128 L 120 150 L 162 104" fill="none" stroke="${INK}" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 98 128 L 120 150 L 162 104" fill="none" stroke="${PAPER}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      `
+    ),
   },
   {
     slug: 'rank-rookie',
     w: 256,
     h: 256,
     title: 'Rookie rank chevron',
-    body: `<polygon points="128,26 218,86 218,176 128,230 38,176 38,86" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9"/><path d="M 76 146 L 128 96 L 180 146" fill="none" stroke="${CYAN}" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>`,
+    body: comicShieldBase(
+      CYAN,
+      CYAN_SHADE,
+      `
+        <path d="M 74 156 L 128 102 L 182 156 L 166 172 L 128 134 L 90 172 Z" fill="${INK}"/>
+        <path d="M 70 150 L 128 92 L 186 150 L 168 168 L 128 128 L 88 168 Z" fill="${CYAN}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+        <path d="${starPath(128, 70, 14, 5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      `
+    ),
   },
   {
     slug: 'rank-vanguard',
     w: 256,
     h: 256,
     title: 'Vanguard rank dual chevron',
-    body: `<polygon points="128,26 218,86 218,176 128,230 38,176 38,86" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9"/><path d="M 74 126 L 128 78 L 182 126 M 74 170 L 128 122 L 182 170" fill="none" stroke="${MAGENTA}" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>`,
+    body: comicShieldBase(
+      MAGENTA,
+      MAGENTA_SHADE,
+      `
+        <path d="M 72 130 L 128 76 L 184 130 L 168 146 L 128 108 L 88 146 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M 72 174 L 128 120 L 184 174 L 168 190 L 128 152 L 88 190 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+      `
+    ),
   },
   {
     slug: 'rank-legend',
     w: 256,
     h: 256,
     title: 'Legend rank crown emblem',
-    body: `<polygon points="128,20 222,74 222,182 128,236 34,182 34,74" fill="${CHARCOAL}" stroke="${INK}" stroke-width="9"/><path d="M 68 172 L 80 94 L 108 128 L 128 80 L 148 128 L 176 94 L 188 172 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/><path d="${starPath(128, 52, 16, 6, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>`,
+    body: comicShieldBase(
+      YELLOW,
+      YELLOW_SHADE,
+      `
+        <path d="M 70 178 L 82 100 L 110 134 L 130 86 L 150 134 L 178 100 L 190 178 Z" fill="${INK}"/>
+        <path d="M 66 172 L 78 94 L 106 128 L 128 78 L 150 128 L 178 94 L 190 172 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+        <rect x="66" y="172" width="124" height="18" rx="4" fill="${MAGENTA}" stroke="${INK}" stroke-width="5"/>
+        <path d="${starPath(128, 52, 18, 6.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      `
+    ),
   },
   {
     slug: 'quest-banner',
     w: 512,
     h: 192,
     title: 'Riot quest banner ribbon',
-    body: `<path d="M 22 44 L 68 44 L 54 148 L 22 148 L 40 96 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/><path d="M 490 44 L 444 44 L 458 148 L 490 148 L 472 96 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/><rect x="52" y="28" width="408" height="120" rx="12" fill="${YELLOW}" stroke="${INK}" stroke-width="8"/><path d="M 72 50 H 440 M 72 126 H 440" stroke="${INK}" stroke-width="3" stroke-dasharray="10 8"/><path d="${starPath(106, 88, 24, 9, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/><path d="${starPath(406, 88, 24, 9, 5)}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>`,
+    body: `
+      <path d="M 28 50 L 74 50 L 60 154 L 28 154 L 46 102 Z" fill="${INK}"/>
+      <path d="M 496 50 L 450 50 L 464 154 L 496 154 L 478 102 Z" fill="${INK}"/>
+      <rect x="58" y="34" width="408" height="120" rx="12" fill="${INK}"/>
+      <path d="M 22 44 L 68 44 L 54 148 L 22 148 L 40 96 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M 490 44 L 444 44 L 458 148 L 490 148 L 472 96 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>
+      <rect x="52" y="28" width="408" height="120" rx="12" fill="${YELLOW}" stroke="${INK}" stroke-width="8"/>
+      <rect x="56" y="114" width="400" height="30" rx="6" fill="${YELLOW_SHADE}" fill-opacity="0.5"/>
+      <path d="M 74 50 H 438 M 74 126 H 438" stroke="${INK}" stroke-width="3.5" stroke-dasharray="10 8"/>
+      <path d="${starPath(106, 88, 24, 9, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4.5"/>
+      <path d="${starPath(406, 88, 24, 9, 5)}" fill="${CYAN}" stroke="${INK}" stroke-width="4.5"/>
+    `,
   },
   {
     slug: 'reward-crate',
     w: 256,
     h: 256,
     title: 'Signal reward crate',
-    body: `<rect x="44" y="88" width="168" height="130" rx="12" fill="${CHARCOAL}" stroke="${INK}" stroke-width="8"/><rect x="34" y="62" width="188" height="38" rx="8" fill="${YELLOW}" stroke="${INK}" stroke-width="8"/><rect x="114" y="62" width="28" height="156" fill="${MAGENTA}" stroke="${INK}" stroke-width="6"/><path d="M 102 62 C 82 32 118 22 128 56 C 138 22 174 32 154 62 Z" fill="${CYAN}" stroke="${INK}" stroke-width="5"/>`,
+    body: `
+      <rect x="50" y="94" width="168" height="130" rx="12" fill="${INK}"/>
+      <rect x="44" y="88" width="168" height="130" rx="12" fill="${CHARCOAL}" stroke="${INK}" stroke-width="8"/>
+      <path d="M 44 134 H 212 M 44 178 H 212" stroke="${SLATE}" stroke-width="5"/>
+      <rect x="34" y="62" width="188" height="38" rx="8" fill="${YELLOW}" stroke="${INK}" stroke-width="8"/>
+      <rect x="114" y="62" width="28" height="156" fill="${MAGENTA}" stroke="${INK}" stroke-width="6"/>
+      <path d="M 102 62 C 80 30 118 20 128 56 C 138 20 176 30 154 62 Z" fill="${CYAN}" stroke="${INK}" stroke-width="5.5"/>
+      <path d="${starPath(192, 42, 16, 5.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+    `,
   },
   {
     slug: 'level-up-burst',
     w: 256,
     h: 256,
     title: 'Level up burst badge',
-    body: `<path d="${starPath(128, 128, 112, 66, 8)}" fill="${YELLOW}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/><circle cx="128" cy="128" r="56" fill="${MAGENTA}" stroke="${INK}" stroke-width="6"/><path d="M 128 84 L 160 124 H 140 V 168 H 116 V 124 H 96 Z" fill="${PAPER}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`,
+    body: `
+      <path d="${starPath(134, 134, 110, 66, 8)}" fill="${INK}"/>
+      <path d="${starPath(128, 128, 110, 66, 8)}" fill="${YELLOW}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>
+      <circle cx="128" cy="128" r="58" fill="${MAGENTA}" stroke="${INK}" stroke-width="6.5"/>
+      <circle cx="128" cy="128" r="46" fill="none" stroke="${CYAN}" stroke-width="3.5" stroke-dasharray="10 6"/>
+      <path d="M 128 82 L 162 124 H 142 V 170 H 114 V 124 H 94 Z" fill="${PAPER}" stroke="${INK}" stroke-width="5.5" stroke-linejoin="round"/>
+    `,
   },
 ];
 
@@ -885,84 +1143,159 @@ const ANIMATION_CLIPS = [
   {
     id: 'idle',
     masterKey: 'happy',
-    durationMs: 260,
+    durationMs: 240,
     direction: 'ping-pong',
-    bob: [0, -6, -3, 0],
-    tilt: [0, -1, 1, 0],
-    fx: (i) =>
-      `<circle cx="386" cy="94" r="${8 + i * 2}" fill="${CYAN}" fill-opacity="${0.4 + i * 0.15}" stroke="${INK}" stroke-width="3"/>`,
+    bob: [0, -5, -8, -3],
+    tilt: [0, -1.2, 0.8, 0.4],
+    scale: [1.0, 1.015, 1.022, 1.008],
+    fx: (i) => `
+      <circle cx="392" cy="96" r="${9 + i * 2.5}" fill="none" stroke="${CYAN}" stroke-width="3.5" stroke-opacity="${0.9 - i * 0.16}"/>
+      <circle cx="392" cy="96" r="${4 + i}" fill="${CYAN}" stroke="${INK}" stroke-width="2.5"/>
+    `,
   },
   {
     id: 'blink',
     masterKey: 'happy',
-    durationMs: 180,
+    durationMs: 170,
     direction: 'forward',
     bob: [0, 2, 3, 0],
-    tilt: [0, 0.5, 0, 0],
+    tilt: [0, 0.6, 0.3, 0],
+    scale: [1.0, 0.995, 0.992, 1.0],
     fx: (i) =>
       i === 1 || i === 2
-        ? `<path d="M 206 206 Q 232 218 254 206 M 280 206 Q 304 218 324 206" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><circle cx="404" cy="108" r="${7 + i * 2}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>`
+        ? `<path d="${starPath(406, 108, 16 + i * 2, 5.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/><circle cx="96" cy="138" r="${5 + i}" fill="${CYAN}" stroke="${INK}" stroke-width="2.5"/>`
         : `<path d="${starPath(406, 108, 12 + i * 2, 4, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>`,
   },
   {
     id: 'wave',
     masterKey: 'excited',
-    durationMs: 200,
+    durationMs: 190,
     direction: 'ping-pong',
-    bob: [0, -8, -4, 0],
-    tilt: [-3, 3, -2, 0],
-    fx: (i) =>
-      `<path d="M ${84 - i * 4} 174 Q 64 136 ${88 + i * 4} 108" fill="none" stroke="${YELLOW}" stroke-width="6" stroke-linecap="round"/><path d="M ${66 - i * 4} 188 Q 42 138 ${70 + i * 4} 96" fill="none" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>`,
+    bob: [0, -8, -12, -4],
+    tilt: [-3, 3, -2, 1],
+    scale: [1.0, 1.02, 1.03, 1.01],
+    fx: (i) => `
+      <path d="M ${82 - i * 4} 174 Q 62 136 ${88 + i * 4} 108" fill="none" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M ${64 - i * 4} 188 Q 42 138 ${70 + i * 4} 96" fill="none" stroke="${MAGENTA}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="${starPath(424, 108 - i * 4, 18 + i * 2, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+    `,
   },
   {
     id: 'celebrate',
     masterKey: 'celebrating',
-    durationMs: 180,
+    durationMs: 175,
     direction: 'forward',
-    bob: [0, -16, -24, -8],
+    bob: [0, -14, -22, -8],
     tilt: [-3, 2, 4, -1],
-    fx: (i) =>
-      `<path d="${starPath(94 + i * 6, 108 - i * 4, 22, 8, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/><path d="${starPath(422 - i * 6, 114 - i * 4, 22, 8, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>`,
+    scale: [1.0, 1.025, 1.04, 1.01],
+    fx: (i) => `
+      <path d="${starPath(94 + i * 5, 108 - i * 4, 20 + i * 1.5, 7, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(422 - i * 5, 114 - i * 4, 20 + i * 1.5, 7, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
+      <rect x="${74 + i * 8}" y="${182 - i * 6}" width="14" height="8" rx="2" fill="${CYAN}" stroke="${INK}" stroke-width="2.5" transform="rotate(${-24 + i * 12} ${81 + i * 8} ${186 - i * 6})"/>
+    `,
   },
   {
     id: 'think',
     masterKey: 'thinking',
-    durationMs: 280,
+    durationMs: 260,
     direction: 'ping-pong',
-    bob: [0, -3, -5, -2],
-    tilt: [-4, -6, -5, -3],
-    fx: (i) =>
-      `<circle cx="386" cy="168" r="${6 + i}" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/><circle cx="412" cy="136" r="${10 + i * 2}" fill="${PAPER}" stroke="${INK}" stroke-width="4"/><circle cx="436" cy="100" r="${14 + i * 2}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>`,
+    bob: [0, -3, -6, -2],
+    tilt: [-3, -5, -4, -2],
+    scale: [1.0, 1.008, 1.012, 1.004],
+    fx: (i) => `
+      <circle cx="386" cy="168" r="${5 + i}" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/>
+      <circle cx="412" cy="136" r="${9 + i * 1.5}" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/>
+      <circle cx="438" cy="100" r="${13 + i * 1.5}" fill="${CYAN}" stroke="${INK}" stroke-width="4"/>
+    `,
   },
   {
     id: 'loading',
     masterKey: 'thinking',
-    durationMs: 180,
+    durationMs: 170,
     direction: 'forward',
-    bob: [0, -4, 0, 4],
-    tilt: [0, 1, 0, -1],
-    fx: (i) =>
-      `<g transform="rotate(${i * 90} 418 122)"><circle cx="418" cy="122" r="24" fill="none" stroke="${INK}" stroke-width="7"/><path d="M 418 98 A 24 24 0 0 1 442 122" fill="none" stroke="${CYAN}" stroke-width="7" stroke-linecap="round"/></g>`,
+    bob: [0, -4, 0, 3],
+    tilt: [0, 1.5, 0, -1.5],
+    scale: [1.0, 1.01, 1.0, 0.995],
+    fx: (i) => `
+      <g transform="rotate(${i * 90} 418 122)">
+        <circle cx="418" cy="122" r="24" fill="${CHARCOAL}" fill-opacity="0.7" stroke="${INK}" stroke-width="6"/>
+        <path d="M 418 98 A 24 24 0 0 1 442 122" fill="none" stroke="${CYAN}" stroke-width="6" stroke-linecap="round"/>
+        <path d="M 418 146 A 24 24 0 0 1 394 122" fill="none" stroke="${YELLOW}" stroke-width="5" stroke-linecap="round"/>
+      </g>
+    `,
   },
   {
     id: 'success',
     masterKey: 'celebrating',
-    durationMs: 200,
+    durationMs: 190,
     direction: 'forward',
     bob: [0, -10, -14, -4],
     tilt: [0, 2, 3, 1],
-    fx: (i) =>
-      `<circle cx="414" cy="126" r="${22 + i * 3}" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5"/><path d="M 402 126 L 412 136 L 428 114" fill="none" stroke="${INK}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`,
+    scale: [1.0, 1.02, 1.03, 1.01],
+    fx: (i) => `
+      <circle cx="414" cy="126" r="${22 + i * 2}" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5"/>
+      <path d="M 402 126 L 412 136 L 428 114" fill="none" stroke="${INK}" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+    `,
   },
   {
     id: 'error',
-    masterKey: 'happy',
-    durationMs: 160,
+    masterKey: 'angry',
+    durationMs: 150,
     direction: 'ping-pong',
     bob: [0, 4, -4, 2],
     tilt: [-4, 4, -3, 2],
-    fx: (i) =>
-      `<polygon points="414,${86 + i * 2} 444,${144 + i * 2} 384,${144 + i * 2}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4.5"/><path d="M 414 ${106 + i * 2} V ${124 + i * 2}" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><circle cx="414" cy="${134 + i * 2}" r="3" fill="${INK}"/>`,
+    scale: [1.02, 1.04, 1.02, 1.03],
+    fx: (i) => `
+      <polygon points="416,${84 + i * 2} 446,${140 + i * 2} 386,${140 + i * 2}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M 416 ${104 + i * 2} V ${120 + i * 2}" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="416" cy="${130 + i * 2}" r="3" fill="${INK}"/>
+      <path d="M ${54 + i * 3} 142 L ${92 + i * 3} 160 M ${48 + i * 3} 180 L ${88 + i * 3} 186" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>
+    `,
+  },
+];
+
+const WALTER_EXPRESSIONS = [
+  {
+    slug: 'calm',
+    tilt: 0,
+    scale: 1.0,
+    offsetY: 4,
+    overlay: `
+      <circle cx="414" cy="112" r="10" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(94, 128, 16, 5.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+    `,
+  },
+  {
+    slug: 'sweeping',
+    tilt: -3,
+    scale: 1.02,
+    offsetY: 2,
+    overlay: `
+      <path d="M 46 392 Q 112 356 176 382 M 36 420 Q 108 388 170 408" fill="none" stroke="${CYAN}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="${starPath(422, 124, 20, 7, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+    `,
+  },
+  {
+    slug: 'gloating',
+    tilt: 3,
+    scale: 1.03,
+    offsetY: -2,
+    overlay: `
+      <path d="${starPath(418, 106, 22, 7.5, 4)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4"/>
+      <path d="${starPath(96, 134, 18, 6, 4)}" fill="${VIOLET}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="M 404 166 L 444 152 M 412 192 L 454 186" stroke="${MAGENTA}" stroke-width="5" stroke-linecap="round"/>
+    `,
+  },
+  {
+    slug: 'victorious',
+    tilt: -1,
+    scale: 1.04,
+    offsetY: -6,
+    overlay: `
+      <path d="M 380 138 L 392 92 L 414 114 L 436 92 L 448 138 Z" fill="${YELLOW}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+      <path d="${starPath(96, 108, 22, 7.5, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+      <path d="${starPath(434, 194, 16, 5.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
+    `,
   },
 ];
 
@@ -1023,7 +1356,7 @@ async function buildCompositePortrait(
     create: { width: size, height: size, channels: 4, background },
   })
     .composite(composites)
-    .png({ compressionLevel: 9, palette: true, quality: 90, effort: 10 })
+    .png({ compressionLevel: 9, palette: true, quality: 92, effort: 10 })
     .toBuffer();
 }
 
@@ -1049,17 +1382,29 @@ async function main() {
   const kuroExcitedPath = resolve(riotSourceDir, 'kuro-signal-portrait-excited-master.png');
   const kuroThinkingPath = resolve(riotSourceDir, 'kuro-signal-portrait-thinking-master.png');
   const kuroCelebratingPath = resolve(riotSourceDir, 'kuro-signal-portrait-celebrating-master.png');
+  const kuroAngryPath = resolve(riotSourceDir, 'kuro-signal-portrait-angry-master.png');
+  const kuroSadPath = resolve(riotSourceDir, 'kuro-signal-portrait-sad-master.png');
   const kuroFullbodyPath = resolve(riotSourceDir, 'kuro-signal-fullbody-standing-master.png');
+  const kuroPoseRunningPath = resolve(riotSourceDir, 'kuro-signal-pose-running-master.png');
+  const kuroPoseSittingPath = resolve(riotSourceDir, 'kuro-signal-pose-sitting-master.png');
+  const kuroPoseWavingPath = resolve(riotSourceDir, 'kuro-signal-pose-waving-master.png');
   const vesperPortraitPath = resolve(riotSourceDir, 'vesper-ink-portrait-master.png');
+  const walterCelPath = resolve(riotSourceDir, 'walter-white-portrait-cel-master.png');
 
-  stdout.write('Keying character masters via 4-edge exterior flood-fill...\n');
+  stdout.write('Keying character masters via 2-pass anti-aliased flood-fill...\n');
   const [
     kuroPortraitHappyCutout,
     kuroPortraitExcitedCutout,
     kuroPortraitThinkingCutout,
     kuroPortraitCelebratingCutout,
+    kuroPortraitAngryCutout,
+    kuroPortraitSadCutout,
     kuroFullbodyStandingCutout,
+    kuroPoseRunningCutout,
+    kuroPoseSittingCutout,
+    kuroPoseWavingCutout,
     vesperPortraitCutout,
+    walterCelCutout,
     kuroSideCutout,
     kuroThreeQuarterCutout,
   ] = await Promise.all([
@@ -1067,8 +1412,14 @@ async function main() {
     floodFillCutout(kuroExcitedPath),
     floodFillCutout(kuroThinkingPath),
     floodFillCutout(kuroCelebratingPath),
+    floodFillCutout(kuroAngryPath),
+    floodFillCutout(kuroSadPath),
     floodFillCutout(kuroFullbodyPath),
+    floodFillCutout(kuroPoseRunningPath),
+    floodFillCutout(kuroPoseSittingPath),
+    floodFillCutout(kuroPoseWavingPath),
     floodFillCutout(vesperPortraitPath),
+    floodFillCutout(walterCelPath),
     floodFillCutout(kuroModelPath, { left: 614, top: 44, width: 208, height: 710 }),
     floodFillCutout(kuroModelPath, { left: 988, top: 38, width: 268, height: 722 }),
   ]);
@@ -1078,18 +1429,23 @@ async function main() {
     excited: kuroPortraitExcitedCutout,
     thinking: kuroPortraitThinkingCutout,
     celebrating: kuroPortraitCelebratingCutout,
+    angry: kuroPortraitAngryCutout,
+    sad: kuroPortraitSadCutout,
   };
 
   const viewCutouts = {
     front: kuroFullbodyStandingCutout,
     side: kuroSideCutout,
     threeQuarter: kuroThreeQuarterCutout,
+    running: kuroPoseRunningCutout,
+    sitting: kuroPoseSittingCutout,
+    waving: kuroPoseWavingCutout,
   };
 
   const generated = [];
   const sourceProvenance = [];
 
-  // 1. Register all 12 Direct AI Source Masters + synthesize the 2 procedural halftone masters
+  // 1. Register all Direct AI Source Masters + synthesize the 2 procedural halftone masters
   const existingMasters = [
     {
       path: 'source/artwork/riot-universe/kuro-signal-model-sheet-master.png',
@@ -1101,49 +1457,74 @@ async function main() {
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-happy-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
-      modifications:
-        'Direct AI happy bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI happy bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-excited-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
-      modifications:
-        'Direct AI excited bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI excited bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
-      modifications:
-        'Direct AI thinking bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI thinking bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
-      modifications:
-        'Direct AI celebrating bust portrait master for kuro-signal (normalized 1024x1024 RGB on #ffffff).',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI celebrating bust portrait master for kuro-signal.',
+    },
+    {
+      path: 'source/artwork/riot-universe/kuro-signal-portrait-angry-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI angry/determined bust portrait master for kuro-signal.',
+    },
+    {
+      path: 'source/artwork/riot-universe/kuro-signal-portrait-sad-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI sad/teary bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
-      modifications:
-        'Direct AI full-body standing master for kuro-signal (normalized 1024x1536 RGB contain on #ffffff).',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI full-body standing master for kuro-signal.',
+    },
+    {
+      path: 'source/artwork/riot-universe/kuro-signal-pose-running-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI dynamic full-body running/action master for kuro-signal.',
+    },
+    {
+      path: 'source/artwork/riot-universe/kuro-signal-pose-sitting-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI full-body seated on crate with handheld signal deck master for kuro-signal.',
+    },
+    {
+      path: 'source/artwork/riot-universe/kuro-signal-pose-waving-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      modifications: 'Direct AI full-body friendly waving master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/vesper-ink-portrait-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
-      source:
-        'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
+      source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI bust portrait master for vesper-ink.',
+    },
+    {
+      path: 'source/artwork/riot-universe/walter-white-portrait-cel-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI cel-shaded portrait master unified with Signal Riot art direction',
+      modifications: 'Direct AI cel-shaded bust portrait master on #ffffff for transparent walter-white cutouts.',
     },
     {
       path: 'source/artwork/riot-universe/bg-riot-street-alley-master.png',
@@ -1155,14 +1536,19 @@ async function main() {
       path: 'source/artwork/riot-universe/bg-riot-arcade-workbench-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
       source: 'Direct AI master generation for Signal Riot arcade studio workbench environment',
-      modifications:
-        'Direct AI 1376x768 landscape master for Signal Riot arcade workbench backdrop.',
+      modifications: 'Direct AI 1376x768 landscape master for Signal Riot arcade workbench backdrop.',
     },
     {
       path: 'source/artwork/riot-universe/scene-empty-signal-static-master.png',
       creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
       source: 'Direct AI master generation for Signal Riot empty/offline/static scene states',
       modifications: 'Direct AI 1376x768 narrative scene master for empty-signal-static.',
+    },
+    {
+      path: 'source/artwork/riot-universe/scene-error-static-master.png',
+      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      source: 'Direct AI master generation for Signal Riot error/offline/glitch scene states',
+      modifications: 'Direct AI narrative scene master for rooftop CRT static & antenna glitch.',
     },
     {
       path: 'source/artwork/riot-universe/scene-onboarding-welcome-master.png',
@@ -1328,7 +1714,7 @@ async function main() {
       overlaySvg: expr.overlay,
     });
     const webpBuf = await sharp(pngBuf)
-      .webp({ quality: 86, alphaQuality: 96, effort: 6 })
+      .webp({ quality: 88, alphaQuality: 96, effort: 6 })
       .toBuffer();
     const pngRel = `illustrations/riot-universe/characters/kuro-signal-expression-${expr.slug}.png`;
     const webpRel = `illustrations/riot-universe/characters/kuro-signal-expression-${expr.slug}.webp`;
@@ -1360,11 +1746,8 @@ async function main() {
   stdout.write('Generating 12 Kuro full-body pose cutouts (.png + .webp)...\n');
   for (const pose of POSES) {
     const baseCutout = viewCutouts[pose.view];
-    const poseSourceRel =
-      pose.view === 'front'
-        ? 'source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png'
-        : 'source/artwork/riot-universe/kuro-signal-model-sheet-master.png';
-    let fg = sharp(baseCutout).resize(400, 640, {
+    const poseSourceRel = POSE_MASTERS[pose.view];
+    let fg = sharp(baseCutout).resize(420, 650, {
       fit: 'contain',
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     });
@@ -1381,10 +1764,10 @@ async function main() {
       create: { width: 512, height: 768, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
     })
       .composite(composites)
-      .png({ compressionLevel: 9, palette: true, quality: 90, effort: 10 })
+      .png({ compressionLevel: 9, palette: true, quality: 92, effort: 10 })
       .toBuffer();
     const webpBuf = await sharp(pngBuf)
-      .webp({ quality: 86, alphaQuality: 96, effort: 6 })
+      .webp({ quality: 88, alphaQuality: 96, effort: 6 })
       .toBuffer();
 
     const pngRel = `illustrations/riot-universe/characters/kuro-signal-pose-${pose.slug}.png`;
@@ -1421,7 +1804,7 @@ async function main() {
       offsetY: 16,
     });
     const webpBuf = await sharp(pngBuf)
-      .webp({ quality: 86, alphaQuality: 96, effort: 6 })
+      .webp({ quality: 88, alphaQuality: 96, effort: 6 })
       .toBuffer();
     const pngRel = 'illustrations/riot-universe/characters/vesper-ink-portrait.png';
     const webpRel = 'illustrations/riot-universe/characters/vesper-ink-portrait.webp';
@@ -1449,35 +1832,88 @@ async function main() {
     }
   }
 
-  // 6. 25 UI States (640x480 WebP <= 160 KB)
+  // 5b. Walter White 4 transparent cel-shaded expressions (512x512 PNG + WebP)
+  stdout.write('Generating 4 transparent cel-shaded Walter White cutouts (.png + .webp)...\n');
+  const walterSourceRel = 'source/artwork/riot-universe/walter-white-portrait-cel-master.png';
+  for (const expr of WALTER_EXPRESSIONS) {
+    const pngBuf = await buildCompositePortrait(walterCelCutout, {
+      size: 512,
+      tilt: expr.tilt,
+      scale: expr.scale,
+      offsetY: expr.offsetY,
+      overlaySvg: expr.overlay,
+    });
+    const webpBuf = await sharp(pngBuf)
+      .webp({ quality: 88, alphaQuality: 96, effort: 6 })
+      .toBuffer();
+    const pngRel = `illustrations/riot-universe/characters/walter-white-expression-${expr.slug}.png`;
+    const webpRel = `illustrations/riot-universe/characters/walter-white-expression-${expr.slug}.webp`;
+    await atomicWrite(resolve(packageRoot, pngRel), pngBuf);
+    await atomicWrite(resolve(packageRoot, webpRel), webpBuf);
+    for (const [path, format] of [
+      [pngRel, 'png'],
+      [webpRel, 'webp'],
+    ]) {
+      generated.push({
+        path,
+        kind: 'character-sprite',
+        variant: `expression-${expr.slug}`,
+        subject: 'walter-white',
+        format,
+        width: 512,
+        height: 512,
+        pack: 'riot-universe',
+        domain: 'visual-universe',
+        status: 'approved',
+        license: 'MoonWitness Commissioned Asset (ISC pipeline)',
+        source: walterSourceRel,
+        sourceAsset: walterSourceRel,
+      });
+    }
+  }
+
+  // 6. 25 UI States (640x480 WebP <= 160 KB) — clean comic framing, zero duplicate actors
   stdout.write('Generating 25 UI state vignettes (.webp)...\n');
   const MAX_STATE_BYTES = 160 * 1024;
   for (const state of UI_STATES) {
     const rel = `illustrations/riot-universe/states/state-${state.slug}.webp`;
     const masterRel = `source/artwork/riot-universe/${state.master}`;
-    const overlaySvg = `
-      <rect x="0" y="0" width="640" height="480" fill="${NIGHT}" fill-opacity="0.48"/>
-      <rect x="16" y="16" width="608" height="448" rx="14" fill="none" stroke="${state.accent}" stroke-width="5"/>
-      <rect x="24" y="24" width="592" height="432" rx="10" fill="none" stroke="${INK}" stroke-width="4"/>
-      ${halftoneDots(12, 5, 36, 36, 22, 2, state.accent, 0.2)}
-      ${state.glyph}
+    const hasEmbeddedActor = MASTERS_WITH_CHARACTERS.has(state.master);
+
+    const frameSvg = `
+      <defs>
+        <linearGradient id="st_scrim" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${NIGHT}" stop-opacity="0.18"/>
+          <stop offset="65%" stop-color="${NIGHT}" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="${NIGHT}" stop-opacity="0.44"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="640" height="480" fill="url(#st_scrim)"/>
+      ${halftoneDots(8, 3, 24, 24, 18, 1.8, state.accent, 0.22)}
+      <rect x="10" y="10" width="620" height="460" fill="none" stroke="${INK}" stroke-width="6"/>
+      <rect x="14" y="14" width="612" height="452" fill="none" stroke="${state.accent}" stroke-width="2" stroke-opacity="0.82"/>
+      <path d="M 14 42 V 14 H 42 M 598 14 H 626 V 42 M 14 438 V 466 H 42 M 598 466 H 626 V 438" fill="none" stroke="${state.accent}" stroke-width="4.5" stroke-linecap="square"/>
+      ${stateBadge(state.accent, state.badgeIcon, state.master)}
     `;
-    const composites = [{ input: await svgBuffer(640, 480, overlaySvg), left: 0, top: 0 }];
-    if (state.actor === 'kuro' || state.actor === 'both') {
-      const kuroCutout = expressionCutouts[state.expr];
+
+    const composites = [];
+    if (!hasEmbeddedActor && (state.actor === 'kuro' || state.actor === 'both')) {
+      const kuroCutout = expressionCutouts[state.expr] ?? expressionCutouts.thinking;
       const kBuf = await sharp(kuroCutout)
-        .resize(240, 240, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .resize(248, 248, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer();
-      composites.push({ input: kBuf, left: state.actor === 'both' ? 40 : 28, top: 218 });
+      composites.push({ input: kBuf, left: 20, top: 222 });
     }
-    if (state.actor === 'vesper' || state.actor === 'both') {
+    if (!hasEmbeddedActor && (state.actor === 'vesper' || state.actor === 'both')) {
       const vBuf = await sharp(vesperPortraitCutout)
-        .resize(230, 230, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .resize(236, 236, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer();
-      composites.push({ input: vBuf, left: state.actor === 'both' ? 378 : 386, top: 226 });
+      composites.push({ input: vBuf, left: state.actor === 'both' ? 378 : 22, top: 234 });
     }
+    composites.push({ input: await svgBuffer(640, 480, frameSvg), left: 0, top: 0 });
+
     const masterAbs = resolve(packageRoot, masterRel);
     const webpBuf = await encodeWebpWithinBudget(
       () =>
@@ -1485,7 +1921,7 @@ async function main() {
           .resize(640, 480, { fit: 'cover', position: 'centre' })
           .composite(composites),
       MAX_STATE_BYTES,
-      [80, 68, 56, 44]
+      [84, 74, 62, 50]
     );
     await atomicWrite(resolve(packageRoot, rel), webpBuf);
     generated.push({
@@ -1513,7 +1949,7 @@ async function main() {
     await atomicWrite(resolve(packageRoot, svgRel), svgText);
     const pngBuf = await sharp(Buffer.from(svgText, 'utf8'))
       .resize(256, 256)
-      .png({ compressionLevel: 9, palette: true, quality: 92 })
+      .png({ compressionLevel: 9, palette: true, quality: 94 })
       .toBuffer();
     await atomicWrite(resolve(packageRoot, pngRel), pngBuf);
     generated.push(
@@ -1558,12 +1994,12 @@ async function main() {
     let pngBuf;
     if (item.avatarKey) {
       const portrait = item.avatarKey === 'kuro' ? kuroPortraitHappyCutout : vesperPortraitCutout;
-      const ringSvg = `<circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="98" fill="${item.avatarKey === 'kuro' ? CYAN : VIOLET}" fill-opacity="0.22" stroke="${item.avatarKey === 'kuro' ? YELLOW : VIOLET}" stroke-width="6"/>`;
+      const ringSvg = `<circle cx="132" cy="132" r="112" fill="${INK}"/><circle cx="128" cy="128" r="112" fill="${CHARCOAL}" stroke="${INK}" stroke-width="10"/><circle cx="128" cy="128" r="98" fill="${item.avatarKey === 'kuro' ? CYAN : VIOLET}" fill-opacity="0.24" stroke="${item.avatarKey === 'kuro' ? YELLOW : VIOLET}" stroke-width="6"/>`;
       const faceBuf = await sharp(portrait)
-        .resize(184, 184, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .resize(186, 186, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer();
-      const frontRing = `<circle cx="128" cy="128" r="108" fill="none" stroke="${INK}" stroke-width="8"/><circle cx="128" cy="128" r="100" fill="none" stroke="${item.avatarKey === 'kuro' ? YELLOW : VIOLET}" stroke-width="4"/>`;
+      const frontRing = `<circle cx="128" cy="128" r="108" fill="none" stroke="${INK}" stroke-width="8"/><circle cx="128" cy="128" r="100" fill="none" stroke="${item.avatarKey === 'kuro' ? YELLOW : VIOLET}" stroke-width="4.5"/>`;
       pngBuf = await sharp({
         create: {
           width: 256,
@@ -1574,15 +2010,15 @@ async function main() {
       })
         .composite([
           { input: await svgBuffer(256, 256, ringSvg), left: 0, top: 0 },
-          { input: faceBuf, left: 36, top: 44 },
+          { input: faceBuf, left: 35, top: 43 },
           { input: await svgBuffer(256, 256, frontRing), left: 0, top: 0 },
         ])
-        .png({ compressionLevel: 9, palette: true, quality: 92 })
+        .png({ compressionLevel: 9, palette: true, quality: 94 })
         .toBuffer();
     } else {
       pngBuf = await sharp(Buffer.from(svgText, 'utf8'))
         .resize(item.w, item.h)
-        .png({ compressionLevel: 9, palette: true, quality: 92 })
+        .png({ compressionLevel: 9, palette: true, quality: 94 })
         .toBuffer();
     }
 
@@ -1635,7 +2071,7 @@ async function main() {
       const frameBuf = await buildCompositePortrait(clipCutout, {
         size: 512,
         tilt: clipSpec.tilt[i],
-        scale: 0.98 + (i % 2 === 1 ? 0.02 : 0),
+        scale: clipSpec.scale ? clipSpec.scale[i] : 0.98 + (i % 2 === 1 ? 0.02 : 0),
         offsetY: clipSpec.bob[i],
         overlaySvg: clipSpec.fx(i),
       });
@@ -1673,7 +2109,7 @@ async function main() {
         { input: frameBuffers[2], left: 0, top: 512 },
         { input: frameBuffers[3], left: 512, top: 512 },
       ])
-      .png({ compressionLevel: 9, palette: true, quality: 88, effort: 10 })
+      .png({ compressionLevel: 9, palette: true, quality: 90, effort: 10 })
       .toBuffer();
     await atomicWrite(resolve(packageRoot, sheetRel), sheetBuf);
     generated.push({
@@ -1738,57 +2174,76 @@ async function main() {
     });
   }
 
-  // 10. 5-Layer Parallax Scene: 4 SVGs + scenes/riot-alley-scene.json
+  // 10. 5-Layer Parallax Scene: 4 translucent atmospheric SVGs that enhance bg-riot-street-alley.webp
   stdout.write('Generating 5-layer Riot Alley parallax scene...\n');
   const alleyLayers = [
     {
       path: 'environments/riot-alley-bg.svg',
-      title: 'Riot alley distant nocturnal skyline and halftone moon',
+      title: 'Riot alley nocturnal moon halo and drifting halftone sky haze',
       variant: 'riot-alley-bg',
       body: `
-        <defs><linearGradient id="__ID__sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090d1c"/><stop offset="1" stop-color="#17172a"/></linearGradient></defs>
-        <rect x="0" y="0" width="2048" height="1152" fill="url(#__ID__sky)" fill-opacity="0.55"/>
-        <circle cx="1540" cy="270" r="196" fill="${PAPER}" fill-opacity="0.92" stroke="${INK}" stroke-width="6"/>
-        ${halftoneDots(10, 6, 1380, 140, 32, 3, CYAN, 0.22)}
-        <path d="M 80 1140 V 620 H 240 V 520 H 410 V 680 H 580 V 460 H 780 V 660 H 980 V 500 H 1180 V 700 H 1400 V 440 H 1640 V 620 H 1840 V 540 H 1980 V 1140 Z" fill="#121424" stroke="${INK}" stroke-width="5"/>
+        <defs>
+          <radialGradient id="__ID__moonHalo" cx="67%" cy="17%" r="28%">
+            <stop offset="0%" stop-color="${PAPER}" stop-opacity="0.34"/>
+            <stop offset="48%" stop-color="${CYAN}" stop-opacity="0.14"/>
+            <stop offset="100%" stop-color="${NIGHT}" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect x="0" y="0" width="2048" height="1152" fill="url(#__ID__moonHalo)"/>
+        ${halftoneDots(12, 5, 1180, 64, 34, 2.8, PAPER, 0.16)}
+        <path d="M 140 260 Q 420 212 720 256 T 1340 248 T 1920 270" fill="none" stroke="${CYAN}" stroke-opacity="0.14" stroke-width="24" stroke-linecap="round"/>
       `,
     },
     {
       path: 'environments/riot-alley-mid.svg',
-      title: 'Riot alley neon brick walls and transit arches',
+      title: 'Riot alley neon magenta and cyan wall glow atmosphere',
       variant: 'riot-alley-mid',
       body: `
-        <path d="M 24 1140 V 320 H 460 V 1140 Z" fill="#171720" stroke="${INK}" stroke-width="6"/>
-        <path d="M 1560 1140 V 280 H 2024 V 1140 Z" fill="#171720" stroke="${INK}" stroke-width="6"/>
-        <path d="M 460 540 Q 1024 380 1560 540 L 1560 600 Q 1024 440 460 600 Z" fill="#1e1e28" stroke="${INK}" stroke-width="6"/>
-        <rect x="360" y="420" width="44" height="240" rx="8" fill="${MAGENTA}" stroke="${INK}" stroke-width="5"/>
-        <rect x="1630" y="380" width="44" height="260" rx="8" fill="${CYAN}" stroke="${INK}" stroke-width="5"/>
-        <rect x="140" y="560" width="160" height="190" fill="${PAPER}" fill-opacity="0.88" stroke="${INK}" stroke-width="5"/>
-        <polygon points="170,610 270,610 220,700" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+        <defs>
+          <radialGradient id="__ID__pinkGlow" cx="46%" cy="54%" r="24%">
+            <stop offset="0%" stop-color="${MAGENTA}" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="${MAGENTA}" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="__ID__cyanGlow" cx="82%" cy="56%" r="24%">
+            <stop offset="0%" stop-color="${CYAN}" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="${CYAN}" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect x="0" y="0" width="2048" height="1152" fill="url(#__ID__pinkGlow)"/>
+        <rect x="0" y="0" width="2048" height="1152" fill="url(#__ID__cyanGlow)"/>
+        ${halftoneDots(8, 6, 780, 420, 28, 2.4, MAGENTA, 0.16)}
+        ${halftoneDots(8, 6, 1520, 400, 28, 2.4, CYAN, 0.16)}
       `,
     },
     {
       path: 'environments/riot-alley-fg.svg',
-      title: 'Riot alley wet pavement and foreground rooftop crates',
+      title: 'Riot alley wet pavement shimmer reflections and framing vignette',
       variant: 'riot-alley-fg',
       body: `
-        <path d="M 20 880 H 2028 V 1140 H 20 Z" fill="#121216" stroke="${INK}" stroke-width="6"/>
-        <ellipse cx="760" cy="990" rx="220" ry="26" fill="${MAGENTA}" fill-opacity="0.34" stroke="${INK}" stroke-width="3"/>
-        <ellipse cx="1320" cy="1020" rx="240" ry="28" fill="${CYAN}" fill-opacity="0.32" stroke="${INK}" stroke-width="3"/>
-        <rect x="1340" y="810" width="180" height="130" rx="10" fill="${CHARCOAL}" stroke="${INK}" stroke-width="6"/>
-        <rect x="1380" y="838" width="100" height="26" rx="4" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
+        <defs>
+          <linearGradient id="__ID__bottomVignette" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${NIGHT}" stop-opacity="0"/>
+            <stop offset="72%" stop-color="${NIGHT}" stop-opacity="0"/>
+            <stop offset="100%" stop-color="${NIGHT}" stop-opacity="0.56"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="2048" height="1152" fill="url(#__ID__bottomVignette)"/>
+        <ellipse cx="960" cy="1028" rx="190" ry="18" fill="${MAGENTA}" fill-opacity="0.22"/>
+        <ellipse cx="1240" cy="1046" rx="210" ry="20" fill="${CYAN}" fill-opacity="0.2"/>
+        <path d="M 860 1018 H 1040 M 1160 1044 H 1340" stroke="${PAPER}" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"/>
       `,
     },
     {
       path: 'environments/riot-alley-decor.svg',
-      title: 'Riot alley overhead cables and comic spark motes',
+      title: 'Riot alley overhead catenary wires and drifting comic spark motes',
       variant: 'riot-alley-decor',
       body: `
-        <path d="M 24 120 Q 1024 310 2024 140 M 24 184 Q 1024 380 2024 204" fill="none" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>
-        <path d="${starPath(1720, 320, 22, 8, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="4"/>
-        <path d="${starPath(380, 280, 18, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-        <circle cx="1180" cy="240" r="8" fill="${MAGENTA}" stroke="${INK}" stroke-width="3"/>
-        <circle cx="840" cy="220" r="6" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>
+        <path d="M 0 112 Q 980 284 2048 134 M 0 176 Q 1040 342 2048 198" fill="none" stroke="${INK}" stroke-width="5" stroke-opacity="0.72" stroke-linecap="round"/>
+        <path d="${starPath(1720, 290, 20, 6.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
+        <path d="${starPath(380, 260, 16, 5.5, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3"/>
+        <circle cx="1180" cy="236" r="7" fill="${MAGENTA}" stroke="${INK}" stroke-width="2.5"/>
+        <circle cx="840" cy="212" r="5.5" fill="${YELLOW}" stroke="${INK}" stroke-width="2.5"/>
+        <path d="M 520 380 L 508 424 M 1480 340 L 1468 386 M 980 460 L 968 504" stroke="${CYAN}" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
       `,
     },
   ];
@@ -1834,7 +2289,7 @@ async function main() {
             order: 10,
             position: { x: 0.5, y: 0.5 },
             pivot: { x: 0.5, y: 0.5 },
-            opacity: 0.96,
+            opacity: 0.9,
             parallax: { x: 0.1, y: 0.04 },
           },
           {
@@ -1843,7 +2298,7 @@ async function main() {
             order: 20,
             position: { x: 0.5, y: 0.52 },
             pivot: { x: 0.5, y: 0.52 },
-            opacity: 1,
+            opacity: 0.92,
             parallax: { x: 0.28, y: 0.1 },
           },
           {
@@ -1852,7 +2307,7 @@ async function main() {
             order: 40,
             position: { x: 0.5, y: 0.88 },
             pivot: { x: 0.5, y: 0.88 },
-            opacity: 1,
+            opacity: 0.95,
             parallax: { x: 0.52, y: 0.18 },
           },
           {

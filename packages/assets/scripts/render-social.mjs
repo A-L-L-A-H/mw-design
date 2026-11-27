@@ -3,7 +3,6 @@ import { Buffer } from 'node:buffer';
 import { dirname, resolve } from 'node:path';
 import { stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
-import { chromium } from '@playwright/test';
 import { SOCIAL_FORMATS, SOCIAL_THEMES, getSocialFormat } from './social-formats.config.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,6 +34,7 @@ function dataUrl(svg) {
 }
 
 async function renderLegacy() {
+  const { chromium } = await import('@playwright/test');
   const browser = await chromium.launch({ headless: true });
   try {
     const socialSvg = await readFile(resolve(brandRoot, 'social-card.svg'), 'utf8');

@@ -71,7 +71,7 @@ test('package exposes explicit stylesheet and tree-shakeable typed icon entries'
   assert.equal(packageJson.peerDependenciesMeta.sonner.optional, true);
   assert.deepEqual(packageJson.sideEffects, ['**/*.css']);
   assert.equal(packageJson.publishConfig.access, 'public');
-  assert.equal(packageJson.engines.node, '24.x');
+  assert.equal(packageJson.engines.node, '>=22');
   assert.equal(packageJson.version, '1.0.0-rc.1');
   for (const component of ['dialog', 'dropdown-menu', 'select', 'tabs', 'tooltip', 'toast']) {
     assert.equal(
@@ -176,6 +176,56 @@ test('semantic text pairs meet WCAG AA in both theme mappings', () => {
   assert.equal(resolvedValue('background', ':root'), '#f3efe4');
   assert.equal(resolvedValue('foreground', '\\.dark'), '#f3efe4');
   assert.equal(resolvedValue('background', '\\.dark'), '#0e0e10');
+});
+
+test('high-contrast system theme overrides meet WCAG AAA primary contrast and AA semantic targets', () => {
+  const selector = ':root\\.high-contrast';
+  assert.match(css, /:root\[data-theme='high-contrast'\],\s*:root\.high-contrast\s*\{/u);
+
+  const pairs = [
+    ['foreground', 'background'],
+    ['surface-foreground', 'surface'],
+    ['muted-foreground', 'muted'],
+    ['primary-foreground', 'primary'],
+    ['destructive-foreground', 'destructive'],
+    ['on-error', 'error'],
+    ['on-success', 'success'],
+    ['on-warning', 'warning'],
+    ['on-info', 'info'],
+    ['on-magenta', 'magenta'],
+    ['secondary-foreground', 'secondary'],
+  ];
+
+  for (const [foregroundName, backgroundName] of pairs) {
+    const foreground = resolvedValue(foregroundName, selector);
+    const background = resolvedValue(backgroundName, selector);
+    assert.ok(
+      contrast(foreground, background) >= 4.5,
+      `${foregroundName} on ${backgroundName} in high-contrast is below 4.5:1`
+    );
+  }
+
+  assert.ok(
+    contrast(resolvedValue('foreground', selector), resolvedValue('background', selector)) >= 7,
+    'Primary foreground on background in high-contrast must meet WCAG AAA (>= 7:1)'
+  );
+  assert.ok(
+    contrast(resolvedValue('border', selector), resolvedValue('surface', selector)) >= 7,
+    'Border against surface in high-contrast must meet WCAG AAA (>= 7:1)'
+  );
+  assert.ok(
+    contrast(resolvedValue('focus', selector), resolvedValue('background', selector)) >= 7,
+    'Focus ring against background in high-contrast must meet WCAG AAA (>= 7:1)'
+  );
+  for (const token of ['magenta-readable', 'cyan-readable', 'yellow-readable', 'violet-readable']) {
+    assert.ok(
+      contrast(resolvedValue(token, selector), resolvedValue('surface', selector)) >= 7,
+      `${token} on surface in high-contrast must meet WCAG AAA (>= 7:1)`
+    );
+  }
+  assert.equal(resolvedValue('background', selector), '#000000');
+  assert.equal(resolvedValue('foreground', selector), '#ffffff');
+  assert.equal(resolvedValue('frame-width', selector), '3px');
 });
 
 test('brush variants pair semantic foregrounds with their brush backgrounds', async () => {

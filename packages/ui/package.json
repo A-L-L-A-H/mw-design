@@ -6,7 +6,7 @@
     "access": "public"
   },
   "engines": {
-    "node": "24.x"
+    "node": ">=22"
   },
   "type": "module",
   "license": "ISC",
@@ -305,11 +305,47 @@
     "./token-exporter": {
       "types": "./dist/token-exporter.d.ts",
       "import": "./dist/token-exporter.js"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components/accordion": {
+      "types": "./dist/components/accordion.d.ts",
+      "import": "./dist/components/accordion.js"
+    },
+    "./components/alert": {
+      "types": "./dist/components/alert.d.ts",
+      "import": "./dist/components/alert.js"
+    },
+    "./components/card": {
+      "types": "./dist/components/card.d.ts",
+      "import": "./dist/components/card.js"
+    },
+    "./components/copy-button": {
+      "types": "./dist/components/copy-button.d.ts",
+      "import": "./dist/components/copy-button.js"
+    },
+    "./components/progress": {
+      "types": "./dist/components/progress.d.ts",
+      "import": "./dist/components/progress.js"
+    },
+    "./components/radio-group": {
+      "types": "./dist/components/radio-group.d.ts",
+      "import": "./dist/components/radio-group.js"
+    },
+    "./components/separator": {
+      "types": "./dist/components/separator.d.ts",
+      "import": "./dist/components/separator.js"
+    },
+    "./components/spinner": {
+      "types": "./dist/components/spinner.d.ts",
+      "import": "./dist/components/spinner.js"
     }
   },
   "scripts": {
     "build": "node scripts/generate-icons.mjs && tsc",
-    "test": "bun run build && node --test tests/*.test.mjs"
+    "test": "npm run build && node --test tests/*.test.mjs"
   },
   "peerDependencies": {
     "cmdk": ">=1.1.1",

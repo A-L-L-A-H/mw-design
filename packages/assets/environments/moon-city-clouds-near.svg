@@ -1,49 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 512" width="2048" height="512" role="img" aria-label="Loopable translucent Moon City cloud drift layer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 512" width="2048" height="512" role="img" aria-label="Loopable atmospheric Moon City cloud drift layer with inked shadows and cyan-silver moon rims">
   <title>Moon City looping clouds layer</title>
   <defs>
-    <linearGradient id="mw-environments-moon-city-clouds-near-clouds" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#b9cee4"/>
-      <stop offset="0.28" stop-color="#e6eef5"/>
-      <stop offset="0.52" stop-color="#f6f2ea"/>
-      <stop offset="0.74" stop-color="#d7e4ee"/>
-      <stop offset="1" stop-color="#b9cee4"/>
+    <linearGradient id="mw-environments-moon-city-clouds-near-clouds" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c758c"/>
+      <stop offset="0.45" stop-color="#192d47"/>
+      <stop offset="1" stop-color="#0b1526"/>
     </linearGradient>
-    <linearGradient id="mw-environments-moon-city-clouds-near-rim" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff2e88" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#ff2e88" stop-opacity="0"/>
+    <linearGradient id="mw-environments-moon-city-clouds-near-rim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#58dce6" stop-opacity="0.18"/>
+      <stop offset="0.52" stop-color="#c6f5f7" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#ff2e88" stop-opacity="0.28"/>
     </linearGradient>
     <g id="mw-environments-moon-city-clouds-near-puff">
-      <ellipse cx="0" cy="0" rx="120" ry="52"/>
-      <ellipse cx="-74" cy="14" rx="92" ry="40"/>
-      <ellipse cx="-24" cy="-30" rx="86" ry="54"/>
-      <ellipse cx="56" cy="-12" rx="104" ry="58"/>
-      <ellipse cx="126" cy="20" rx="84" ry="38"/>
-      <path d="M-166 26 Q 0 62 210 26 Q 0 78 -166 26 Z"/>
+      <path d="M-196 34C-182 -6 -130 -24 -86 -12C-62 -56 12 -68 58 -34C104 -54 166 -32 184 8C222 6 254 24 264 46C150 74 -84 74 -196 34Z"/>
     </g>
   </defs>
-  <g id="mw-environments-moon-city-clouds-near-layer" fill="url(#mw-environments-moon-city-clouds-near-clouds)">
-    <g opacity="0.42">
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(112 176) scale(1.05)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(238 158) scale(0.72)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(560 232) scale(0.92)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(676 206) scale(0.66)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1010 152) scale(1.12)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1146 184) scale(0.7)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1460 240) scale(0.96)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1586 214) scale(0.68)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1900 168) scale(1.08)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(2032 196) scale(0.74)"/>
+  <g id="mw-environments-moon-city-clouds-near-layer" fill="url(#mw-environments-moon-city-clouds-near-clouds)" stroke="#070d18" stroke-width="2.5">
+    <g opacity="0.62">
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(128 214) scale(1.06)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(568 256) scale(0.94)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1028 192) scale(1.16)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1488 264) scale(0.98)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1904 188) scale(1.12)"/>
     </g>
-    <g opacity="0.24">
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(356 262) scale(0.8)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(820 292) scale(0.7)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1280 270) scale(0.86)"/>
-      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1740 286) scale(0.76)"/>
+    <g opacity="0.34">
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(348 304) scale(0.84)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(816 322) scale(0.76)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1284 298) scale(0.88)"/>
+      <use href="#mw-environments-moon-city-clouds-near-puff" transform="translate(1736 312) scale(0.82)"/>
     </g>
   </g>
-  <g fill="url(#mw-environments-moon-city-clouds-near-rim)" opacity="0.7" pointer-events="none">
-    <path d="M-40 132 Q 112 104 252 138 Q 112 120 -40 132 Z"/>
-    <path d="M880 118 Q 1030 88 1180 122 Q 1030 104 880 118 Z"/>
-    <path d="M1770 134 Q 1920 106 2070 140 Q 1920 122 1770 134 Z"/>
+  <g fill="none" stroke="url(#mw-environments-moon-city-clouds-near-rim)" stroke-width="4" stroke-linecap="round" opacity="0.72">
+    <path d="M-24 196C46 154 152 152 246 186"/>
+    <path d="M874 166C958 122 1084 124 1184 164"/>
+    <path d="M1744 156C1834 118 1954 122 2046 164"/>
   </g>
 </svg>

@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Street flame sticker"><title>Street flame sticker</title><path d="M 134 18 C 168 62 206 94 200 152 C 196 202 166 238 128 238 C 84 238 56 202 58 154 C 60 112 90 92 92 64 C 108 78 118 86 120 106 C 136 82 126 48 134 18 Z" fill="#ff2e88" stroke="#0d0d0d" stroke-width="8" stroke-linejoin="round"/><path d="M 130 98 C 154 128 168 152 162 184 C 158 208 142 222 126 222 C 106 222 94 202 96 178 C 98 154 118 138 130 98 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Street flame sticker"><title>Street flame sticker</title>
+      <path d="M 140 24 C 174 68 212 100 206 158 C 202 208 172 244 134 244 C 90 244 62 208 64 160 C 66 118 96 98 98 70 C 114 84 124 92 126 112 C 142 88 132 54 140 24 Z" fill="#0d0d0d"/>
+      <path d="M 134 18 C 168 62 206 94 200 152 C 196 202 166 238 128 238 C 84 238 56 202 58 154 C 60 112 90 92 92 64 C 108 78 118 86 120 106 C 136 82 126 48 134 18 Z" fill="#ff2e88" stroke="#0d0d0d" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M 130 88 C 158 122 174 150 166 186 C 162 212 146 226 128 226 C 104 226 90 204 92 178 C 94 150 116 132 130 88 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="5.5"/>
+      <path d="M 128 144 C 142 164 148 180 144 198 C 140 212 134 218 126 218 C 116 218 110 206 112 192 C 114 176 122 166 128 144 Z" fill="#f3efe4" stroke="#0d0d0d" stroke-width="4"/>
+    </svg>

@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Signal lightning bolt sticker"><title>Signal lightning bolt sticker</title><polygon points="154,16 58,138 118,138 98,240 198,112 138,112" fill="#ffe031" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/><polygon points="144,44 82,126 126,126 112,202 176,122 132,122" fill="#00b8f0" fill-opacity="0.45"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Signal lightning bolt sticker"><title>Signal lightning bolt sticker</title>
+      <polygon points="160,22 64,144 124,144 104,244 204,118 144,118" fill="#0d0d0d"/>
+      <polygon points="154,16 58,138 118,138 98,240 198,112 138,112" fill="#ffe031" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+      <polygon points="154,16 138,112 198,112 98,240 128,138 134,94" fill="#d9b514" fill-opacity="0.7"/>
+      <polygon points="142,46 84,126 116,126 108,166" fill="#ffffff" fill-opacity="0.65"/>
+      <path d="M 154 16 L 58 138 L 118 138 L 98 240 L 198 112 L 138 112 Z" fill="none" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M 194.0 36.0 L 197.5 48.5 L 210.0 52.0 L 197.5 55.5 L 194.0 68.0 L 190.5 55.5 L 178.0 52.0 L 190.5 48.5 Z" fill="#00b8f0" stroke="#0d0d0d" stroke-width="3.5"/>
+    </svg>

@@ -4,7 +4,10 @@
       "id": "riot-alley-hero",
       "staticFallback": "illustrations/riot-universe/backgrounds/bg-riot-street-alley.webp",
       "accessibilityFallback": "illustrations/riot-universe/states/state-welcome.webp",
-      "clips": ["kuro-signal-idle", "kuro-signal-wave"],
+      "clips": [
+        "kuro-signal-idle",
+        "kuro-signal-wave"
+      ],
       "layers": [
         {
           "id": "sky-backdrop",
@@ -36,7 +39,7 @@
             "x": 0.5,
             "y": 0.5
           },
-          "opacity": 0.96,
+          "opacity": 0.9,
           "parallax": {
             "x": 0.1,
             "y": 0.04
@@ -54,7 +57,7 @@
             "x": 0.5,
             "y": 0.52
           },
-          "opacity": 1,
+          "opacity": 0.92,
           "parallax": {
             "x": 0.28,
             "y": 0.1
@@ -72,7 +75,7 @@
             "x": 0.5,
             "y": 0.88
           },
-          "opacity": 1,
+          "opacity": 0.95,
           "parallax": {
             "x": 0.52,
             "y": 0.18
@@ -134,19 +137,19 @@
       "frames": [
         {
           "asset": "animation/kuro-signal-idle/kuro-signal-idle-frame-01.png",
-          "durationMs": 260
+          "durationMs": 240
         },
         {
           "asset": "animation/kuro-signal-idle/kuro-signal-idle-frame-02.png",
-          "durationMs": 260
+          "durationMs": 240
         },
         {
           "asset": "animation/kuro-signal-idle/kuro-signal-idle-frame-03.png",
-          "durationMs": 260
+          "durationMs": 240
         },
         {
           "asset": "animation/kuro-signal-idle/kuro-signal-idle-frame-04.png",
-          "durationMs": 260
+          "durationMs": 240
         }
       ]
     },
@@ -161,19 +164,19 @@
       "frames": [
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-01.png",
-          "durationMs": 200
+          "durationMs": 190
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-02.png",
-          "durationMs": 200
+          "durationMs": 190
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-03.png",
-          "durationMs": 200
+          "durationMs": 190
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-04.png",
-          "durationMs": 200
+          "durationMs": 190
         }
       ]
     }

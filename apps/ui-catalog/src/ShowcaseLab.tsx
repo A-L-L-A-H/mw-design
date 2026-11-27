@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
+import { ExampleCopyButton } from './ExampleCopyButton.js';
 import {
   ActivityIcon,
   AddIcon,
@@ -75,13 +76,17 @@ function ShowcaseExample({
   wide?: boolean;
   children: ReactNode;
 }) {
+  const stageRef = useRef<HTMLDivElement>(null);
   return (
     <article className={wide ? 'catalog-example catalog-example-wide' : 'catalog-example'}>
       <div className="catalog-example-copy">
         <h3>{title}</h3>
         <p>{description}</p>
+        <ExampleCopyButton title={title} stageRef={stageRef} />
       </div>
-      <div className="catalog-example-stage">{children}</div>
+      <div className="catalog-example-stage" ref={stageRef}>
+        {children}
+      </div>
     </article>
   );
 }

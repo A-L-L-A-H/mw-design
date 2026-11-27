@@ -8,13 +8,19 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "bun --filter @moonwitness/ui build && bun --filter @moonwitness/ui-catalog build:built",
-    "typecheck": "bun --filter @moonwitness/ui build && tsc -p apps/ui-catalog/tsconfig.json --noEmit",
-    "test": "bun --filter @moonwitness/ui test",
-    "catalog:build": "bun --filter @moonwitness/ui-catalog build"
+    "dev": "npm run build --workspace=@moonwitness/ui && npm run dev --workspace=@moonwitness/ui-catalog",
+    "build": "npm run build --workspace=@moonwitness/ui && npm run build:built --workspace=@moonwitness/ui-catalog",
+    "typecheck": "npm run build --workspace=@moonwitness/ui && npx tsc -p apps/ui-catalog/tsconfig.json --noEmit",
+    "test": "npm run test --workspace=@moonwitness/ui && npm run test:unit --workspace=@moonwitness/ui-catalog",
+    "test:e2e": "npm run test:e2e --workspace=@moonwitness/ui-catalog",
+    "catalog:build": "npm run build --workspace=@moonwitness/ui-catalog"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
     "jsdom": "^31.0.1",
-    "typescript": "~5.7.3"
+    "typescript": "~5.7.3",
+    "vitest": "^5.1.2"
   }
 }

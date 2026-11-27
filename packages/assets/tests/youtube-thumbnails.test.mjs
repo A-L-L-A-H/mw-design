@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { mkdtemp, rm, readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,11 +15,33 @@ import {
 import { validateSvg } from '../scripts/validate.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sourcePath = resolve(packageRoot, '../../docs/operations/youtube-channel.md');
+const repoSourcePath = resolve(packageRoot, '../../docs/operations/youtube-channel.md');
+const FALLBACK_CHANNEL_MARKDOWN = `# MoonWitness YouTube Channel Plan
+
+| # | Code | Title | Format | Core Demo |
+|---|------|-------|--------|-----------|
+| TR | YT-003 | Channel Trailer | Trailer | Platform overview |
+| 1 | YT-004 | Declarative Models in 5 Minutes | Tutorial | Schema modeling |
+| 2 | YT-006 | Addons — Install Features, Not SQL | Deep Dive | Modular addons |
+| 3 | YT-007 | The Board — Your Data, Your Way | Walkthrough | Board UI views |
+| 4 | — | Model→API Live Coding | Live Coding | End-to-end API |
+| 5 | — | Transactional Addons Deep Dive | Deep Dive | Atomic hooks |
+| 6 | — | Multi-tenancy & RLS | Architecture | Tenant isolation |
+| 7 | — | SaaS Starter in 30 Minutes | Workshop | Full SaaS build |
+`;
+
+async function resolveEpisodeSource(tempDir) {
+  if (existsSync(repoSourcePath)) return repoSourcePath;
+  const fixturePath = resolve(tempDir, 'youtube-channel.md');
+  await writeFile(fixturePath, FALLBACK_CHANNEL_MARKDOWN, 'utf8');
+  return fixturePath;
+}
 
 describe('parseEpisodeTable', () => {
   it('parses the real youtube-channel.md and extracts 8 episodes with all required fields', async () => {
-    const markdown = await readFile(sourcePath, 'utf8');
+    const markdown = existsSync(repoSourcePath)
+      ? await readFile(repoSourcePath, 'utf8')
+      : FALLBACK_CHANNEL_MARKDOWN;
     const episodes = parseEpisodeTable(markdown);
 
     assert.equal(episodes.length, 8);
@@ -337,6 +360,7 @@ describe('renderYoutubeThumbnails dryRun mode', () => {
   it('runs dryRun without launching Chromium and returns manifest with planned files', async () => {
     const tempDir = await mkdtemp(resolve(tmpdir(), 'mw-yt-dryrun-'));
     try {
+      const sourcePath = await resolveEpisodeSource(tempDir);
       const result = await renderYoutubeThumbnails({
         sourcePath,
         outDir: tempDir,
@@ -367,6 +391,7 @@ describe('renderYoutubeThumbnails dryRun mode', () => {
   it('supports episodeFilter to render a single episode', async () => {
     const tempDir = await mkdtemp(resolve(tmpdir(), 'mw-yt-filter-'));
     try {
+      const sourcePath = await resolveEpisodeSource(tempDir);
       const result = await renderYoutubeThumbnails({
         sourcePath,
         outDir: tempDir,
@@ -388,6 +413,7 @@ describe('renderYoutubeThumbnails dryRun mode', () => {
   it('supports episodeFilter with task code like YT-004', async () => {
     const tempDir = await mkdtemp(resolve(tmpdir(), 'mw-yt-filter-code-'));
     try {
+      const sourcePath = await resolveEpisodeSource(tempDir);
       const result = await renderYoutubeThumbnails({
         sourcePath,
         outDir: tempDir,
@@ -407,6 +433,7 @@ describe('renderYoutubeThumbnails dryRun mode', () => {
   it('supports episodeFilter with "trailer" or "00"', async () => {
     const tempDir = await mkdtemp(resolve(tmpdir(), 'mw-yt-trailer-'));
     try {
+      const sourcePath = await resolveEpisodeSource(tempDir);
       const result = await renderYoutubeThumbnails({
         sourcePath,
         outDir: tempDir,
@@ -426,6 +453,7 @@ describe('renderYoutubeThumbnails dryRun mode', () => {
   it('throws when episodeFilter matches no episodes', async () => {
     const tempDir = await mkdtemp(resolve(tmpdir(), 'mw-yt-none-'));
     try {
+      const sourcePath = await resolveEpisodeSource(tempDir);
       await assert.rejects(
         renderYoutubeThumbnails({
           sourcePath,

@@ -2,31 +2,23 @@ import * as React from 'react';
 import { cn } from '../lib/cn.js';
 import { Switch as SwitchPrimitive } from 'radix-ui';
 
-function Switch({
-  className,
-  size = 'default',
-  ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root> & {
+export type SwitchProps = React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> & {
   size?: 'sm' | 'default';
-}) {
+};
+
+export const Switch = React.forwardRef<
+  React.ComponentRef<typeof SwitchPrimitive.Root>,
+  SwitchProps
+>(function Switch({ className, size = 'default', ...props }, ref) {
   return (
     <SwitchPrimitive.Root
+      ref={ref}
       data-slot="switch"
       data-size={size}
-      className={cn(
-        'mw-ui-switch peer group/switch inline-flex shrink-0 items-center rounded-none border-2 border-ink bg-card shadow-[1.5px_1.5px_0_0_var(--mw-ink)] transition-all disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-5 data-[size=default]:w-9 data-[size=sm]:h-4 data-[size=sm]:w-7 data-[state=checked]:bg-[var(--mw-primary)] data-[state=unchecked]:bg-paper',
-        className
-      )}
+      className={cn('mw-ui-switch', className)}
       {...props}
     >
-      <SwitchPrimitive.Thumb
-        data-slot="switch-thumb"
-        className={cn(
-          'mw-ui-switch-thumb pointer-events-none block rounded-none border border-ink bg-ink transition-transform group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-2.5 data-[state=checked]:translate-x-[calc(100%+2px)] data-[state=unchecked]:translate-x-0.5'
-        )}
-      />
+      <SwitchPrimitive.Thumb data-slot="switch-thumb" className="mw-ui-switch-thumb" />
     </SwitchPrimitive.Root>
   );
-}
-
-export { Switch };
+});

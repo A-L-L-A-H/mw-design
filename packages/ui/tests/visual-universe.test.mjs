@@ -6,11 +6,18 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { JSDOM } from 'jsdom';
 import {
   BACKGROUND_ASSETS,
+  CREW_CLIP_IDS,
+  EDITORIAL_ILLUSTRATIONS,
   GAME_ASSETS,
   KURO_CLIP_IDS,
   KURO_EXPRESSIONS,
   KURO_POSES,
+  LEGACY_STATE_ILLUSTRATIONS,
+  MATERIAL_ASSETS,
+  MOON_CITY_SCENE_PATH,
   RIOT_ALLEY_SCENE_PATH,
+  SCENE_PATHS,
+  SOUND_ASSETS,
   STATE_ILLUSTRATIONS,
   STICKER_ASSETS,
   getBackgroundAsset,
@@ -18,6 +25,11 @@ import {
   getCharacterClip,
   getCharacterPortrait,
   getCharacterPose,
+  getCrewClip,
+  getEditorialIllustration,
+  getLegacyStateIllustration,
+  getMaterialAsset,
+  getSoundAsset,
   getStateIllustration,
   getStickerAsset,
   resolveUniverseAsset,
@@ -138,6 +150,37 @@ test('asset-registry resolves canonical universe paths with optional basePath', 
   assert.equal(clip.frames.length, 4);
   assert.equal(clip.frames[0], '/sub/animation/kuro-signal-wave/kuro-signal-wave-frame-01.png');
   assert.equal(clip.frames[3], '/sub/animation/kuro-signal-wave/kuro-signal-wave-frame-04.png');
+
+  assert.equal(MOON_CITY_SCENE_PATH, 'scenes/moon-city-scene.json');
+  assert.equal(SCENE_PATHS['moon-city'], 'scenes/moon-city-scene.json');
+  assert.equal(EDITORIAL_ILLUSTRATIONS.length, 13);
+  assert.equal(LEGACY_STATE_ILLUSTRATIONS.length, 8);
+  assert.equal(MATERIAL_ASSETS.length, 31);
+  assert.equal(SOUND_ASSETS.length, 7);
+  assert.equal(CREW_CLIP_IDS.length, 4);
+
+  assert.equal(
+    getEditorialIllustration('editorial-signal').path,
+    'illustrations/editorial-signal.webp'
+  );
+  assert.equal(
+    getLegacyStateIllustration('offline', 'light').path,
+    'illustrations/offline-light.svg'
+  );
+  assert.equal(
+    getMaterialAsset('tile-halftone', { basePath: '/app' }).src,
+    '/app/materials/tile-halftone.svg'
+  );
+  const sound = getSoundAsset('ambience-moon-city-night', { basePath: '/cdn' });
+  assert.equal(sound.path, 'sounds/ambience-moon-city-night.wav');
+  assert.equal(sound.src, '/cdn/sounds/ambience-moon-city-night.wav');
+  assert.equal(sound.format, 'wav');
+
+  const crewHair = getCrewClip('hair-move', { basePath: '/sub' });
+  assert.equal(crewHair.frames.length, 4);
+  assert.equal(crewHair.frames[0], '/sub/animation/crew-01-hair/crew-01-hair-move-frame-01.svg');
+  const crewIdle = getCrewClip('idle');
+  assert.equal(crewIdle.frames[0], '/animation/crew-01-idle/crew-01-idle-frame-01.svg');
 });
 
 test('ComicPanel, MangaFrame, SpeechBubble, and StickerBadge render expected markup and attributes', () => {

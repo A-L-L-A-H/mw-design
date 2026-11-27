@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Legend rank crown emblem"><title>Legend rank crown emblem</title><polygon points="128,20 222,74 222,182 128,236 34,182 34,74" fill="#17171a" stroke="#0d0d0d" stroke-width="9"/><path d="M 68 172 L 80 94 L 108 128 L 128 80 L 148 128 L 176 94 L 188 172 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="6" stroke-linejoin="round"/><path d="M 128.0 36.0 L 132.2 47.8 L 144.0 52.0 L 132.2 56.2 L 128.0 68.0 L 123.8 56.2 L 112.0 52.0 L 123.8 47.8 Z" fill="#ff2e88" stroke="#0d0d0d" stroke-width="3.5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Legend rank crown emblem"><title>Legend rank crown emblem</title>
+    <polygon points="134,24 230,74 212,198 134,244 56,198 38,74" fill="#0d0d0d"/>
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="#17171a" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+    <polygon points="128,18 224,68 206,192 128,238" fill="#262833" fill-opacity="0.55"/>
+    <polygon points="128,34 208,76 192,182 128,220 64,182 48,76" fill="none" stroke="#ffe031" stroke-width="5.5" stroke-linejoin="round"/>
+    <polygon points="128,34 208,76 192,182 128,220" fill="none" stroke="#d9b514" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <circle cx="86" cy="150" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="104" cy="150" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="122" cy="150" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="140" cy="150" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="158" cy="150" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="95" cy="168" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="113" cy="168" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="131" cy="168" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="149" cy="168" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="167" cy="168" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="86" cy="186" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="104" cy="186" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="122" cy="186" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="140" cy="186" r="2" fill="#ffe031" fill-opacity="0.2"/><circle cx="158" cy="186" r="2" fill="#ffe031" fill-opacity="0.2"/>
+    
+        <path d="M 70 178 L 82 100 L 110 134 L 130 86 L 150 134 L 178 100 L 190 178 Z" fill="#0d0d0d"/>
+        <path d="M 66 172 L 78 94 L 106 128 L 128 78 L 150 128 L 178 94 L 190 172 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="6" stroke-linejoin="round"/>
+        <rect x="66" y="172" width="124" height="18" rx="4" fill="#ff2e88" stroke="#0d0d0d" stroke-width="5"/>
+        <path d="M 128.0 34.0 L 132.6 47.4 L 146.0 52.0 L 132.6 56.6 L 128.0 70.0 L 123.4 56.6 L 110.0 52.0 L 123.4 47.4 Z" fill="#00b8f0" stroke="#0d0d0d" stroke-width="3.5"/>
+      
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="none" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+  </svg>

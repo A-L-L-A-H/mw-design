@@ -1,12 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 360" width="2048" height="360" role="img" aria-label="Foreground overhead Moon City utility cables">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 360" width="2048" height="360" role="img" aria-label="Foreground overhead Moon City utility cables with signal warning markers">
   <title>Moon City overhead wires prop</title>
-  <g id="mw-environments-moon-city-prop-wires-cables" fill="none" stroke="#0d0f17" stroke-linecap="round">
-    <path d="M-20 44C420 156 1120 176 2068 62" stroke-width="6"/>
+  <g id="mw-environments-moon-city-prop-wires-cables" fill="none" stroke="#070a11" stroke-linecap="round">
+    <path d="M-20 44C420 156 1120 176 2068 62" stroke-width="6.5"/>
     <path d="M-20 92C510 218 1240 228 2068 118" stroke-width="4.5"/>
     <path d="M-20 144C620 264 1390 250 2068 164" stroke-width="3"/>
   </g>
-  <g fill="#ffe031" opacity="0.65">
+  <g fill="none" stroke="#5ed8eb" stroke-width="1.4" opacity="0.34">
+    <path d="M-20 41C420 153 1120 173 2068 59"/>
+    <path d="M-20 89C510 215 1240 225 2068 115"/>
+  </g>
+  <g fill="#ffe031" opacity="0.82">
     <circle cx="1742" cy="96" r="6"/>
     <circle cx="1770" cy="93" r="4"/>
   </g>
+  <circle cx="468" cy="148" r="4.5" fill="#ff3b9a" opacity="0.72"/>
 </svg>

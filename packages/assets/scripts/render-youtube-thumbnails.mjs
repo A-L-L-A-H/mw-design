@@ -2,7 +2,6 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { argv, stderr, stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
-import { chromium } from '@playwright/test';
 import sharp from 'sharp';
 import { atomicWrite } from './atomic-write.mjs';
 import { buildEmbeddedFontCss } from './render-social.mjs';
@@ -656,6 +655,7 @@ export async function renderYoutubeThumbnails({
   await mkdir(resolvedOutDir, { recursive: true });
 
   const renderedFiles = [];
+  const { chromium } = await import('@playwright/test');
   const browser = await chromium.launch({ headless: true });
 
   try {

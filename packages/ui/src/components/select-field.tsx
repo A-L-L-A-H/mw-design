@@ -1,8 +1,21 @@
-import type { ComponentProps } from 'react';
+import { forwardRef, type ComponentProps } from 'react';
 
-export type SelectFieldProps = ComponentProps<'select'>;
+export type SelectFieldProps = ComponentProps<'select'> & {
+  controlSize?: 'sm' | 'md' | 'lg';
+};
 
-export function SelectField({ className, ...props }: SelectFieldProps) {
+export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(function SelectField(
+  { className, controlSize = 'md', ...props },
+  ref
+) {
   const classes = ['mw-ui-select', className].filter(Boolean).join(' ');
-  return <select data-slot="select" className={classes} {...props} />;
-}
+  return (
+    <select
+      ref={ref}
+      data-slot="select"
+      data-size={controlSize}
+      className={classes}
+      {...props}
+    />
+  );
+});

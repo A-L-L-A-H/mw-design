@@ -1,29 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Midground Moon City rooftops and lit apartment windows">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Midground Moon City comic-inked rooftops, observatory domes, neon strips, and lit windows">
   <title>Moon City midground city layer</title>
   <defs>
     <linearGradient id="mw-environments-moon-city-skyline-mid-body" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#141e33"/>
-      <stop offset="1" stop-color="#0b101d"/>
+      <stop offset="0" stop-color="#18273f"/>
+      <stop offset="0.55" stop-color="#0f1829"/>
+      <stop offset="1" stop-color="#080c15"/>
     </linearGradient>
+    <pattern id="mw-environments-moon-city-skyline-mid-hatch" width="10" height="10" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="10" x2="10" y2="0" stroke="#060911" stroke-width="1.2" opacity="0.32"/>
+    </pattern>
   </defs>
-  <path d="M0 1152V810H142V692H294V780H436V732H588V842H736V760H908V856H1082V748H1244V820H1420V680H1596V774H1748V642H1910V760H2048V1152Z" fill="url(#mw-environments-moon-city-skyline-mid-body)" stroke="#243857" stroke-width="3"/>
-  <g fill="#ffe031" opacity="0.72">
-    <rect x="172" y="728" width="18" height="24"/>
-    <rect x="206" y="728" width="18" height="24"/>
-    <rect x="240" y="766" width="18" height="24"/>
-    <rect x="466" y="768" width="22" height="18"/>
-    <rect x="502" y="768" width="22" height="18"/>
-    <rect x="1456" y="718" width="22" height="26"/>
-    <rect x="1494" y="718" width="22" height="26"/>
-    <rect x="1532" y="760" width="22" height="26"/>
-    <rect x="1782" y="684" width="20" height="28"/>
-    <rect x="1816" y="684" width="20" height="28"/>
-    <rect x="1850" y="724" width="20" height="28"/>
+  <g stroke="#060911" stroke-width="4" stroke-linejoin="round">
+    <path d="M0 1152V842H128V766H262V818H396V748H538V828H694V772H838V810H988V746H1142V804H1282V732H1438V796H1580V710H1746V776H1886V684H2048V1152Z" fill="url(#mw-environments-moon-city-skyline-mid-body)"/>
+    <path d="M0 1152V842H128V766H262V818H396V748H538V828H694V772H838V810H988V746H1142V804H1282V732H1438V796H1580V710H1746V776H1886V684H2048V1152Z" fill="url(#mw-environments-moon-city-skyline-mid-hatch)"/>
+    <path d="M846 810C846 766 936 766 936 810Z" fill="#17263d"/>
+    <path d="M1452 796C1452 738 1564 738 1564 796Z" fill="#1b2d47"/>
+    <circle cx="1822" cy="726" r="42" fill="#1c324e"/>
   </g>
-  <g fill="#39e6ff" opacity="0.58">
-    <rect x="768" y="796" width="28" height="14"/>
-    <rect x="810" y="796" width="28" height="14"/>
-    <rect x="1116" y="784" width="24" height="18"/>
-    <rect x="1152" y="784" width="24" height="18"/>
+  <g stroke="#52d6ec" stroke-width="3" fill="none" opacity="0.62">
+    <path d="M262 766V818M538 748V828M1142 746V804M1438 732V796M1746 710V776"/>
+    <path d="M1460 762C1490 740 1536 740 1560 764"/>
+    <path d="M1794 700C1814 686 1844 690 1858 712"/>
+  </g>
+  <g stroke="#ff3b9a" stroke-width="4" stroke-linecap="round" opacity="0.82">
+    <line x1="406" y1="762" x2="406" y2="836"/>
+    <line x1="1294" y1="744" x2="1294" y2="824"/>
+    <line x1="1592" y1="724" x2="1592" y2="812"/>
+    <line x1="1898" y1="698" x2="1898" y2="804"/>
+  </g>
+  <g fill="#ffe031" opacity="0.84">
+    <rect x="156" y="796" width="14" height="20"/>
+    <rect x="184" y="796" width="14" height="20"/>
+    <rect x="444" y="782" width="18" height="14"/>
+    <rect x="476" y="782" width="18" height="14"/>
+    <rect x="1324" y="768" width="16" height="22"/>
+    <rect x="1352" y="768" width="16" height="22"/>
+    <rect x="1630" y="746" width="16" height="24"/>
+    <rect x="1660" y="746" width="16" height="24"/>
+    <rect x="1934" y="722" width="18" height="24"/>
+    <rect x="1966" y="722" width="18" height="24"/>
+  </g>
+  <g fill="#39e6ff" opacity="0.78">
+    <rect x="726" y="806" width="24" height="12"/>
+    <rect x="762" y="806" width="24" height="12"/>
+    <rect x="1024" y="782" width="20" height="16"/>
+    <rect x="1058" y="782" width="20" height="16"/>
+    <rect x="1630" y="786" width="46" height="10"/>
+    <rect x="1934" y="764" width="50" height="10"/>
+  </g>
+  <g fill="#ff3b9a" opacity="0.78">
+    <rect x="1096" y="782" width="14" height="16"/>
+    <rect x="1386" y="768" width="14" height="22"/>
+    <rect x="1998" y="722" width="14" height="24"/>
   </g>
 </svg>

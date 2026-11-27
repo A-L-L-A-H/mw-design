@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Zero Drift badge"><title>Zero Drift badge</title><polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="#17171a" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/><circle cx="128" cy="128" r="52" fill="#ffe031" stroke="#0d0d0d" stroke-width="6"/><path d="M 100 128 L 120 148 L 160 104" fill="none" stroke="#0d0d0d" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Zero Drift badge"><title>Zero Drift badge</title>
+    <polygon points="134,24 230,74 212,198 134,244 56,198 38,74" fill="#0d0d0d"/>
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="#17171a" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+    <polygon points="128,18 224,68 206,192 128,238" fill="#262833" fill-opacity="0.55"/>
+    <polygon points="128,34 208,76 192,182 128,220 64,182 48,76" fill="none" stroke="#ff2e88" stroke-width="5.5" stroke-linejoin="round"/>
+    <polygon points="128,34 208,76 192,182 128,220" fill="none" stroke="#b8175d" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <circle cx="86" cy="150" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="104" cy="150" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="122" cy="150" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="140" cy="150" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="158" cy="150" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="95" cy="168" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="113" cy="168" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="131" cy="168" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="149" cy="168" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="167" cy="168" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="86" cy="186" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="104" cy="186" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="122" cy="186" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="140" cy="186" r="2" fill="#ff2e88" fill-opacity="0.2"/><circle cx="158" cy="186" r="2" fill="#ff2e88" fill-opacity="0.2"/>
+    
+        <circle cx="132" cy="132" r="54" fill="#0d0d0d"/>
+        <circle cx="128" cy="128" r="54" fill="#ffe031" stroke="#0d0d0d" stroke-width="6.5"/>
+        <path d="M 128 74 A 54 54 0 0 1 182 128 H 128 Z" fill="#ffffff" fill-opacity="0.35"/>
+        <circle cx="128" cy="128" r="42" fill="none" stroke="#0d0d0d" stroke-width="3" stroke-dasharray="8 6"/>
+        <path d="M 98 128 L 120 150 L 162 104" fill="none" stroke="#0d0d0d" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M 98 128 L 120 150 L 162 104" fill="none" stroke="#f3efe4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      
+    <polygon points="128,18 224,68 206,192 128,238 50,192 32,68" fill="none" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+  </svg>

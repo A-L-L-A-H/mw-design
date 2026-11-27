@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Comic motion burst sticker"><title>Comic motion burst sticker</title><path d="M 128 18 L 128 62 M 128 194 L 128 238 M 18 128 L 62 128 M 194 128 L 238 128 M 48 48 L 82 82 M 174 174 L 208 208 M 208 48 L 174 82 M 82 174 L 48 208" stroke="#0d0d0d" stroke-width="14" stroke-linecap="round"/><path d="M 128 18 L 128 62 M 128 194 L 128 238 M 18 128 L 62 128 M 194 128 L 238 128 M 48 48 L 82 82 M 174 174 L 208 208 M 208 48 L 174 82 M 82 174 L 48 208" stroke="#ffe031" stroke-width="7" stroke-linecap="round"/><circle cx="128" cy="128" r="32" fill="#00b8f0" stroke="#0d0d0d" stroke-width="7"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Comic motion burst sticker"><title>Comic motion burst sticker</title>
+      <path d="M 128 18 L 128 66 M 128 190 L 128 238 M 18 128 L 66 128 M 190 128 L 238 128 M 48 48 L 84 84 M 172 172 L 208 208 M 208 48 L 172 84 M 84 172 L 48 208" stroke="#0d0d0d" stroke-width="16" stroke-linecap="round"/>
+      <path d="M 128 18 L 128 66 M 128 190 L 128 238 M 18 128 L 66 128 M 190 128 L 238 128 M 48 48 L 84 84 M 172 172 L 208 208 M 208 48 L 172 84 M 84 172 L 48 208" stroke="#ffe031" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="132" cy="132" r="36" fill="#0d0d0d"/>
+      <circle cx="128" cy="128" r="36" fill="#00b8f0" stroke="#0d0d0d" stroke-width="7"/>
+      <circle cx="128" cy="128" r="18" fill="#f3efe4" stroke="#0d0d0d" stroke-width="4"/>
+      <circle cx="122" cy="122" r="5" fill="#ff2e88"/>
+    </svg>

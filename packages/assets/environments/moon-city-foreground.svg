@@ -1,19 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Moon City rooftop edge, rail, aerials, and loose cables">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Moon City comic-inked foreground rooftop edge, vents, aerials, neon signage rim, and loose cables">
   <title>Moon City foreground rooftop layer</title>
-  <g fill="#090c15">
-    <path d="M0 1038h2048v114H0z"/>
-    <path d="M0 1007h2048v34H0z"/>
-    <path d="M74 1081h410v18H74zM1112 1064h384v20h-384zM1654 1091h300v17h-300z" fill="#101722"/>
+  <defs>
+    <linearGradient id="mw-environments-moon-city-foreground-deck" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#111927"/>
+      <stop offset="1" stop-color="#06080f"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#mw-environments-moon-city-foreground-deck)" stroke="#05070c" stroke-width="5">
+    <path d="M0 1018H2048V1152H0Z"/>
+    <path d="M0 996H2048V1024H0Z" fill="#172436"/>
   </g>
-  <g fill="none" stroke="#0a0e17" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M0 1006h2048" stroke-width="12"/>
-    <path d="M84 1006V962m0 22h390m-390-22h390m-350 0v44m310-44v44" stroke-width="8"/>
-    <path d="M1442 1006V944m0 31h255m-255-62h255m-220 0v93m184-93v93" stroke-width="8"/>
-    <path d="M478 1005c93-6 100-32 163-40 65-8 80 23 150 16 59-7 60-29 138-30" stroke-width="6"/>
-    <path d="M1060 1004c71-9 74-30 148-32 53-1 76 13 137 7" stroke-width="5"/>
+  <line x1="0" y1="998" x2="2048" y2="998" stroke="#4ccbe0" stroke-width="3" opacity="0.45"/>
+  <g fill="#0b111c" stroke="#05070c" stroke-width="5" stroke-linejoin="round">
+    <rect x="74" y="1062" width="420" height="24"/>
+    <rect x="1108" y="1054" width="396" height="26"/>
+    <rect x="1648" y="1076" width="320" height="24"/>
+    <path d="M584 998V932H668V998Z"/>
+    <path d="M604 932V872H624V932Z"/>
+    <path d="M1748 998V924H1842V998Z"/>
+    <path d="M1778 924V854H1802V924Z"/>
   </g>
-  <g fill="#15273a" stroke="#070b12" stroke-width="6">
-    <path d="M610 1008V970h48v38zM624 970V910h18v60z"/>
-    <path d="M1772 1008V966h64v42zM1793 966V890h18v76z"/>
+  <g stroke="#50d4ea" stroke-width="2.5" opacity="0.48" fill="none">
+    <line x1="588" y1="936" x2="664" y2="936"/>
+    <line x1="1752" y1="928" x2="1838" y2="928"/>
+  </g>
+  <g fill="#ff3b9a" opacity="0.82">
+    <rect x="640" y="950" width="14" height="6"/>
+    <rect x="1814" y="944" width="16" height="6"/>
+  </g>
+  <g fill="none" stroke="#070b12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M84 996V952m0 22h390m-390-22h390m-350 0v44m310-44v44" stroke-width="8"/>
+    <path d="M1442 996V936m0 30h255m-255-60h255m-220 0v90m184-90v90" stroke-width="8"/>
+    <path d="M478 996c93-6 100-34 163-42 65-8 80 24 150 17 59-7 60-30 138-31" stroke-width="6"/>
+    <path d="M1060 995c71-9 74-31 148-33 53-1 76 13 137 7" stroke-width="5"/>
   </g>
 </svg>

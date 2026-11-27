@@ -19,6 +19,15 @@ export type {
   ThemeRegistry,
   UserThemePreferences,
 } from './types.js';
+export {
+  ThemeProvider,
+  useTheme,
+  applyThemeState,
+  type ThemeContextValue,
+  type ThemeMode,
+  type ThemeProviderProps,
+  type ThemeState,
+} from './provider.js';
 
 export const DEFAULT_SKIN_ID: BuiltinSkinId = 'moonwitness-ink';
 

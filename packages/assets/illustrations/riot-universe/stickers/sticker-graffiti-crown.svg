@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="MoonWitness crown sticker"><title>MoonWitness crown sticker</title><path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/><rect x="36" y="198" width="184" height="24" rx="6" fill="#ff2e88" stroke="#0d0d0d" stroke-width="7"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="MoonWitness crown sticker"><title>MoonWitness crown sticker</title>
+      <path d="M 36 200 L 50 70 L 102 128 L 134 52 L 166 128 L 218 70 L 232 200 Z" fill="#0d0d0d"/>
+      <rect x="42" y="204" width="184" height="24" rx="6" fill="#0d0d0d"/>
+      <path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M 128 46 L 160 122 L 212 64 L 226 194 H 128 Z" fill="#d9b514" fill-opacity="0.55"/>
+      <path d="M 30 194 L 44 64 L 96 122 L 128 46 L 160 122 L 212 64 L 226 194 Z" fill="none" stroke="#0d0d0d" stroke-width="9" stroke-linejoin="round"/>
+      <circle cx="128" cy="144" r="12" fill="#00b8f0" stroke="#0d0d0d" stroke-width="4"/>
+      <circle cx="78" cy="156" r="8" fill="#ff2e88" stroke="#0d0d0d" stroke-width="3.5"/>
+      <circle cx="178" cy="156" r="8" fill="#ff2e88" stroke="#0d0d0d" stroke-width="3.5"/>
+      <rect x="36" y="198" width="184" height="24" rx="6" fill="#ff2e88" stroke="#0d0d0d" stroke-width="7"/>
+    </svg>

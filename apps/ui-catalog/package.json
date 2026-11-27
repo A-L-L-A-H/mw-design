@@ -5,19 +5,21 @@
   "description": "Static, interactive catalog for the MoonWitness UI package",
   "type": "module",
   "engines": {
-    "node": "24.x"
+    "node": ">=22"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "bun --filter @moonwitness/ui build && bun run diagnostics:generate && tsc -p tsconfig.json && vite build",
-    "build:built": "bun run diagnostics:generate && tsc -p tsconfig.json && vite build",
+    "dev": "vite --host 0.0.0.0 --port 3000",
+    "build": "npm run build --workspace=@moonwitness/ui && npm run diagnostics:generate && tsc -p tsconfig.json && vite build",
+    "build:built": "npm run diagnostics:generate && tsc -p tsconfig.json && vite build",
     "diagnostics:generate": "node scripts/generate-asset-diagnostics.mjs",
     "test": "playwright test",
-    "preview": "vite preview"
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "preview": "vite preview --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
-    "@moonwitness/assets": "workspace:*",
-    "@moonwitness/ui": "workspace:*",
+    "@moonwitness/assets": "*",
+    "@moonwitness/ui": "*",
     "radix-ui": "^1.6.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

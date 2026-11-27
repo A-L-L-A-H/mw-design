@@ -1,22 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Distant Moon City skyline silhouettes under night haze">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Distant Moon City neo-noir skyline spires, domes, and antennas backlit by teal moon haze">
   <title>Moon City distant skyline layer</title>
   <defs>
     <linearGradient id="mw-environments-moon-city-skyline-far-fill" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1a2c47"/>
-      <stop offset="1" stop-color="#0f192d"/>
+      <stop offset="0" stop-color="#224563"/>
+      <stop offset="0.45" stop-color="#142740"/>
+      <stop offset="1" stop-color="#0a1221"/>
+    </linearGradient>
+    <linearGradient id="mw-environments-moon-city-skyline-far-haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#48bcc9" stop-opacity="0.28"/>
+      <stop offset="0.65" stop-color="#193b52" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#09111f" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <path d="M0 1152V740H84V620H168V704H244V560H332V680H410V610H520V722H606V528H692V672H790V600H882V718H974V548H1058V660H1164V584H1262V706H1354V496H1452V644H1548V566H1646V684H1742V534H1848V676H1932V598H2048V1152Z" fill="url(#mw-environments-moon-city-skyline-far-fill)"/>
-  <g fill="#ffe031" opacity="0.42">
-    <circle cx="288" cy="542" r="4"/>
-    <circle cx="649" cy="508" r="4.5"/>
-    <circle cx="1403" cy="476" r="5"/>
-    <circle cx="1795" cy="516" r="4"/>
+  <rect x="0" y="610" width="2048" height="310" fill="url(#mw-environments-moon-city-skyline-far-haze)"/>
+  <path d="M0 1152V786H74V710H136V764H198V672H264V736H340V688H402V758H474V664H554V744H624V642H698V730H774V686H848V748H934V632H1012V718H1076V664H1144V712H1210V582H1244V548H1264V582H1294V690H1340V558H1396V676H1456V596H1514V672H1544V522H1568V496H1592V522H1614V646H1684V572H1722V454H1746V422H1784V454H1806V618H1842V412H1868V386H1906V412H1928V594H1964V486H1996V458H2024V486H2048V1152Z" fill="url(#mw-environments-moon-city-skyline-far-fill)" stroke="#070d18" stroke-width="3"/>
+  <g stroke="#69e1ef" stroke-width="2.5" opacity="0.58" fill="none">
+    <path d="M1294 582V690M1396 558V676M1614 522V646M1806 454V618M1928 412V594M2024 486V624"/>
+    <path d="M1722 454H1806M1842 412H1928M1544 522H1614"/>
   </g>
-  <g stroke="#294366" stroke-width="3" opacity="0.7">
-    <line x1="288" y1="546" x2="288" y2="560"/>
-    <line x1="649" y1="512" x2="649" y2="528"/>
-    <line x1="1403" y1="480" x2="1403" y2="496"/>
-    <line x1="1795" y1="520" x2="1795" y2="534"/>
+  <g stroke="#396682" stroke-width="2.5" opacity="0.82">
+    <line x1="1254" y1="548" x2="1254" y2="490"/>
+    <line x1="1580" y1="496" x2="1580" y2="424"/>
+    <line x1="1765" y1="422" x2="1765" y2="338"/>
+    <line x1="1887" y1="386" x2="1887" y2="294"/>
+    <line x1="2010" y1="458" x2="2010" y2="392"/>
+  </g>
+  <g fill="#ff3b9a" opacity="0.86">
+    <circle cx="1254" cy="488" r="3.5"/>
+    <circle cx="1580" cy="422" r="4"/>
+    <circle cx="1765" cy="336" r="4.5"/>
+    <circle cx="1887" cy="292" r="4.5"/>
+    <rect x="1348" y="576" width="12" height="4"/>
+    <rect x="1554" y="544" width="14" height="4"/>
+    <rect x="1852" y="444" width="16" height="5"/>
+  </g>
+  <g fill="#63edff" opacity="0.72">
+    <rect x="1742" y="486" width="8" height="22"/>
+    <rect x="1760" y="486" width="8" height="22"/>
+    <rect x="1742" y="522" width="8" height="22"/>
+    <rect x="1862" y="468" width="10" height="26"/>
+    <rect x="1882" y="468" width="10" height="26"/>
+    <rect x="1862" y="508" width="10" height="26"/>
+    <rect x="1978" y="506" width="8" height="16"/>
+    <rect x="1994" y="506" width="8" height="16"/>
   </g>
 </svg>

@@ -431,6 +431,64 @@
   --mw-grunge-grain-opacity: 0.22;
 }
 
+/* Theme mode: high-contrast (system high-contrast CSS variable overrides) */
+:root[data-theme='high-contrast'],
+:root.high-contrast {
+  color-scheme: dark;
+  --mw-paper: #000000;
+  --mw-paper-raised: #0a0a0a;
+  --mw-ink: #ffffff;
+  --mw-ink-soft: #e6e6e6;
+  --mw-ink-faint: #d4d4d4;
+  --mw-color-ink-muted: var(--mw-ink-faint);
+  --mw-muted: #1a1a1a;
+  --mw-yellow: #ffe600;
+  --mw-on-accent: #000000;
+  --mw-on-magenta: #000000;
+  --mw-on-violet: #000000;
+  --mw-background: var(--mw-paper);
+  --mw-foreground: var(--mw-ink);
+  --mw-surface: var(--mw-paper-raised);
+  --mw-surface-foreground: var(--mw-ink);
+  --mw-popover: var(--mw-paper-raised);
+  --mw-popover-foreground: var(--mw-ink);
+  --mw-primary: var(--mw-yellow);
+  --mw-primary-foreground: var(--mw-on-accent);
+  --mw-secondary: var(--mw-paper);
+  --mw-secondary-foreground: var(--mw-ink);
+  --mw-muted-foreground: var(--mw-ink-soft);
+  --mw-accent: var(--mw-yellow);
+  --mw-accent-foreground: var(--mw-on-accent);
+  --mw-error: #ff8a80;
+  --mw-on-error: #000000;
+  --mw-destructive: var(--mw-error);
+  --mw-destructive-foreground: var(--mw-on-error);
+  --mw-success: #4ade80;
+  --mw-on-success: #000000;
+  --mw-warning: #ffe600;
+  --mw-on-warning: #000000;
+  --mw-info: #38bdf8;
+  --mw-on-info: #000000;
+  --mw-border: #ffffff;
+  --mw-border-strong: #ffffff;
+  --mw-border-subtle: #d4d4d4;
+  --mw-input: #ffffff;
+  --mw-focus: var(--mw-yellow);
+  --mw-yellow-readable: var(--mw-yellow);
+  --mw-magenta-readable: #ff66a8;
+  --mw-cyan-readable: #33d1ff;
+  --mw-violet-readable: #d8b4fe;
+  --mw-warning-readable: var(--mw-yellow);
+  --mw-success-readable: #4ade80;
+  --mw-halftone-dot: rgb(255 255 255 / 16%);
+  --mw-frame-width: 3px;
+  --mw-comic-border-width: 3px;
+  --mw-shadow-ink: 3px 3px 0 0 #ffffff;
+  --mw-shadow-ink-lg: 6px 6px 0 0 #ffffff;
+  --mw-shadow-comic: 4px 4px 0 0 #ffffff;
+  --mw-shadow-anime-impact: 4px 4px 0 0 #ffffff, 7px 7px 0 0 #ffe600;
+}
+
 /* Density: compact */
 [data-density='compact'] {
   --mw-space-2: 0.375rem;

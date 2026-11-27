@@ -141,6 +141,98 @@ export const KURO_CLIP_IDS = [
 export type KuroClipId = (typeof KURO_CLIP_IDS)[number];
 
 export const RIOT_ALLEY_SCENE_PATH = 'scenes/riot-alley-scene.json';
+export const MOON_CITY_SCENE_PATH = 'scenes/moon-city-scene.json';
+
+export const SCENE_PATHS = {
+  'riot-alley': RIOT_ALLEY_SCENE_PATH,
+  'moon-city': MOON_CITY_SCENE_PATH,
+} as const;
+
+export type SceneId = keyof typeof SCENE_PATHS;
+
+export const EDITORIAL_ILLUSTRATIONS = [
+  'auth-login-desktop',
+  'auth-login-mobile',
+  'board-masthead',
+  'editorial-archive',
+  'editorial-knowledge',
+  'editorial-people',
+  'editorial-rain',
+  'editorial-signal',
+  'editorial-stories',
+  'home-hero-desktop',
+  'home-hero-mobile',
+  'moon-city-orbit',
+  'story-workbench-masthead',
+] as const;
+
+export type EditorialIllustrationSlug = (typeof EDITORIAL_ILLUSTRATIONS)[number];
+
+export const LEGACY_STATE_ILLUSTRATIONS = [
+  'access-denied',
+  'empty',
+  'no-activity',
+  'no-results',
+  'not-found',
+  'offline',
+  'onboarding',
+  'orbit-pattern',
+] as const;
+
+export type LegacyStateIllustrationSlug = (typeof LEGACY_STATE_ILLUSTRATIONS)[number];
+export type LegacyStateTone = 'dark' | 'light';
+
+export const MATERIAL_ASSETS = [
+  'brush-strip-long',
+  'brush-strip-short',
+  'doodle-arrow',
+  'doodle-bolt',
+  'doodle-crown',
+  'doodle-smiley',
+  'doodle-star',
+  'folded-corner',
+  'ink-splatter-md',
+  'ink-splatter-sm',
+  'motif-cross-out',
+  'motif-eye-target',
+  'motif-globe-grid',
+  'motif-moon-phases',
+  'motif-orbit',
+  'motif-underline',
+  'paper-note',
+  'scuffed-border',
+  'stamp-outline',
+  'tape-strip',
+  'tile-halftone',
+  'tile-scratch',
+  'tile-speckle',
+  'torn-corner-bl',
+  'torn-corner-br',
+  'torn-corner-tl',
+  'torn-corner-tr',
+  'torn-edge-bottom',
+  'torn-edge-left',
+  'torn-edge-right',
+  'torn-edge-top',
+] as const;
+
+export type MaterialSlug = (typeof MATERIAL_ASSETS)[number];
+
+export const SOUND_ASSETS = [
+  'ambience-archive-quiet',
+  'ambience-moon-city-night',
+  'ambience-street-rain',
+  'ambience-underground-hum',
+  'ui-alert',
+  'ui-signal',
+  'ui-success',
+] as const;
+
+export type SoundSlug = (typeof SOUND_ASSETS)[number];
+
+export const CREW_CLIP_IDS = ['idle', 'walk', 'turn', 'hair-move'] as const;
+
+export type CrewClipId = (typeof CREW_CLIP_IDS)[number];
 
 export interface UniverseAssetLookupOptions {
   readonly basePath?: string;
@@ -165,9 +257,23 @@ export interface ResolvedUniverseImage {
   readonly alt: string;
 }
 
+export interface ResolvedUniverseSound {
+  readonly path: string;
+  readonly src: string;
+  readonly label: string;
+  readonly format: 'wav';
+}
+
 export interface ResolvedCharacterClip extends SpriteClipMetadata {
   readonly characterId: 'kuro-signal';
   readonly clipId: KuroClipId;
+  readonly framePaths: readonly string[];
+  readonly fallbackPath: string;
+}
+
+export interface ResolvedCrewClip extends SpriteClipMetadata {
+  readonly characterId: 'crew-01';
+  readonly clipId: CrewClipId;
   readonly framePaths: readonly string[];
   readonly fallbackPath: string;
 }
@@ -306,6 +412,57 @@ export function getBrandMarkAsset(
   return buildImage(path, alt, opts.basePath);
 }
 
+/** Resolve an editorial masthead, hero, or storytelling illustration (.webp). */
+export function getEditorialIllustration(
+  slug: EditorialIllustrationSlug,
+  opts: UniverseAssetLookupOptions = {}
+): ResolvedUniverseImage {
+  return buildImage(
+    `illustrations/${slug}.webp`,
+    `${WORDS(slug)} illustration`,
+    opts.basePath
+  );
+}
+
+/** Resolve a dark/light monochrome vector state illustration (.svg). */
+export function getLegacyStateIllustration(
+  slug: LegacyStateIllustrationSlug,
+  tone: LegacyStateTone = 'dark',
+  opts: UniverseAssetLookupOptions = {}
+): ResolvedUniverseImage {
+  return buildImage(
+    `illustrations/${slug}-${tone}.svg`,
+    `${WORDS(slug)} (${tone}) illustration`,
+    opts.basePath
+  );
+}
+
+/** Resolve a MoonWitness surface material, torn edge, doodle, or halftone tile (.svg). */
+export function getMaterialAsset(
+  material: MaterialSlug,
+  opts: UniverseAssetLookupOptions = {}
+): ResolvedUniverseImage {
+  return buildImage(
+    `materials/${material}.svg`,
+    `${WORDS(material)} material`,
+    opts.basePath
+  );
+}
+
+/** Resolve a MoonWitness UI sound cue or ambient audio loop (.wav). */
+export function getSoundAsset(
+  sound: SoundSlug,
+  opts: Pick<UniverseAssetLookupOptions, 'basePath'> = {}
+): ResolvedUniverseSound {
+  const path = `sounds/${sound}.wav`;
+  return {
+    path,
+    src: resolveUniverseAsset(path, opts.basePath),
+    label: `${WORDS(sound)} audio`,
+    format: 'wav',
+  };
+}
+
 /** Resolve a 4-frame sprite clip descriptor compatible with SpritePlayer. */
 export function getCharacterClip(
   clipId: KuroClipId,
@@ -328,5 +485,31 @@ export function getCharacterClip(
     pingPong: opts.pingPong ?? true,
     width: opts.width ?? 512,
     height: opts.height ?? 512,
+  };
+}
+
+/** Resolve a 4-frame vector animation clip for Crew 01 compatible with SpritePlayer. */
+export function getCrewClip(
+  clipId: CrewClipId,
+  opts: CharacterClipLookupOptions = {}
+): ResolvedCrewClip {
+  const dir = clipId === 'hair-move' ? 'crew-01-hair' : `crew-01-${clipId}`;
+  const stem = `crew-01-${clipId}`;
+  const framePaths = ['01', '02', '03', '04'].map((f) => `animation/${dir}/${stem}-frame-${f}.svg`);
+  const frames = framePaths.map((p) => resolveUniverseAsset(p, opts.basePath));
+  return {
+    id: stem,
+    characterId: 'crew-01',
+    clipId,
+    framePaths,
+    frames,
+    fallbackPath: framePaths[0],
+    fallbackAsset: frames[0],
+    fps: opts.fps ?? 6,
+    durationMs: opts.durationMs,
+    loop: opts.loop ?? true,
+    pingPong: opts.pingPong ?? true,
+    width: opts.width ?? 256,
+    height: opts.height ?? 384,
   };
 }

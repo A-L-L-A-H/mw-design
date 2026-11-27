@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react';
+import { forwardRef, type ComponentProps, type ReactNode } from 'react';
 import { cn } from '../lib/cn.js';
 
 export type PanelProps = Omit<ComponentProps<'section'>, 'children' | 'title'> & {
@@ -13,22 +13,26 @@ export type PanelProps = Omit<ComponentProps<'section'>, 'children' | 'title'> &
   headingLevel?: 2 | 3 | 4;
 };
 
-export function Panel({
-  title,
-  description,
-  actions,
-  children,
-  surface = 'default',
-  frame = 'line',
-  density = 'comfortable',
-  contentClassName,
-  headingLevel = 2,
-  className,
-  ...props
-}: PanelProps) {
+export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
+  {
+    title,
+    description,
+    actions,
+    children,
+    surface = 'default',
+    frame = 'line',
+    density = 'comfortable',
+    contentClassName,
+    headingLevel = 2,
+    className,
+    ...props
+  },
+  ref
+) {
   const Heading = `h${headingLevel}` as const;
   return (
     <section
+      ref={ref}
       className={cn('mw-ui-panel', className)}
       data-density={density}
       data-frame={frame}
@@ -47,4 +51,4 @@ export function Panel({
       <div className={cn('mw-ui-panel-content', contentClassName)}>{children}</div>
     </section>
   );
-}
+});

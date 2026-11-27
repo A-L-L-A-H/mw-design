@@ -2,6 +2,7 @@ import {
   Suspense,
   lazy,
   useEffect,
+  useRef,
   useState,
   type ComponentType,
   type ReactNode,
@@ -60,6 +61,17 @@ import tileHalftoneUrl from '@moonwitness/assets/materials/tile-halftone.svg';
 import scuffedBorderUrl from '@moonwitness/assets/materials/scuffed-border.svg';
 import { MetricTile } from '@moonwitness/ui/components/metric-tile';
 import { CharacterPreview } from '@moonwitness/ui/components/character-preview';
+import { ExampleCopyButton } from './ExampleCopyButton.js';
+import { ComponentPlayground } from './ComponentPlayground.js';
+import { CorePrimitivesShowcase } from './CorePrimitivesShowcase.js';
+import { TokenExportPanel } from './TokenExportPanel.js';
+import {
+  clearSectionViews,
+  getMostViewedSections,
+  readSectionViews,
+  recordSectionView,
+  type SectionViewCounts,
+} from './viewTracker.js';
 import idleFrameOne from '@moonwitness/assets/animation/crew-01-idle/crew-01-idle-frame-01.svg';
 import idleFrameTwo from '@moonwitness/assets/animation/crew-01-idle/crew-01-idle-frame-02.svg';
 import hairFrameOne from '@moonwitness/assets/animation/crew-01-hair/crew-01-hair-move-frame-01.svg';
@@ -301,13 +313,17 @@ function Example({
   wide?: boolean;
   children: ReactNode;
 }) {
+  const stageRef = useRef<HTMLDivElement>(null);
   return (
     <article className={wide ? 'catalog-example catalog-example-wide' : 'catalog-example'}>
       <div className="catalog-example-copy">
         <h3>{title}</h3>
         <p>{description}</p>
+        <ExampleCopyButton title={title} stageRef={stageRef} />
       </div>
-      <div className="catalog-example-stage">{children}</div>
+      <div className="catalog-example-stage" ref={stageRef}>
+        {children}
+      </div>
     </article>
   );
 }
@@ -386,15 +402,303 @@ function CatalogSection({
   );
 }
 
+type CatalogThemeMode = 'light' | 'dark' | 'high-contrast';
+
+const THEME_MODES: ReadonlyArray<{
+  id: CatalogThemeMode;
+  label: string;
+  ariaLabel: string;
+  title: string;
+}> = [
+  {
+    id: 'light',
+    label: 'Light',
+    ariaLabel: 'Use light theme',
+    title: 'Switch to light theme',
+  },
+  {
+    id: 'dark',
+    label: 'Dark',
+    ariaLabel: 'Use dark theme',
+    title: 'Switch to dark theme',
+  },
+  {
+    id: 'high-contrast',
+    label: 'High contrast',
+    ariaLabel: 'Use high contrast theme',
+    title: 'Switch to high contrast system theme',
+  },
+];
+
+const DENSITY_MODES: ReadonlyArray<{
+  id: SkinDensity;
+  label: string;
+  title: string;
+}> = [
+  {
+    id: 'comfortable',
+    label: 'Comfortable',
+    title: 'Switch preview cards to comfortable layout density',
+  },
+  {
+    id: 'compact',
+    label: 'Compact',
+    title: 'Switch preview cards to compact layout density',
+  },
+];
+
+const SEMANTIC_SWATCHES: ReadonlyArray<readonly [label: string, token: string]> = [
+  ['Page', '--mw-background'],
+  ['Surface', '--mw-surface'],
+  ['Primary', '--mw-primary'],
+  ['Destructive', '--mw-destructive'],
+  ['Success', '--mw-success'],
+  ['Info', '--mw-info'],
+];
+
+function ThemeModeGlyph({ mode }: { mode: CatalogThemeMode }) {
+  if (mode === 'light') {
+    return (
+      <svg
+        className="catalog-theme-glyph"
+        viewBox="0 0 16 16"
+        width="13"
+        height="13"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="8" cy="8" r="3.1" />
+        <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1" />
+      </svg>
+    );
+  }
+  if (mode === 'dark') {
+    return (
+      <svg
+        className="catalog-theme-glyph"
+        viewBox="0 0 16 16"
+        width="13"
+        height="13"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12.9 9.8A5.4 5.4 0 0 1 6.2 3.1a5.5 5.5 0 1 0 6.7 6.7Z" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      className="catalog-theme-glyph"
+      viewBox="0 0 16 16"
+      width="13"
+      height="13"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="5.5" />
+      <path d="M8 2.5a5.5 5.5 0 0 1 0 11Z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function DensityModeGlyph({ mode }: { mode: SkinDensity }) {
+  if (mode === 'comfortable') {
+    return (
+      <svg
+        className="catalog-theme-glyph"
+        viewBox="0 0 16 16"
+        width="13"
+        height="13"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        aria-hidden="true"
+      >
+        <rect x="2" y="2" width="5" height="5" />
+        <rect x="9" y="2" width="5" height="5" />
+        <rect x="2" y="9" width="5" height="5" />
+        <rect x="9" y="9" width="5" height="5" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      className="catalog-theme-glyph"
+      viewBox="0 0 16 16"
+      width="13"
+      height="13"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      aria-hidden="true"
+    >
+      <rect x="1.75" y="1.75" width="3" height="3" />
+      <rect x="6.5" y="1.75" width="3" height="3" />
+      <rect x="11.25" y="1.75" width="3" height="3" />
+      <rect x="1.75" y="6.5" width="3" height="3" />
+      <rect x="6.5" y="6.5" width="3" height="3" />
+      <rect x="11.25" y="6.5" width="3" height="3" />
+      <rect x="1.75" y="11.25" width="3" height="3" />
+      <rect x="6.5" y="11.25" width="3" height="3" />
+      <rect x="11.25" y="11.25" width="3" height="3" />
+    </svg>
+  );
+}
+
+function applyThemeMode(nextMode: CatalogThemeMode) {
+  const root = document.documentElement;
+  root.dataset.theme = nextMode;
+  root.classList.toggle('dark', nextMode === 'dark');
+  root.classList.toggle('high-contrast', nextMode === 'high-contrast');
+}
+
+function readSemanticTokens(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const computed = getComputedStyle(document.documentElement);
+  return Object.fromEntries(
+    SEMANTIC_SWATCHES.map(([, token]) => [token, computed.getPropertyValue(token).trim()])
+  );
+}
+
+const SECTION_COMPONENTS: Record<string, readonly string[]> = {
+  foundations: [
+    'Avatar',
+    'Badge',
+    'SectionRibbon',
+    'Semantic colors',
+    'Icons',
+    'Skin switcher',
+    'Density',
+    'Export tokens',
+    'Download CSS',
+    'Download JSON',
+  ],
+  playground: [
+    'Playground',
+    'Props editor',
+    'Button',
+    'Badge',
+    'Alert',
+    'Progress',
+    'Field',
+    'Input',
+    'Panel',
+    'SectionRibbon',
+    'Live JSX',
+  ],
+  'core-primitives': [
+    'Alert',
+    'Progress',
+    'Spinner',
+    'Separator',
+    'Card',
+    'Accordion',
+    'RadioGroup',
+    'CopyButton',
+    'ThemeProvider',
+    'Checkbox',
+    'Badge',
+    'Avatar',
+    'Button loading',
+  ],
+  'board-proof': ['Board dashboard', 'MetricTile', 'Panel', 'Kanban'],
+  brand: ['BrandMark', 'Lockup', 'Wordmark', 'Symbol', 'Logo'],
+  typography: ['Typography', 'Display', 'Brush', 'Grunge', 'Mono', 'Type scale'],
+  materials: ['PaperNote', 'TapeStrip', 'TornEdge', 'Halftone', 'Xerox', 'Zine', 'Motion'],
+  'icons-materials': ['Icons', 'Doodle', 'DecorativeMotif', 'Material SVG'],
+  'workbench-proof': ['Story Workbench', 'Editor', 'Inspector'],
+  'editorial-proof': ['Editorial hero', 'ArtworkFrame', 'Article'],
+  actions: ['Button', 'Tooltip', 'Toast', 'Feedback'],
+  forms: ['Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'Switch', 'Label', 'FilterFacetBar'],
+  overlays: [
+    'Dialog',
+    'Popover',
+    'Sheet',
+    'DropdownMenu',
+    'Command',
+    'Tabs',
+    'Toolbar',
+    'PageHeader',
+  ],
+  'data-display': ['Table', 'Pagination', 'KanbanBoard', 'Skeleton', 'EmptyState'],
+  'auth-coverage': ['Auth', 'Login', 'Session', 'Route coverage'],
+  'integration-coverage': ['Integration', 'Boundary', 'API'],
+  'request-coverage': ['Purchase request', 'Workflow', 'Approval'],
+  assets: ['AssetBrowser', 'Asset inventory', 'Media'],
+  'asset-diagnostics': ['AssetDiagnostics', 'Audit', 'Provenance'],
+  'orm-storage-coverage': ['Attachment', 'Storage', 'Upload'],
+  'ai-coverage': ['AI Corporation', 'Agent'],
+  'character-preview': ['CharacterPreview', 'Sprite', 'Animation', 'crew-01'],
+  'scene-environment-inspector': ['SceneLab', 'ComicLab', 'Parallax', 'Timeline', 'Moon City'],
+  'fx-lab': ['FXLab', 'Particles', 'Transitions', 'Soundscape', 'Audio'],
+  'extended-controls': [
+    'BrandMark',
+    'Breadcrumbs',
+    'ConfirmDialog',
+    'DatePicker',
+    'ErrorState',
+    'InboxPopover',
+    'LogConsole',
+    'ModePicker',
+    'NumberInput',
+    'SectionRibbon',
+    'SmartButtonBox',
+    'StatusBar',
+    'TagInput',
+    'UpdateBanner',
+  ],
+  charts: ['Chart', 'BarChart', 'LineChart', 'Data visualization'],
+  'visual-universe': [
+    'ComicPanel',
+    'MangaFrame',
+    'SpeechBubble',
+    'StickerBadge',
+    'CharacterDisplay',
+    'CharacterReaction',
+    'QuestCard',
+    'AchievementBadge',
+    'RewardPanel',
+    'Signal Riot',
+  ],
+};
+
+const THEME_TRANSITION_MS = 280;
+
 function CatalogContent() {
-  const [dark, setDark] = useState(false);
+  const [themeMode, setThemeMode] = useState<CatalogThemeMode>('light');
   const [skin, setSkin] = useState<SkinId>(DEFAULT_SKIN_ID);
   const [density, setDensity] = useState<SkinDensity>('comfortable');
+  const [resolvedTokens, setResolvedTokens] = useState<Record<string, string>>({});
+  const themeTransitionTimerRef = useRef<number | null>(null);
+  const sidebarSearchRef = useRef<HTMLInputElement>(null);
+  const isApplePlatform =
+    typeof navigator !== 'undefined' &&
+    /mac|iphone|ipad|ipod/i.test(navigator.platform || navigator.userAgent);
 
   useEffect(() => {
     document.documentElement.dataset.skin = skin;
     document.documentElement.dataset.density = density;
-  }, [skin, density]);
+    applyThemeMode(themeMode);
+    setResolvedTokens(readSemanticTokens());
+  }, [skin, density, themeMode]);
+
+  useEffect(() => {
+    return () => {
+      if (themeTransitionTimerRef.current !== null) {
+        window.clearTimeout(themeTransitionTimerRef.current);
+      }
+      delete document.documentElement.dataset.themeTransitioning;
+    };
+  }, []);
   const [page, setPage] = useState(1);
   const [checked, setChecked] = useState(true);
   const [indeterminateChecked, setIndeterminateChecked] = useState<boolean | 'indeterminate'>(
@@ -404,6 +708,11 @@ function CatalogContent() {
   const [assignment, setAssignment] = useState('none');
   const [notesValue, setNotesValue] = useState('  First line\n    Indented detail');
   const [query, setQuery] = useState('');
+  const [sidebarQuery, setSidebarQuery] = useState('');
+  const [sectionViews, setSectionViews] = useState<SectionViewCounts>(() => readSectionViews());
+  const lastTrackedHashRef = useRef<string | null>(
+    typeof window !== 'undefined' ? window.location.hash || null : null
+  );
   const [addonSort, setAddonSort] = useState<'ascending' | 'descending' | null>(null);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [selectedCommand, setSelectedCommand] = useState('Create story');
@@ -440,25 +749,46 @@ function CatalogContent() {
     );
   }
 
-  function toggleTheme() {
-    setDark((current) => {
-      const next = !current;
-      document.documentElement.classList.toggle('dark', next);
-      return next;
-    });
+  function triggerThemeTransition() {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = document.documentElement;
+    root.dataset.themeTransitioning = 'true';
+    if (themeTransitionTimerRef.current !== null) {
+      window.clearTimeout(themeTransitionTimerRef.current);
+    }
+    themeTransitionTimerRef.current = window.setTimeout(() => {
+      delete root.dataset.themeTransitioning;
+      themeTransitionTimerRef.current = null;
+    }, THEME_TRANSITION_MS);
+  }
+
+  function selectThemeMode(nextMode: CatalogThemeMode) {
+    if (nextMode !== themeMode) {
+      triggerThemeTransition();
+    }
+    setThemeMode(nextMode);
+    applyThemeMode(nextMode);
+    setResolvedTokens(readSemanticTokens());
   }
 
   function selectSkin(nextSkin: SkinId) {
+    if (nextSkin !== skin) {
+      triggerThemeTransition();
+    }
     setSkin(nextSkin);
     document.documentElement.dataset.skin = nextSkin;
+    setResolvedTokens(readSemanticTokens());
+  }
+
+  function selectDensity(nextDensity: SkinDensity) {
+    setDensity(nextDensity);
+    document.documentElement.dataset.density = nextDensity;
+    setResolvedTokens(readSemanticTokens());
   }
 
   function toggleDensity() {
-    setDensity((current) => {
-      const next: SkinDensity = current === 'comfortable' ? 'compact' : 'comfortable';
-      document.documentElement.dataset.density = next;
-      return next;
-    });
+    selectDensity(density === 'comfortable' ? 'compact' : 'comfortable');
   }
 
   const [requestedHash, setRequestedHash] = useState(() => window.location.hash);
@@ -480,20 +810,16 @@ function CatalogContent() {
         <>
           <Example
             title="Semantic colors"
-            description="Theme-aware surfaces and status colors keep meaning stable."
+            description="Theme-aware surfaces and status colors keep meaning stable across light, dark, and high-contrast modes."
           >
             <div className="swatch-grid">
-              {[
-                ['Page', 'var(--mw-background)'],
-                ['Surface', 'var(--mw-surface)'],
-                ['Primary', 'var(--mw-primary)'],
-                ['Destructive', 'var(--mw-destructive)'],
-                ['Success', 'var(--mw-success)'],
-                ['Info', 'var(--mw-info)'],
-              ].map(([label, color]) => (
+              {SEMANTIC_SWATCHES.map(([label, token]) => (
                 <div className="swatch" key={label}>
-                  <span style={{ backgroundColor: color }} />
+                  <span style={{ backgroundColor: `var(${token})` }} />
                   <small>{label}</small>
+                  <code className="swatch-token" title={token}>
+                    {resolvedTokens[token] || token}
+                  </code>
                 </div>
               ))}
             </div>
@@ -572,8 +898,30 @@ function CatalogContent() {
               </Button>
             </div>
           </Example>
+          <Example
+            title="Export active design tokens"
+            description="Generate and download a CSS custom-property stylesheet or JSON object reflecting the currently active theme, skin, density, colors, spacing scales, and typography."
+          >
+            <TokenExportPanel themeMode={themeMode} skin={skin} density={density} />
+          </Example>
         </>
       ),
+    },
+    playground: {
+      label: 'Interactive playground',
+      title: 'Interactive playground',
+      description:
+        'Modify live component props—variants, sizes, treatments, frames, labels, and states—to inspect rendered output and JSX in real time.',
+      loading: 'eager',
+      renderer: () => <ComponentPlayground />,
+    },
+    'core-primitives': {
+      label: 'Core primitives',
+      title: 'Core consumer primitives',
+      description:
+        'Everyday UI building blocks—Alert, Progress, Spinner, Separator, Card, Accordion, RadioGroup, CopyButton, and ThemeProvider—exported from @moonwitness/ui.',
+      loading: 'eager',
+      renderer: () => <CorePrimitivesShowcase Example={Example} />,
     },
     'board-proof': {
       label: 'Board dashboard proof',
@@ -1706,9 +2054,66 @@ function CatalogContent() {
   });
 
   const activeSectionId = resolveCatalogSectionHash(requestedHash, sectionRegistry);
+  const mostViewedSections = getMostViewedSections(sectionViews, sectionRegistry, 4);
+  const normalizedSidebarQuery = sidebarQuery.trim().toLocaleLowerCase();
+
+  function trackSectionView(sectionId: string) {
+    lastTrackedHashRef.current = `#${sectionId}`;
+    setSectionViews(recordSectionView(sectionId));
+  }
+
+  const filteredSidebarSections = normalizedSidebarQuery
+    ? sectionRegistry
+        .map((section) => {
+          const components = SECTION_COMPONENTS[section.id] ?? [];
+          const matchedComponents = components.filter((component) =>
+            component.toLocaleLowerCase().includes(normalizedSidebarQuery)
+          );
+          const sectionMatches =
+            section.label.toLocaleLowerCase().includes(normalizedSidebarQuery) ||
+            section.title.toLocaleLowerCase().includes(normalizedSidebarQuery) ||
+            section.id.toLocaleLowerCase().includes(normalizedSidebarQuery) ||
+            section.description.toLocaleLowerCase().includes(normalizedSidebarQuery);
+          if (!sectionMatches && matchedComponents.length === 0) return null;
+          return { section, matchedComponents };
+        })
+        .filter(
+          (
+            entry
+          ): entry is { section: RegisteredCatalogSection; matchedComponents: string[] } =>
+            entry !== null
+        )
+    : sectionRegistry.map((section) => ({ section, matchedComponents: [] as string[] }));
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.defaultPrevented ||
+        !(event.ctrlKey || event.metaKey) ||
+        event.altKey ||
+        event.shiftKey ||
+        event.key.toLowerCase() !== 'k'
+      ) {
+        return;
+      }
+      const input = sidebarSearchRef.current;
+      if (!input) return;
+      event.preventDefault();
+      input.focus();
+      input.select();
+      input.scrollIntoView({ block: 'nearest' });
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   useEffect(() => {
     if (!activeSectionId) return;
+    const expectedHash = `#${activeSectionId}`;
+    if (requestedHash === expectedHash && lastTrackedHashRef.current !== expectedHash) {
+      lastTrackedHashRef.current = expectedHash;
+      setSectionViews(recordSectionView(activeSectionId));
+    }
     const frame = window.requestAnimationFrame(() => {
       document.getElementById(activeSectionId)?.scrollIntoView({ block: 'start' });
     });
@@ -1729,17 +2134,129 @@ function CatalogContent() {
               <small>UI CATALOG</small>
             </span>
           </a>
-          <nav className="catalog-nav" aria-label="Component sections">
-            <span className="catalog-nav-label">LIBRARY</span>
-            {sectionRegistry.map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                aria-current={activeSectionId === section.id ? 'location' : undefined}
+          <div
+            className="catalog-sidebar-search"
+            role="search"
+            aria-label="Filter catalog components"
+          >
+            <SearchIcon className="catalog-sidebar-search-icon" aria-hidden="true" />
+            <input
+              ref={sidebarSearchRef}
+              type="search"
+              className="catalog-sidebar-search-input"
+              value={sidebarQuery}
+              onChange={(event) => setSidebarQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape' && sidebarQuery) {
+                  event.preventDefault();
+                  setSidebarQuery('');
+                } else if (event.key === 'Enter' && filteredSidebarSections.length > 0) {
+                  event.preventDefault();
+                  const firstId = filteredSidebarSections[0].section.id;
+                  trackSectionView(firstId);
+                  window.location.hash = `#${firstId}`;
+                  document.getElementById(firstId)?.scrollIntoView({ block: 'start' });
+                }
+              }}
+              placeholder="Filter components..."
+              aria-label="Filter components"
+              aria-keyshortcuts="Control+K Meta+K"
+              data-testid="sidebar-component-search"
+            />
+            {sidebarQuery ? (
+              <button
+                type="button"
+                className="catalog-sidebar-search-clear"
+                aria-label="Clear component filter"
+                onClick={() => setSidebarQuery('')}
               >
-                {section.label}
-              </a>
-            ))}
+                ×
+              </button>
+            ) : (
+              <kbd className="catalog-sidebar-search-kbd" aria-hidden="true">
+                {isApplePlatform ? '⌘K' : 'Ctrl+K'}
+              </kbd>
+            )}
+          </div>
+          {!normalizedSidebarQuery && mostViewedSections.length > 0 ? (
+            <section
+              className="catalog-most-viewed"
+              aria-label="Most viewed components"
+              data-testid="sidebar-most-viewed"
+            >
+              <div className="catalog-most-viewed-header">
+                <span className="catalog-nav-label">MOST VIEWED</span>
+                <button
+                  type="button"
+                  className="catalog-most-viewed-clear"
+                  aria-label="Clear most viewed history"
+                  onClick={() => {
+                    lastTrackedHashRef.current = window.location.hash || null;
+                    setSectionViews(clearSectionViews());
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
+              <div className="catalog-most-viewed-list">
+                {mostViewedSections.map(({ section, count }) => (
+                  <a
+                    key={section.id}
+                    className="catalog-most-viewed-link"
+                    href={`#${section.id}`}
+                    aria-current={activeSectionId === section.id ? 'location' : undefined}
+                    onClick={() => trackSectionView(section.id)}
+                  >
+                    <span className="catalog-most-viewed-title">{section.label}</span>
+                    <span
+                      className="catalog-most-viewed-count"
+                      aria-label={`${count} ${count === 1 ? 'view' : 'views'}`}
+                    >
+                      {count}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ) : null}
+          <nav className="catalog-nav" aria-label="Component sections">
+            <span className="catalog-nav-label">
+              {normalizedSidebarQuery
+                ? `LIBRARY · ${filteredSidebarSections.length}/${sectionRegistry.length}`
+                : 'LIBRARY'}
+            </span>
+            {filteredSidebarSections.length > 0 ? (
+              filteredSidebarSections.map(({ section, matchedComponents }) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  aria-current={activeSectionId === section.id ? 'location' : undefined}
+                  onClick={() => trackSectionView(section.id)}
+                >
+                  {normalizedSidebarQuery && matchedComponents.length > 0 ? (
+                    <>
+                      <span>{section.label}</span>
+                      <small className="catalog-nav-match">
+                        {matchedComponents.slice(0, 3).join(' · ')}
+                      </small>
+                    </>
+                  ) : (
+                    section.label
+                  )}
+                </a>
+              ))
+            ) : (
+              <div className="catalog-nav-empty" role="status">
+                <span>No matching components</span>
+                <button
+                  type="button"
+                  className="catalog-nav-empty-reset"
+                  onClick={() => setSidebarQuery('')}
+                >
+                  Clear filter
+                </button>
+              </div>
+            )}
           </nav>
           <div className="catalog-sidebar-footer">
             <span>Shared tokens · RC.1</span>
@@ -1760,7 +2277,7 @@ function CatalogContent() {
                   style={{
                     minHeight: '2rem',
                     height: '2rem',
-                    width: '12rem',
+                    width: '9.5rem',
                     maxWidth: '100%',
                   }}
                 >
@@ -1774,9 +2291,55 @@ function CatalogContent() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="sm" onClick={toggleTheme} aria-pressed={dark}>
-                {dark ? 'Use light theme' : 'Use dark theme'}
-              </Button>
+              <div
+                className="catalog-density-toggle"
+                role="group"
+                aria-label="Grid density"
+                data-testid="grid-density-toggle"
+              >
+                {DENSITY_MODES.map((option) => {
+                  const active = density === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      className="catalog-density-toggle-button"
+                      data-active={active ? 'true' : 'false'}
+                      aria-pressed={active}
+                      title={option.title}
+                      onClick={() => selectDensity(option.id)}
+                    >
+                      <DensityModeGlyph mode={option.id} />
+                      <span>{option.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div
+                className="catalog-theme-toggle"
+                role="group"
+                aria-label="Color theme"
+                data-testid="theme-mode-toggle"
+              >
+                {THEME_MODES.map((mode) => {
+                  const active = themeMode === mode.id;
+                  return (
+                    <button
+                      key={mode.id}
+                      type="button"
+                      className="catalog-theme-toggle-button"
+                      data-active={active ? 'true' : 'false'}
+                      aria-label={mode.ariaLabel}
+                      aria-pressed={active}
+                      title={mode.title}
+                      onClick={() => selectThemeMode(mode.id)}
+                    >
+                      <ThemeModeGlyph mode={mode.id} />
+                      <span>{mode.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </header>
 

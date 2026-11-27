@@ -144,8 +144,8 @@ test('riot-universe manifest and source provenance validate cleanly', () => {
   );
   assert.equal(
     riotSources.length,
-    18,
-    '16 direct AI masters + 2 procedural halftone masters tracked'
+    25,
+    '23 direct AI masters (including new expressions, poses, cel Walter White, and error static scene) + 2 procedural halftone masters tracked'
   );
   for (const src of riotSources) {
     const prov = licenses.sourceAssets.find((p) => p.path === src.path);
@@ -174,6 +174,13 @@ test('all 16 Kuro expressions, 12 poses, and Vesper portrait exist with flood-fi
     const rel = `illustrations/riot-universe/characters/vesper-ink-portrait.${ext}`;
     assert.ok(byPath.has(rel), `${rel} registered`);
     await assertAlphaCutout(rel, 512, 512);
+  }
+  for (const expr of ['calm', 'sweeping', 'gloating', 'victorious']) {
+    for (const ext of ['png', 'webp']) {
+      const rel = `illustrations/riot-universe/characters/walter-white-expression-${expr}.${ext}`;
+      assert.ok(byPath.has(rel), `${rel} registered`);
+      await assertAlphaCutout(rel, 512, 512);
+    }
   }
 });
 

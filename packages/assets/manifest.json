@@ -272,7 +272,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 180,
+        "frameDurationMs": 170,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -374,7 +374,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 180,
+        "frameDurationMs": 175,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -476,7 +476,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 160,
+        "frameDurationMs": 150,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -499,8 +499,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "animation/kuro-signal-error/kuro-signal-error-frame-02.png",
@@ -514,8 +514,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "animation/kuro-signal-error/kuro-signal-error-frame-03.png",
@@ -529,8 +529,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "animation/kuro-signal-error/kuro-signal-error-frame-04.png",
@@ -544,8 +544,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "animation/kuro-signal-error/kuro-signal-error-sheet.png",
@@ -559,8 +559,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "animation/kuro-signal-idle/kuro-signal-idle-clip.json",
@@ -578,7 +578,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 260,
+        "frameDurationMs": 240,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -680,7 +680,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 180,
+        "frameDurationMs": 170,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -782,7 +782,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 200,
+        "frameDurationMs": 190,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -884,7 +884,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 280,
+        "frameDurationMs": 260,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -986,7 +986,7 @@
         "frameWidth": 512,
         "frameHeight": 512,
         "frameCount": 4,
-        "frameDurationMs": 200,
+        "frameDurationMs": 190,
         "columns": 2,
         "rows": 2,
         "loop": true,
@@ -1265,6 +1265,604 @@
       "format": "svg",
       "width": 1280,
       "height": 320
+    },
+    {
+      "path": "brand/rendered/bluesky.dark.png",
+      "kind": "social-card",
+      "variant": "bluesky-dark",
+      "format": "png",
+      "width": 1600,
+      "height": 900,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/bluesky.png",
+      "kind": "social-card",
+      "variant": "bluesky-light",
+      "format": "png",
+      "width": 1600,
+      "height": 900,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/devto-cover.dark.png",
+      "kind": "social-card",
+      "variant": "devto-cover-dark",
+      "format": "png",
+      "width": 1000,
+      "height": 420,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/devto-cover.png",
+      "kind": "social-card",
+      "variant": "devto-cover-light",
+      "format": "png",
+      "width": 1000,
+      "height": 420,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/github.dark.png",
+      "kind": "social-card",
+      "variant": "github-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 640,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/github.png",
+      "kind": "social-card",
+      "variant": "github-light",
+      "format": "png",
+      "width": 1280,
+      "height": 640,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/instagram-square.dark.png",
+      "kind": "social-card",
+      "variant": "instagram-square-dark",
+      "format": "png",
+      "width": 1080,
+      "height": 1080,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/instagram-square.png",
+      "kind": "social-card",
+      "variant": "instagram-square-light",
+      "format": "png",
+      "width": 1080,
+      "height": 1080,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/instagram-story.dark.png",
+      "kind": "social-card",
+      "variant": "instagram-story-dark",
+      "format": "png",
+      "width": 1080,
+      "height": 1920,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/instagram-story.png",
+      "kind": "social-card",
+      "variant": "instagram-story-light",
+      "format": "png",
+      "width": 1080,
+      "height": 1920,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin-banner.dark.png",
+      "kind": "social-card",
+      "variant": "linkedin-banner-dark",
+      "format": "png",
+      "width": 1128,
+      "height": 191,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin-banner.png",
+      "kind": "social-card",
+      "variant": "linkedin-banner-light",
+      "format": "png",
+      "width": 1128,
+      "height": 191,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin-carousel.dark.png",
+      "kind": "social-card",
+      "variant": "linkedin-carousel-dark",
+      "format": "png",
+      "width": 1080,
+      "height": 1080,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin-carousel.png",
+      "kind": "social-card",
+      "variant": "linkedin-carousel-light",
+      "format": "png",
+      "width": 1080,
+      "height": 1080,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin.dark.png",
+      "kind": "social-card",
+      "variant": "linkedin-dark",
+      "format": "png",
+      "width": 1200,
+      "height": 627,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/linkedin.png",
+      "kind": "social-card",
+      "variant": "linkedin-light",
+      "format": "png",
+      "width": 1200,
+      "height": 627,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/og.dark.png",
+      "source": "brand/social-card.dark.svg",
+      "kind": "social-card",
+      "variant": "og-dark",
+      "format": "png",
+      "width": 1200,
+      "height": 630,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/og.png",
+      "source": "brand/social-card.svg",
+      "kind": "social-card",
+      "variant": "og-light",
+      "format": "png",
+      "width": 1200,
+      "height": 630,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/social-render-manifest.json",
+      "kind": "manifest",
+      "variant": "social-render",
+      "format": "json",
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/tiktok.dark.png",
+      "kind": "social-card",
+      "variant": "tiktok-dark",
+      "format": "png",
+      "width": 1080,
+      "height": 1920,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/tiktok.png",
+      "kind": "social-card",
+      "variant": "tiktok-light",
+      "format": "png",
+      "width": 1080,
+      "height": 1920,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/x-header.dark.png",
+      "kind": "social-card",
+      "variant": "x-header-dark",
+      "format": "png",
+      "width": 1500,
+      "height": 500,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/x-header.png",
+      "kind": "social-card",
+      "variant": "x-header-light",
+      "format": "png",
+      "width": 1500,
+      "height": 500,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/x-post.dark.png",
+      "kind": "social-card",
+      "variant": "x-post-dark",
+      "format": "png",
+      "width": 1600,
+      "height": 900,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/x-post.png",
+      "kind": "social-card",
+      "variant": "x-post-light",
+      "format": "png",
+      "width": 1600,
+      "height": 900,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-banner.dark.png",
+      "kind": "social-card",
+      "variant": "youtube-banner-dark",
+      "format": "png",
+      "width": 2560,
+      "height": 1440,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-banner.png",
+      "kind": "social-card",
+      "variant": "youtube-banner-light",
+      "format": "png",
+      "width": 2560,
+      "height": 1440,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-profile.dark.png",
+      "kind": "social-card",
+      "variant": "youtube-profile-dark",
+      "format": "png",
+      "width": 800,
+      "height": 800,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-profile.png",
+      "kind": "social-card",
+      "variant": "youtube-profile-light",
+      "format": "png",
+      "width": 800,
+      "height": 800,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnail.dark.png",
+      "kind": "social-card",
+      "variant": "youtube-thumbnail-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnail.png",
+      "kind": "social-card",
+      "variant": "youtube-thumbnail-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-00-channel-trailer.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-00-channel-trailer-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-00-channel-trailer.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-00-channel-trailer-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-01-declarative-models-in-5-minutes.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-01-declarative-models-in-5-minutes-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-01-declarative-models-in-5-minutes.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-01-declarative-models-in-5-minutes-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-02-addons-install-features-not-sql.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-02-addons-install-features-not-sql-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-02-addons-install-features-not-sql.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-02-addons-install-features-not-sql-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-03-the-board-your-data-your-way.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-03-the-board-your-data-your-way-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-03-the-board-your-data-your-way.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-03-the-board-your-data-your-way-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-04-model-api-live-coding.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-04-model-api-live-coding-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-04-model-api-live-coding.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-04-model-api-live-coding-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-05-transactional-addons-deep-dive.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-05-transactional-addons-deep-dive-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-05-transactional-addons-deep-dive.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-05-transactional-addons-deep-dive-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-06-multi-tenancy-rls.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-06-multi-tenancy-rls-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-06-multi-tenancy-rls.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-06-multi-tenancy-rls-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-07-saas-starter-in-30-minutes.dark.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-07-saas-starter-in-30-minutes-dark",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/ep-07-saas-starter-in-30-minutes.png",
+      "kind": "youtube-thumbnail",
+      "variant": "ep-07-saas-starter-in-30-minutes-light",
+      "format": "png",
+      "width": 1280,
+      "height": 720,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-thumbnails/thumbnails-manifest.json",
+      "kind": "manifest",
+      "variant": "youtube-thumbnails",
+      "format": "json",
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-watermark.dark.png",
+      "kind": "social-card",
+      "variant": "youtube-watermark-dark",
+      "format": "png",
+      "width": 150,
+      "height": 150,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
+    },
+    {
+      "path": "brand/rendered/youtube-watermark.png",
+      "kind": "social-card",
+      "variant": "youtube-watermark-light",
+      "format": "png",
+      "width": 150,
+      "height": 150,
+      "pack": "brand",
+      "domain": "visual-universe",
+      "status": "review",
+      "license": "ISC"
     },
     {
       "path": "brand/social-card.dark.png",
@@ -2583,8 +3181,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-angry.webp",
@@ -2598,8 +3196,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-celebrating.png",
@@ -2673,8 +3271,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-crying.webp",
@@ -2688,8 +3286,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-curious.png",
@@ -2733,8 +3331,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-excited-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-excited-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-determined.webp",
@@ -2748,8 +3346,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-excited-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-excited-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-disappointed.png",
@@ -2763,8 +3361,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-disappointed.webp",
@@ -2778,8 +3376,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-embarrassed.png",
@@ -2913,8 +3511,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-sad.webp",
@@ -2928,8 +3526,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-sleepy.png",
@@ -2943,8 +3541,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-sleepy.webp",
@@ -2958,8 +3556,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-expression-surprised.png",
@@ -3063,8 +3661,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-celebrating.webp",
@@ -3078,8 +3676,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-gaming.png",
@@ -3093,8 +3691,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-gaming.webp",
@@ -3108,8 +3706,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-holding-objects.png",
@@ -3153,8 +3751,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-jumping.webp",
@@ -3168,8 +3766,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-pointing.png",
@@ -3183,8 +3781,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-pointing.webp",
@@ -3198,8 +3796,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-reading.png",
@@ -3213,8 +3811,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-reading.webp",
@@ -3228,8 +3826,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-running.png",
@@ -3243,8 +3841,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-running.webp",
@@ -3258,8 +3856,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-sitting.png",
@@ -3273,8 +3871,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-sitting.webp",
@@ -3288,8 +3886,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-standing.png",
@@ -3333,8 +3931,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-walking.webp",
@@ -3348,8 +3946,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-running-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-waving.png",
@@ -3363,8 +3961,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-waving.webp",
@@ -3378,8 +3976,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-working.png",
@@ -3393,8 +3991,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/kuro-signal-pose-working.webp",
@@ -3408,8 +4006,8 @@
       "domain": "visual-universe",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
-      "sourceAsset": "source/artwork/riot-universe/kuro-signal-model-sheet-master.png"
+      "source": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "sourceAsset": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png"
     },
     {
       "path": "illustrations/riot-universe/characters/vesper-ink-portrait.png",
@@ -3440,6 +4038,126 @@
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "source": "source/artwork/riot-universe/vesper-ink-portrait-master.png",
       "sourceAsset": "source/artwork/riot-universe/vesper-ink-portrait-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-calm.png",
+      "kind": "character-sprite",
+      "variant": "expression-calm",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-calm.webp",
+      "kind": "character-sprite",
+      "variant": "expression-calm",
+      "subject": "walter-white",
+      "format": "webp",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-gloating.png",
+      "kind": "character-sprite",
+      "variant": "expression-gloating",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-gloating.webp",
+      "kind": "character-sprite",
+      "variant": "expression-gloating",
+      "subject": "walter-white",
+      "format": "webp",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-sweeping.png",
+      "kind": "character-sprite",
+      "variant": "expression-sweeping",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-sweeping.webp",
+      "kind": "character-sprite",
+      "variant": "expression-sweeping",
+      "subject": "walter-white",
+      "format": "webp",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-victorious.png",
+      "kind": "character-sprite",
+      "variant": "expression-victorious",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
+    },
+    {
+      "path": "illustrations/riot-universe/characters/walter-white-expression-victorious.webp",
+      "kind": "character-sprite",
+      "variant": "expression-victorious",
+      "subject": "walter-white",
+      "format": "webp",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-cel-master.png"
     },
     {
       "path": "illustrations/riot-universe/game/avatar-frame-riot.png",
@@ -3803,8 +4521,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/bg-riot-street-alley-master.png",
-      "sourceAsset": "source/artwork/riot-universe/bg-riot-street-alley-master.png"
+      "source": "source/artwork/riot-universe/scene-error-static-master.png",
+      "sourceAsset": "source/artwork/riot-universe/scene-error-static-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-achievement.webp",
@@ -3859,8 +4577,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-onboarding-welcome-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-onboarding-welcome-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-street-alley-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-street-alley-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-empty-collection.webp",
@@ -3873,8 +4591,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-empty-dashboard.webp",
@@ -3901,8 +4619,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/scene-error-static-master.png",
+      "sourceAsset": "source/artwork/riot-universe/scene-error-static-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-explore.webp",
@@ -3915,8 +4633,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-onboarding-welcome-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-onboarding-welcome-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-street-alley-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-street-alley-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-first-time.webp",
@@ -3971,8 +4689,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/scene-error-static-master.png",
+      "sourceAsset": "source/artwork/riot-universe/scene-error-static-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-no-activity.webp",
@@ -3985,8 +4703,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-no-favorites.webp",
@@ -4013,8 +4731,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-no-notifications.webp",
@@ -4041,8 +4759,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-street-alley-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-street-alley-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-not-found.webp",
@@ -4069,8 +4787,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/scene-error-static-master.png",
+      "sourceAsset": "source/artwork/riot-universe/scene-error-static-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-onboarding.webp",
@@ -4097,8 +4815,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-onboarding-welcome-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-onboarding-welcome-master.png"
+      "source": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png",
+      "sourceAsset": "source/artwork/riot-universe/bg-riot-arcade-workbench-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-success.webp",
@@ -4125,8 +4843,8 @@
       "domain": "ui-states",
       "status": "approved",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
-      "sourceAsset": "source/artwork/riot-universe/scene-empty-signal-static-master.png"
+      "source": "source/artwork/riot-universe/scene-error-static-master.png",
+      "sourceAsset": "source/artwork/riot-universe/scene-error-static-master.png"
     },
     {
       "path": "illustrations/riot-universe/states/state-welcome.webp",
@@ -5082,6 +5800,19 @@
       "source": "packages/assets/scripts/generate-riot-universe.mjs"
     },
     {
+      "path": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 1024,
+      "height": 1024,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png",
       "kind": "source",
       "variant": "riot-universe-master",
@@ -5121,6 +5852,19 @@
       "source": "packages/assets/scripts/generate-riot-universe.mjs"
     },
     {
+      "path": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 1024,
+      "height": 1024,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
       "kind": "source",
       "variant": "riot-universe-master",
@@ -5134,12 +5878,64 @@
       "source": "packages/assets/scripts/generate-riot-universe.mjs"
     },
     {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 848,
+      "height": 1264,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 848,
+      "height": 1264,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 848,
+      "height": 1264,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
       "path": "source/artwork/riot-universe/scene-empty-signal-static-master.png",
       "kind": "source",
       "variant": "riot-universe-master",
       "format": "png",
       "width": 1376,
       "height": 768,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/scene-error-static-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 1200,
+      "height": 896,
       "pack": "riot-universe",
       "domain": "visual-universe",
       "status": "approved",
@@ -5179,6 +5975,75 @@
       "format": "png",
       "width": 1024,
       "height": 1024,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-cel-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "format": "png",
+      "width": 1024,
+      "height": 1024,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
+      "pack": "riot-universe",
+      "domain": "visual-universe",
+      "status": "approved",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "source": "packages/assets/scripts/generate-riot-universe.mjs"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png",
+      "kind": "source",
+      "variant": "riot-universe-master",
+      "subject": "walter-white",
+      "format": "png",
+      "width": 512,
+      "height": 512,
       "pack": "riot-universe",
       "domain": "visual-universe",
       "status": "approved",
@@ -5438,780 +6303,6 @@
       "status": "approved",
       "license": "ISC",
       "source": "MoonWitness contributors"
-    },
-    {
-      "path": "brand/rendered/og.png",
-      "source": "brand/social-card.svg",
-      "kind": "social-card",
-      "variant": "og-light",
-      "format": "png",
-      "width": 1200,
-      "height": 630,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/og.dark.png",
-      "source": "brand/social-card.dark.svg",
-      "kind": "social-card",
-      "variant": "og-dark",
-      "format": "png",
-      "width": 1200,
-      "height": 630,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-banner.png",
-      "kind": "social-card",
-      "variant": "youtube-banner-light",
-      "format": "png",
-      "width": 2560,
-      "height": 1440,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-banner.dark.png",
-      "kind": "social-card",
-      "variant": "youtube-banner-dark",
-      "format": "png",
-      "width": 2560,
-      "height": 1440,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnail.png",
-      "kind": "social-card",
-      "variant": "youtube-thumbnail-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnail.dark.png",
-      "kind": "social-card",
-      "variant": "youtube-thumbnail-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-profile.png",
-      "kind": "social-card",
-      "variant": "youtube-profile-light",
-      "format": "png",
-      "width": 800,
-      "height": 800,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-profile.dark.png",
-      "kind": "social-card",
-      "variant": "youtube-profile-dark",
-      "format": "png",
-      "width": 800,
-      "height": 800,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-watermark.png",
-      "kind": "social-card",
-      "variant": "youtube-watermark-light",
-      "format": "png",
-      "width": 150,
-      "height": 150,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-watermark.dark.png",
-      "kind": "social-card",
-      "variant": "youtube-watermark-dark",
-      "format": "png",
-      "width": 150,
-      "height": 150,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/x-header.png",
-      "kind": "social-card",
-      "variant": "x-header-light",
-      "format": "png",
-      "width": 1500,
-      "height": 500,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/x-header.dark.png",
-      "kind": "social-card",
-      "variant": "x-header-dark",
-      "format": "png",
-      "width": 1500,
-      "height": 500,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/x-post.png",
-      "kind": "social-card",
-      "variant": "x-post-light",
-      "format": "png",
-      "width": 1600,
-      "height": 900,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/x-post.dark.png",
-      "kind": "social-card",
-      "variant": "x-post-dark",
-      "format": "png",
-      "width": 1600,
-      "height": 900,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin.png",
-      "kind": "social-card",
-      "variant": "linkedin-light",
-      "format": "png",
-      "width": 1200,
-      "height": 627,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin.dark.png",
-      "kind": "social-card",
-      "variant": "linkedin-dark",
-      "format": "png",
-      "width": 1200,
-      "height": 627,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin-banner.png",
-      "kind": "social-card",
-      "variant": "linkedin-banner-light",
-      "format": "png",
-      "width": 1128,
-      "height": 191,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin-banner.dark.png",
-      "kind": "social-card",
-      "variant": "linkedin-banner-dark",
-      "format": "png",
-      "width": 1128,
-      "height": 191,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin-carousel.png",
-      "kind": "social-card",
-      "variant": "linkedin-carousel-light",
-      "format": "png",
-      "width": 1080,
-      "height": 1080,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/linkedin-carousel.dark.png",
-      "kind": "social-card",
-      "variant": "linkedin-carousel-dark",
-      "format": "png",
-      "width": 1080,
-      "height": 1080,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/instagram-square.png",
-      "kind": "social-card",
-      "variant": "instagram-square-light",
-      "format": "png",
-      "width": 1080,
-      "height": 1080,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/instagram-square.dark.png",
-      "kind": "social-card",
-      "variant": "instagram-square-dark",
-      "format": "png",
-      "width": 1080,
-      "height": 1080,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/instagram-story.png",
-      "kind": "social-card",
-      "variant": "instagram-story-light",
-      "format": "png",
-      "width": 1080,
-      "height": 1920,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/instagram-story.dark.png",
-      "kind": "social-card",
-      "variant": "instagram-story-dark",
-      "format": "png",
-      "width": 1080,
-      "height": 1920,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/tiktok.png",
-      "kind": "social-card",
-      "variant": "tiktok-light",
-      "format": "png",
-      "width": 1080,
-      "height": 1920,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/tiktok.dark.png",
-      "kind": "social-card",
-      "variant": "tiktok-dark",
-      "format": "png",
-      "width": 1080,
-      "height": 1920,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/bluesky.png",
-      "kind": "social-card",
-      "variant": "bluesky-light",
-      "format": "png",
-      "width": 1600,
-      "height": 900,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/bluesky.dark.png",
-      "kind": "social-card",
-      "variant": "bluesky-dark",
-      "format": "png",
-      "width": 1600,
-      "height": 900,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/devto-cover.png",
-      "kind": "social-card",
-      "variant": "devto-cover-light",
-      "format": "png",
-      "width": 1000,
-      "height": 420,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/devto-cover.dark.png",
-      "kind": "social-card",
-      "variant": "devto-cover-dark",
-      "format": "png",
-      "width": 1000,
-      "height": 420,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/github.png",
-      "kind": "social-card",
-      "variant": "github-light",
-      "format": "png",
-      "width": 1280,
-      "height": 640,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/github.dark.png",
-      "kind": "social-card",
-      "variant": "github-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 640,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-00-channel-trailer.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-00-channel-trailer-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-00-channel-trailer.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-00-channel-trailer-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-01-declarative-models-in-5-minutes.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-01-declarative-models-in-5-minutes-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-01-declarative-models-in-5-minutes.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-01-declarative-models-in-5-minutes-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-02-addons-install-features-not-sql.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-02-addons-install-features-not-sql-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-02-addons-install-features-not-sql.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-02-addons-install-features-not-sql-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-03-the-board-your-data-your-way.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-03-the-board-your-data-your-way-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-03-the-board-your-data-your-way.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-03-the-board-your-data-your-way-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-04-model-api-live-coding.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-04-model-api-live-coding-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-04-model-api-live-coding.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-04-model-api-live-coding-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-05-transactional-addons-deep-dive.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-05-transactional-addons-deep-dive-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-05-transactional-addons-deep-dive.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-05-transactional-addons-deep-dive-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-06-multi-tenancy-rls.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-06-multi-tenancy-rls-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-06-multi-tenancy-rls.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-06-multi-tenancy-rls-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-07-saas-starter-in-30-minutes.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-07-saas-starter-in-30-minutes-light",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/ep-07-saas-starter-in-30-minutes.dark.png",
-      "kind": "youtube-thumbnail",
-      "variant": "ep-07-saas-starter-in-30-minutes-dark",
-      "format": "png",
-      "width": 1280,
-      "height": 720,
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/social-render-manifest.json",
-      "kind": "manifest",
-      "variant": "social-render",
-      "format": "json",
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "brand/rendered/youtube-thumbnails/thumbnails-manifest.json",
-      "kind": "manifest",
-      "variant": "youtube-thumbnails",
-      "format": "json",
-      "pack": "brand",
-      "domain": "visual-universe",
-      "status": "review",
-      "license": "ISC"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-calm.png",
-      "kind": "character-sprite",
-      "variant": "expression-calm",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-calm-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-calm.webp",
-      "kind": "character-sprite",
-      "variant": "expression-calm",
-      "subject": "walter-white",
-      "format": "webp",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-calm-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-sweeping.png",
-      "kind": "character-sprite",
-      "variant": "expression-sweeping",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-sweeping.webp",
-      "kind": "character-sprite",
-      "variant": "expression-sweeping",
-      "subject": "walter-white",
-      "format": "webp",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-gloating.png",
-      "kind": "character-sprite",
-      "variant": "expression-gloating",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-gloating.webp",
-      "kind": "character-sprite",
-      "variant": "expression-gloating",
-      "subject": "walter-white",
-      "format": "webp",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-victorious.png",
-      "kind": "character-sprite",
-      "variant": "expression-victorious",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png"
-    },
-    {
-      "path": "illustrations/riot-universe/characters/walter-white-expression-victorious.webp",
-      "kind": "character-sprite",
-      "variant": "expression-victorious",
-      "subject": "walter-white",
-      "format": "webp",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png",
-      "sourceAsset": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png"
-    },
-    {
-      "path": "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
-      "kind": "source",
-      "variant": "riot-universe-master",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "packages/assets/scripts/generate-riot-universe.mjs"
-    },
-    {
-      "path": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
-      "kind": "source",
-      "variant": "riot-universe-master",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "packages/assets/scripts/generate-riot-universe.mjs"
-    },
-    {
-      "path": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
-      "kind": "source",
-      "variant": "riot-universe-master",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "packages/assets/scripts/generate-riot-universe.mjs"
-    },
-    {
-      "path": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png",
-      "kind": "source",
-      "variant": "riot-universe-master",
-      "subject": "walter-white",
-      "format": "png",
-      "width": 512,
-      "height": 512,
-      "pack": "riot-universe",
-      "domain": "visual-universe",
-      "status": "approved",
-      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
-      "source": "packages/assets/scripts/generate-riot-universe.mjs"
     }
   ]
 }

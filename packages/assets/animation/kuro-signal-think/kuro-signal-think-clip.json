@@ -16,19 +16,19 @@
     "frames": [
       {
         "asset": "animation/kuro-signal-think/kuro-signal-think-frame-01.png",
-        "durationMs": 280
+        "durationMs": 260
       },
       {
         "asset": "animation/kuro-signal-think/kuro-signal-think-frame-02.png",
-        "durationMs": 280
+        "durationMs": 260
       },
       {
         "asset": "animation/kuro-signal-think/kuro-signal-think-frame-03.png",
-        "durationMs": 280
+        "durationMs": 260
       },
       {
         "asset": "animation/kuro-signal-think/kuro-signal-think-frame-04.png",
-        "durationMs": 280
+        "durationMs": 260
       }
     ]
   },
@@ -37,7 +37,7 @@
     "frameWidth": 512,
     "frameHeight": 512,
     "frameCount": 4,
-    "frameDurationMs": 280,
+    "frameDurationMs": 260,
     "columns": 2,
     "rows": 2,
     "loop": true,

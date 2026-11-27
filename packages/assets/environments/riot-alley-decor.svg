@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Riot alley overhead cables and comic spark motes"><title>Riot alley overhead cables and comic spark motes</title>
-        <path d="M 24 120 Q 1024 310 2024 140 M 24 184 Q 1024 380 2024 204" fill="none" stroke="#0d0d0d" stroke-width="6" stroke-linecap="round"/>
-        <path d="M 1720.0 298.0 L 1725.7 314.3 L 1742.0 320.0 L 1725.7 325.7 L 1720.0 342.0 L 1714.3 325.7 L 1698.0 320.0 L 1714.3 314.3 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="4"/>
-        <path d="M 380.0 262.0 L 384.2 275.8 L 398.0 280.0 L 384.2 284.2 L 380.0 298.0 L 375.8 284.2 L 362.0 280.0 L 375.8 275.8 Z" fill="#00b8f0" stroke="#0d0d0d" stroke-width="3.5"/>
-        <circle cx="1180" cy="240" r="8" fill="#ff2e88" stroke="#0d0d0d" stroke-width="3"/>
-        <circle cx="840" cy="220" r="6" fill="#ffe031" stroke="#0d0d0d" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1152" width="2048" height="1152" role="img" aria-label="Riot alley overhead catenary wires and drifting comic spark motes"><title>Riot alley overhead catenary wires and drifting comic spark motes</title>
+        <path d="M 0 112 Q 980 284 2048 134 M 0 176 Q 1040 342 2048 198" fill="none" stroke="#0d0d0d" stroke-width="5" stroke-opacity="0.72" stroke-linecap="round"/>
+        <path d="M 1720.0 270.0 L 1724.6 285.4 L 1740.0 290.0 L 1724.6 294.6 L 1720.0 310.0 L 1715.4 294.6 L 1700.0 290.0 L 1715.4 285.4 Z" fill="#ffe031" stroke="#0d0d0d" stroke-width="3.5"/>
+        <path d="M 380.0 244.0 L 383.9 256.1 L 396.0 260.0 L 383.9 263.9 L 380.0 276.0 L 376.1 263.9 L 364.0 260.0 L 376.1 256.1 Z" fill="#00b8f0" stroke="#0d0d0d" stroke-width="3"/>
+        <circle cx="1180" cy="236" r="7" fill="#ff2e88" stroke="#0d0d0d" stroke-width="2.5"/>
+        <circle cx="840" cy="212" r="5.5" fill="#ffe031" stroke="#0d0d0d" stroke-width="2.5"/>
+        <path d="M 520 380 L 508 424 M 1480 340 L 1468 386 M 980 460 L 968 504" stroke="#00b8f0" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
       </svg>
