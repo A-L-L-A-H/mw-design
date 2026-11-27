@@ -1,12 +1,12 @@
-# MoonWitness Design System (`mw-design`)
+# mw-design — Design system packages and static catalog for MoonWitness interfaces.
 
-Standalone monorepo for the MoonWitness Design System:
+**Repository:** [`A-L-L-A-H/mw-design`](https://github.com/A-L-L-A-H/mw-design) · **Stack:** TypeScript · Bun · React
 
-- `packages/ui` (`@moonwitness/ui`): Design tokens, typed icons, accessible React primitives, and theme registry.
-- `packages/assets` (`@moonwitness/assets`): Framework-independent brand assets, fonts, icons, illustrations, materials, sounds, and scenes.
-- `apps/ui-catalog` (`@moonwitness/ui-catalog`): Interactive static UI catalog and asset diagnostics app.
+## What it does
 
-## Quickstart
+Contains @moonwitness/ui, @moonwitness/assets, and the static ui-catalog application.
+
+## Quick start
 
 ```bash
 bun install
@@ -14,11 +14,23 @@ bun run build
 bun run catalog:build
 ```
 
-## Docker
+## Verify
+
+```bash
+bun run test
+bun run typecheck
+```
+
+## Configuration
+
+- **Port:** 8080
+- **Key configuration:** UI catalog container
 
 ```bash
 docker build -t mw-design .
 docker run -p 8080:8080 mw-design
 ```
 
-Serves `apps/ui-catalog` at `/` and `packages/assets` static CDN at `/assets/`.
+## Notes
+
+The catalog is served at / and brand assets at /assets/.
