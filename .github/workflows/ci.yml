@@ -16,6 +16,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check conventional commit messages
+        run: |
+          git log --format=%s origin/main..HEAD | while IFS= read -r msg; do
+            echo "$msg" | grep -qE '^(feat|fix|docs|chore|refactor|test|perf|build|ci|revert|security|deps|style|release)(\(.+\))?!?: .+' || { echo "Invalid: $msg"; exit 1; }
+          done
+
   security:
     name: Security
     runs-on: ubuntu-latest
@@ -53,7 +68,7 @@ jobs:
             --exit-code 1
 
   quality:
-    name: Quality
+    name: Verify
     runs-on: ubuntu-latest
     env:
       MW_UI_CATALOG_BASE_PATH: '/moonwitness-xiv/components/'
@@ -67,12 +82,6 @@ jobs:
         with:
           bun-version-file: package.json
 
-      - name: Check conventional commit messages
-        if: github.event_name == 'pull_request'
-        run: |
-          git log --format=%s origin/main..HEAD | while IFS= read -r msg; do
-            echo "$msg" | grep -qE '^(feat|fix|docs|chore|refactor|test|perf|build|ci|revert|security|deps|style|release)(\(.+\))?!?: .+' || { echo "Invalid: $msg"; exit 1; }
-          done
 
       - uses: actions/setup-node@v4
         with:
