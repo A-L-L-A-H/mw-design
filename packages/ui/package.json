@@ -301,6 +301,10 @@
     "./lib/asset-registry": {
       "types": "./dist/lib/asset-registry.d.ts",
       "import": "./dist/lib/asset-registry.js"
+    },
+    "./token-exporter": {
+      "types": "./dist/token-exporter.d.ts",
+      "import": "./dist/token-exporter.js"
     }
   },
   "scripts": {
