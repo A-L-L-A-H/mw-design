@@ -1152,7 +1152,7 @@ export function AnimeFxLab() {
                 <h3 id="fx-shake-heading">Screen Shake &amp; Hitstop</h3>
                 <p>Damped camera impulse with optional freeze-frame pause before impact recoil.</p>
               </div>
-              <Button size="sm" variant="primary" onClick={() => triggerShake({ presetId: null })}>
+              <Button size="sm" variant="default" onClick={() => triggerShake({ presetId: null })}>
                 Trigger Screen Shake
               </Button>
             </div>
