@@ -380,6 +380,7 @@ export function AnimeFxLab() {
       }
 
       seedRef.current += 1;
+      const currentSeed = seedRef.current;
       setTriggerCount((c) => c + 1);
       const labelPrefix = options?.presetLabel ? `Rumble Preset · ${options.presetLabel}` : `Screen Shake · ${pattern}`;
       setLastActionLabel(
@@ -417,6 +418,7 @@ export function AnimeFxLab() {
       if (freezeMs > 0 && !continuous) {
         setHitstopActive(true);
         scheduleTimer(() => {
+          if (seedRef.current !== currentSeed) return;
           setHitstopActive(false);
           startShake();
         }, Math.round(freezeMs / timeScale));
