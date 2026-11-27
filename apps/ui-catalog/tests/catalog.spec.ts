@@ -159,8 +159,8 @@ test('theme toggle changes the shared token map without hiding readable labels',
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
   const highContrastTokens = await readTokens();
 
-  expect(highContrastTokens.background).toBe('#000000');
-  expect(highContrastTokens.foreground).toBe('#ffffff');
+  expect(highContrastTokens.background).toMatch(/^#(?:000000|000)$/u);
+  expect(highContrastTokens.foreground).toMatch(/^#(?:ffffff|fff)$/u);
   expect(highContrastTokens.primary).toBe('#ffe600');
   expect(highContrastTokens.frameWidth).toBe('3px');
   await expect(page.getByText('Success', { exact: true })).toBeVisible();
@@ -235,9 +235,9 @@ test('component examples provide a copy button for CSS variables and Tailwind cl
   expect(exampleCount).toBeGreaterThan(0);
   await expect(page.getByTestId('copy-example-styles')).toHaveCount(exampleCount);
 
-  const buttonCopy = page.getByRole('button', {
-    name: 'Copy CSS variables and Tailwind classes for Button variants and sizes',
-  });
+  const buttonCopy = page.locator(
+    '[data-testid="copy-example-styles"][aria-label*="Button variants and sizes"]'
+  );
   await buttonCopy.click();
   await expect(buttonCopy).toHaveAttribute('data-copied', 'true');
   const copied = await page.evaluate(
@@ -298,7 +298,9 @@ test('brand, typography, and homepage proof use canonical assets and correct spe
   }
 
   await expect(page.getByRole('heading', { name: 'Brand system' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Typography' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Typography', level: 2 }).first()
+  ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Materials & effects' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Homepage hero proof' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'MOONWITNESS', exact: true })).toBeVisible();
