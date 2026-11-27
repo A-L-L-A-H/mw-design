@@ -27,7 +27,7 @@ jobs:
           persist-credentials: false
       - name: Check conventional commit messages
         run: |
-          git log --format=%s origin/main..HEAD | while IFS= read -r msg; do
+          git log --no-merges --format=%s origin/main..HEAD | while IFS= read -r msg; do
             echo "$msg" | grep -qE '^(feat|fix|docs|chore|refactor|test|perf|build|ci|revert|security|deps|style|release)(\(.+\))?!?: .+' || { echo "Invalid: $msg"; exit 1; }
           done
 
