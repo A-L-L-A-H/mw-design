@@ -625,7 +625,7 @@ describe('Expanded Playground presets, shareable link, and ComponentApiTable', (
 
     // Switch stage character and backdrop
     await user.click(within(lab).getByRole('button', { name: 'Vesper' }));
-    expect(jsxOutput).toHaveTextContent('characterId="vesper-neon"');
+    expect(jsxOutput).toHaveTextContent('characterId="vesper-ink"');
 
     await user.click(within(lab).getByRole('button', { name: 'Manga Halftone' }));
     expect(stage).toHaveAttribute('data-backdrop', 'manga-halftone');
