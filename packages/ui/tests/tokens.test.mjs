@@ -52,7 +52,7 @@ test('package exposes explicit stylesheet and tree-shakeable typed icon entries'
   assert.equal(packageJson.exports['./icons'].import, './dist/icons/index.js');
   assert.equal(packageJson.exports['./components/button'].import, './dist/components/button.js');
   assert.equal(packageJson.exports['./components.css'], './src/styles/components.css');
-  assert.deepEqual(packageJson.dependencies, { '@moonwitness/types': 'workspace:*' });
+  assert.deepEqual(packageJson.dependencies, {});
   assert.equal(packageJson.peerDependencies.react, '>=18');
   assert.notEqual(
     packageJson.peerDependenciesMeta.react?.optional,

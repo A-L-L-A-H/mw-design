@@ -10,12 +10,29 @@
       "depictionPolicy": "anonymous-back-facing",
       "silhouette": "hooded crew figure, adult proportions, standard build",
       "outfit": "industrial workwear shirt and trousers",
-      "paletteTokens": ["ink-900", "paper-white", "hot-magenta-500"],
+      "paletteTokens": [
+        "ink-900",
+        "paper-white",
+        "hot-magenta-500"
+      ],
       "proportions": "standard adult",
-      "signatureProps": ["tool-satchel", "crew-badge"],
-      "allowedVariants": ["idle-standing", "waving", "walking-loop"],
-      "prohibitedVariants": ["recognizable-face", "sacred-figure", "real-person-likeness"],
-      "masterAssetIds": ["source/world/characters/crew-01-sheet.svg"],
+      "signatureProps": [
+        "tool-satchel",
+        "crew-badge"
+      ],
+      "allowedVariants": [
+        "idle-standing",
+        "waving",
+        "walking-loop"
+      ],
+      "prohibitedVariants": [
+        "recognizable-face",
+        "sacred-figure",
+        "real-person-likeness"
+      ],
+      "masterAssetIds": [
+        "source/world/characters/crew-01-sheet.svg"
+      ],
       "variantAssetIds": [
         "source/world/characters/crew-01-pose-idle-standing.svg",
         "source/world/characters/crew-01-pose-waving.svg",
@@ -32,7 +49,13 @@
       "depictionPolicy": "identified-approved",
       "silhouette": "oversized hooded street courier with twin-ring headset antenna and chunky lug-sole boots",
       "outfit": "ink-splattered charcoal and magenta hoodie with yellow crown pin, cargo joggers, yellow-soled boots",
-      "paletteTokens": ["ink-black", "paper-cream", "signal-yellow", "riot-magenta", "signal-cyan"],
+      "paletteTokens": [
+        "ink-black",
+        "paper-cream",
+        "signal-yellow",
+        "riot-magenta",
+        "signal-cyan"
+      ],
       "proportions": "stylized anime-cartoon 5.5 heads",
       "signatureProps": [
         "crown-enamel-pin",
@@ -71,7 +94,11 @@
         "pose-holding-objects",
         "pose-celebrating"
       ],
-      "prohibitedVariants": ["sacred-figure", "real-person-likeness", "third-party-logo"],
+      "prohibitedVariants": [
+        "sacred-figure",
+        "real-person-likeness",
+        "third-party-logo"
+      ],
       "masterAssetIds": [
         "source/artwork/riot-universe/kuro-signal-model-sheet-master.png",
         "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png"
@@ -108,16 +135,79 @@
         "riot-magenta"
       ],
       "proportions": "stylized anime-cartoon 6 heads",
-      "signatureProps": ["forehead-tinted-goggles", "tape-patched-satchel", "brass-stylus"],
-      "allowedVariants": ["portrait"],
-      "prohibitedVariants": ["sacred-figure", "real-person-likeness", "third-party-logo"],
-      "masterAssetIds": ["source/artwork/riot-universe/vesper-ink-portrait-master.png"],
+      "signatureProps": [
+        "forehead-tinted-goggles",
+        "tape-patched-satchel",
+        "brass-stylus"
+      ],
+      "allowedVariants": [
+        "portrait"
+      ],
+      "prohibitedVariants": [
+        "sacred-figure",
+        "real-person-likeness",
+        "third-party-logo"
+      ],
+      "masterAssetIds": [
+        "source/artwork/riot-universe/vesper-ink-portrait-master.png"
+      ],
       "variantAssetIds": [
         "illustrations/riot-universe/characters/vesper-ink-portrait.webp",
         "illustrations/riot-universe/characters/vesper-ink-portrait.png",
         "illustrations/riot-universe/game/avatar-vesper.png"
       ],
       "license": "ISC",
+      "status": "approved"
+    },
+    {
+      "characterId": "walter-white",
+      "role": "label-sweeper",
+      "depictionPolicy": "identified-approved",
+      "silhouette": "bald middle-aged cleaning specialist with round glasses, neat goatee, charcoal work jumpsuit and a wooden broom",
+      "outfit": "charcoal work jumpsuit with yellow crown enamel pin and magenta armband",
+      "paletteTokens": [
+        "ink-black",
+        "paper-cream",
+        "signal-yellow",
+        "riot-magenta",
+        "signal-cyan"
+      ],
+      "proportions": "stylized manga-cartoon 6 heads",
+      "signatureProps": [
+        "wooden-broom",
+        "crown-enamel-pin",
+        "round-glasses",
+        "magenta-armband"
+      ],
+      "allowedVariants": [
+        "expression-calm",
+        "expression-sweeping",
+        "expression-gloating",
+        "expression-victorious"
+      ],
+      "prohibitedVariants": [
+        "sacred-figure",
+        "real-person-likeness",
+        "celebrity-likeness",
+        "third-party-logo"
+      ],
+      "masterAssetIds": [
+        "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
+        "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
+        "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
+        "source/artwork/riot-universe/walter-white-portrait-victorious-master.png"
+      ],
+      "variantAssetIds": [
+        "illustrations/riot-universe/characters/walter-white-expression-calm.webp",
+        "illustrations/riot-universe/characters/walter-white-expression-calm.png",
+        "illustrations/riot-universe/characters/walter-white-expression-sweeping.webp",
+        "illustrations/riot-universe/characters/walter-white-expression-sweeping.png",
+        "illustrations/riot-universe/characters/walter-white-expression-gloating.webp",
+        "illustrations/riot-universe/characters/walter-white-expression-gloating.png",
+        "illustrations/riot-universe/characters/walter-white-expression-victorious.webp",
+        "illustrations/riot-universe/characters/walter-white-expression-victorious.png"
+      ],
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "status": "approved"
     }
   ]

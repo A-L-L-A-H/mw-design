@@ -9,6 +9,7 @@ import {
   type KuroClipId,
   type KuroExpression,
   type KuroPose,
+  type WalterExpression,
 } from '../lib/asset-registry.js';
 import { cn } from '../lib/cn.js';
 import { useReducedMotion } from '../lib/use-reduced-motion.js';
@@ -19,7 +20,7 @@ export type CharacterDisplaySize = 'sm' | 'md' | 'lg';
 
 export type CharacterDisplayProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   characterId?: CharacterId;
-  expression?: KuroExpression;
+  expression?: KuroExpression | WalterExpression;
   pose?: KuroPose;
   animated?: boolean;
   clipId?: KuroClipId;

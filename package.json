@@ -14,6 +14,7 @@
     "catalog:build": "bun --filter @moonwitness/ui-catalog build"
   },
   "devDependencies": {
+    "jsdom": "^31.0.1",
     "typescript": "~5.7.3"
   }
 }

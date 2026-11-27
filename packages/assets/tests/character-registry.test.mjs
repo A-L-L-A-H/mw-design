@@ -70,7 +70,7 @@ test('validates the checked-in registry', () => {
     )
   );
   assert.deepEqual(validateCharacterRegistry(registry), {
-    characterCount: 3,
-    characterIds: ['crew-01', 'kuro-signal', 'vesper-ink'],
+    characterCount: 4,
+    characterIds: ['crew-01', 'kuro-signal', 'vesper-ink', 'walter-white'],
   });
 });

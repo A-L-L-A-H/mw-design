@@ -144,8 +144,8 @@ test('riot-universe manifest and source provenance validate cleanly', () => {
   );
   assert.equal(
     riotSources.length,
-    14,
-    '12 direct AI masters + 2 procedural halftone masters tracked'
+    18,
+    '16 direct AI masters + 2 procedural halftone masters tracked'
   );
   for (const src of riotSources) {
     const prov = licenses.sourceAssets.find((p) => p.path === src.path);

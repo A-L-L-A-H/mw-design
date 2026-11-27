@@ -96,6 +96,21 @@ test('asset-registry resolves canonical universe paths with optional basePath', 
     'illustrations/riot-universe/characters/vesper-ink-portrait.png'
   );
 
+  const walter = getCharacterPortrait('walter-white', 'sweeping');
+  assert.equal(
+    walter.path,
+    'illustrations/riot-universe/characters/walter-white-expression-sweeping.webp'
+  );
+  assert.equal(
+    walter.fallbackPath,
+    'illustrations/riot-universe/characters/walter-white-expression-sweeping.png'
+  );
+  assert.equal(walter.alt, 'Walter White (sweeping)');
+  assert.equal(
+    getCharacterPose('walter-white').path,
+    'illustrations/riot-universe/characters/walter-white-expression-sweeping.webp'
+  );
+
   const pose = getCharacterPose('kuro-signal', 'pointing', { basePath: '/app' });
   assert.equal(
     pose.src,

@@ -727,6 +727,46 @@
       "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
     },
     {
+      "path": "source/artwork/riot-universe/walter-white-portrait-calm-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI calm bust portrait master for walter-white (512x512).",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-gloating-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI gloating bust portrait master for walter-white (512x512).",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-sweeping-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI sweeping bust portrait master for walter-white (512x512).",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
+      "path": "source/artwork/riot-universe/walter-white-portrait-victorious-master.png",
+      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
+      "license": "MoonWitness Commissioned Asset (ISC pipeline)",
+      "termsVerified": true,
+      "modifications": "Direct AI victorious bust portrait master for walter-white (512x512).",
+      "status": "approved",
+      "distribution": "approved source master for MoonWitness Signal Riot asset pipeline"
+    },
+    {
       "path": "source/world/characters/character-registry.json",
       "creator": "MoonWitness contributors",
       "source": "Original manually authored JSON",

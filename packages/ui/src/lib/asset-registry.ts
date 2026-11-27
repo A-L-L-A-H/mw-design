@@ -1,6 +1,16 @@
 import type { SpriteClipMetadata } from '../components/sprite-player.js';
 
-export type CharacterId = 'kuro-signal' | 'vesper-ink';
+export type CharacterId = 'kuro-signal' | 'vesper-ink' | 'walter-white';
+
+// mw-ww ("Walter White") expressions — calm, polite, absurdly serious about sweeping.
+export const WALTER_EXPRESSIONS = [
+  'calm',
+  'sweeping',
+  'gloating',
+  'victorious',
+] as const;
+
+export type WalterExpression = (typeof WALTER_EXPRESSIONS)[number];
 
 export const KURO_EXPRESSIONS = [
   'happy',
@@ -196,9 +206,22 @@ export function resolveUniverseAsset(path: string, basePath = ''): string {
 /** Resolve a character portrait asset (.webp primary with .png fallback). */
 export function getCharacterPortrait(
   characterId: CharacterId,
-  expression: KuroExpression = 'determined',
+  expression: KuroExpression | WalterExpression = 'determined',
   opts: UniverseAssetLookupOptions = {}
 ): ResolvedUniverseImage {
+  if (characterId === 'walter-white') {
+    const walterExpression: WalterExpression = (WALTER_EXPRESSIONS as readonly string[]).includes(expression)
+      ? (expression as WalterExpression)
+      : 'calm';
+    const stem = `${RIOT_DIR}/characters/walter-white-expression-${walterExpression}`;
+    const fallback = `${stem}.png`;
+    return buildImage(
+      opts.format === 'png' ? fallback : `${stem}.webp`,
+      `Walter White (${WORDS(walterExpression)})`,
+      opts.basePath,
+      fallback
+    );
+  }
   const isVesper = characterId === 'vesper-ink';
   const stem = `${RIOT_DIR}/characters/${isVesper ? 'vesper-ink-portrait' : `kuro-signal-expression-${expression}`}`;
   const fallback = `${stem}.png`;
@@ -217,6 +240,7 @@ export function getCharacterPose(
   opts: UniverseAssetLookupOptions = {}
 ): ResolvedUniverseImage {
   if (characterId === 'vesper-ink') return getCharacterPortrait('vesper-ink', 'determined', opts);
+  if (characterId === 'walter-white') return getCharacterPortrait('walter-white', 'sweeping', opts);
   const stem = `${RIOT_DIR}/characters/kuro-signal-pose-${pose}`;
   const fallback = `${stem}.png`;
   return buildImage(
