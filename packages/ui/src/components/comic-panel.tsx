@@ -8,7 +8,8 @@ import {
 import { cn } from '../lib/cn.js';
 
 export type ComicSurface = 'paper' | 'ink' | 'default';
-export type ComicFrame = 'comic' | 'torn' | 'scuffed';
+export type ComicFrame = 'comic' | 'torn' | 'scuffed' | 'pencil-sketch';
+export type ComicTreatment = 'none' | 'funky-zine' | 'cinematic-noir';
 export type ComicAccent = 'yellow' | 'magenta' | 'cyan' | 'violet';
 
 export type ComicPanelProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'title'> & {
@@ -17,6 +18,7 @@ export type ComicPanelProps = Omit<ComponentPropsWithoutRef<'section'>, 'childre
   title?: ReactNode;
   surface?: ComicSurface;
   frame?: ComicFrame;
+  treatment?: ComicTreatment;
   accent?: ComicAccent;
   halftone?: boolean;
   headingLevel?: 2 | 3 | 4;
@@ -30,6 +32,7 @@ export type MangaFrameProps = Omit<ComponentPropsWithoutRef<'div'>, 'children' |
   title?: ReactNode;
   surface?: ComicSurface;
   frame?: ComicFrame;
+  treatment?: ComicTreatment;
   accent?: ComicAccent;
   halftone?: boolean;
   headingLevel?: 2 | 3 | 4;
@@ -41,6 +44,7 @@ type PanelShellProps = Omit<ComicPanelProps, 'headingLevel'> & {
   headingLevel: 2 | 3 | 4;
   surface: ComicSurface;
   frame: ComicFrame;
+  treatment: ComicTreatment;
   accent: ComicAccent;
   halftone: boolean;
 };
@@ -54,6 +58,7 @@ function renderComicShell(
     title,
     surface,
     frame,
+    treatment,
     accent,
     halftone,
     headingLevel,
@@ -80,6 +85,7 @@ function renderComicShell(
       'data-frame': frame,
       'data-halftone': halftone ? 'true' : 'false',
       'data-surface': surface,
+      'data-treatment': treatment,
       ...props,
     },
     hasHeader ? (
@@ -107,6 +113,7 @@ export const ComicPanel = forwardRef<HTMLElement, ComicPanelProps>(function Comi
   {
     surface = 'default',
     frame = 'comic',
+    treatment = 'none',
     accent = 'yellow',
     halftone = true,
     headingLevel = 3,
@@ -117,7 +124,7 @@ export const ComicPanel = forwardRef<HTMLElement, ComicPanelProps>(function Comi
   return renderComicShell(
     'section',
     undefined,
-    { surface, frame, accent, halftone, headingLevel, ...rest },
+    { surface, frame, treatment, accent, halftone, headingLevel, ...rest },
     ref
   );
 });
@@ -127,6 +134,7 @@ export const MangaFrame = forwardRef<HTMLDivElement, MangaFrameProps>(function M
   {
     surface = 'ink',
     frame = 'comic',
+    treatment = 'none',
     accent = 'magenta',
     halftone = true,
     headingLevel = 3,
@@ -140,10 +148,11 @@ export const MangaFrame = forwardRef<HTMLDivElement, MangaFrameProps>(function M
     {
       ...(rest as Omit<
         PanelShellProps,
-        'surface' | 'frame' | 'accent' | 'halftone' | 'headingLevel'
+        'surface' | 'frame' | 'treatment' | 'accent' | 'halftone' | 'headingLevel'
       >),
       surface,
       frame,
+      treatment,
       accent,
       halftone,
       headingLevel,

@@ -161,6 +161,14 @@
       "types": "./dist/components/table.d.ts",
       "import": "./dist/components/table.js"
     },
+    "./components/status-pill": {
+      "types": "./dist/components/status-pill.d.ts",
+      "import": "./dist/components/status-pill.js"
+    },
+    "./components/appearance-menu": {
+      "types": "./dist/components/appearance-menu.d.ts",
+      "import": "./dist/components/appearance-menu.js"
+    },
     "./components/status-bar": {
       "types": "./dist/components/status-bar.d.ts",
       "import": "./dist/components/status-bar.js"
@@ -218,9 +226,22 @@
       "import": "./dist/icons/*.js"
     },
     "./styles/tokens.css": "./src/styles/tokens.css",
+    "./styles/visual-universe.css": "./src/styles/visual-universe.css",
     "./components/layered-scene": {
       "types": "./dist/components/layered-scene.d.ts",
       "import": "./dist/components/layered-scene.js"
+    },
+    "./components/character-badge": {
+      "types": "./dist/components/character-badge.d.ts",
+      "import": "./dist/components/character-badge.js"
+    },
+    "./components/riot-sticker": {
+      "types": "./dist/components/riot-sticker.d.ts",
+      "import": "./dist/components/riot-sticker.js"
+    },
+    "./components/sketch-annotation": {
+      "types": "./dist/components/sketch-annotation.d.ts",
+      "import": "./dist/components/sketch-annotation.js"
     },
     "./components/sprite-player": {
       "types": "./dist/components/sprite-player.d.ts",
@@ -400,7 +421,12 @@
     },
     "./tokens.w3c.json": "./dist/tokens.w3c.json",
     "./tokens.bundle.json": "./dist/tokens.bundle.json",
-    "./tailwind-preset.css": "./dist/tailwind-preset.css"
+    "./tailwind-preset.css": "./dist/tailwind-preset.css",
+    "./components/xv-primitives": {
+      "types": "./dist/components/xv-primitives.d.ts",
+      "import": "./dist/components/xv-primitives.js"
+    },
+    "./styles/xv-primitives.css": "./src/styles/xv-primitives.css"
   },
   "scripts": {
     "build": "node scripts/generate-icons.mjs && tsc && node scripts/generate-token-artifacts.mjs",

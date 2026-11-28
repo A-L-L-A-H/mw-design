@@ -8,6 +8,59 @@ import { gzipSync } from 'node:zlib';
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const uiRoot = join(root, 'packages/ui');
 const uiPkg = JSON.parse(readFileSync(join(uiRoot, 'package.json'), 'utf8'));
+const isWindows = process.platform === 'win32';
+
+function formatExecError(err) {
+  if (!(err instanceof Error)) return String(err);
+  const stderr = 'stderr' in err && typeof err.stderr === 'string' ? err.stderr.trim() : '';
+  return stderr ? `${err.message}\n${stderr}` : err.message;
+}
+
+function runPackageCmd(bin, args, cwd) {
+  if (isWindows) {
+    return execFileSync('cmd.exe', ['/d', '/s', '/c', `${bin}.cmd`, ...args], {
+      cwd,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+    });
+  }
+  return execFileSync(bin, args, {
+    cwd,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+}
+
+function readPackedFilesWithBun(packageDir) {
+  const stdout = runPackageCmd('bun', ['pm', 'pack', '--dry-run'], packageDir);
+  const packedFiles = new Set();
+  for (const rawLine of stdout.split(/\r?\n/u)) {
+    const match = rawLine.match(/^packed\s+\S+\s+(.+)$/u);
+    if (match?.[1]) {
+      packedFiles.add(match[1].trim().replace(/^\.\//u, ''));
+    }
+  }
+  return packedFiles;
+}
+
+function readPackedFileSet(packageDir) {
+  try {
+    const packJson = runPackageCmd('npm', ['pack', '--dry-run', '--json'], packageDir);
+    const parsed = JSON.parse(packJson);
+    const entry = Array.isArray(parsed) ? parsed[0] : parsed;
+    return new Set((entry?.files ?? []).map((item) => item.path));
+  } catch (err) {
+    const detail = formatExecError(err);
+    const code = err && typeof err === 'object' && 'code' in err ? String(err.code) : '';
+    // Windows Node 24 + npm 11 node-tar can drop its exit handler; fall back to bun pm pack.
+    if (/Exit handler never called|ENOENT/iu.test(`${code} ${detail}`)) {
+      return readPackedFilesWithBun(packageDir);
+    }
+    throw err;
+  }
+}
 
 const errors = [];
 
@@ -54,13 +107,10 @@ for (const { file, maxGzipKb } of BUDGETS_KB) {
 
 // 3. Dry-run npm pack to ensure tarball manifest contains dist, styles, tokens, and docs
 try {
-  const packJson = execFileSync('npm', ['pack', '--dry-run', '--json'], {
-    cwd: uiRoot,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  const parsed = JSON.parse(packJson);
-  const packedFiles = new Set((parsed[0]?.files ?? []).map((entry) => entry.path));
+  const packedFiles = readPackedFileSet(uiRoot);
+  if (packedFiles.size === 0) {
+    errors.push('npm pack --dry-run reported zero files');
+  }
   for (const required of [
     'dist/index.js',
     'dist/motion/index.js',
@@ -79,7 +129,7 @@ try {
     }
   }
 } catch (err) {
-  errors.push(`npm pack --dry-run failed: ${err instanceof Error ? err.message : String(err)}`);
+  errors.push(`npm pack --dry-run failed: ${formatExecError(err)}`);
 }
 
 if (errors.length > 0) {

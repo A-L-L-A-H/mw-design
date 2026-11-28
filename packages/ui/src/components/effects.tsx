@@ -4,6 +4,7 @@ import { useId, useMemo, type CSSProperties, type HTMLAttributes, type ReactNode
 import { cn } from '../lib/cn.js';
 import { useAnimationVisibility } from '../lib/use-animation-visibility.js';
 import { useReducedMotion } from '../lib/use-reduced-motion.js';
+import { SpeechBubble as CanonicalSpeechBubble } from './speech-bubble.js';
 
 export function EditorialTexture({
   className,
@@ -426,6 +427,8 @@ const inkFrameScale: Record<'ink' | 'grunge' | 'brutal', { scale: number; stroke
 /**
  * Wraps content in a rough, hand-inked border using an SVG displacement filter, so panel
  * edges wobble like brush ink instead of being perfectly straight.
+ * @deprecated Overlaps `MangaFrame` in `comic-panel.tsx`. Kept (markup differs: SVG displacement filter)
+ * so existing imports keep working; prefer `MangaFrame` for new code.
  */
 export function InkFrame({
   children,
@@ -753,7 +756,11 @@ export function ZineSticker({
   );
 }
 
-/** High-contrast manga/zine panel with distressed chalk frame, halftone grit, and anime action lines. */
+/**
+ * High-contrast manga/zine panel with distressed chalk frame, halftone grit, and anime action lines.
+ * @deprecated Overlaps `ComicPanel`/`MangaFrame` in `comic-panel.tsx`. Kept (class names `mw-ui-manga-panel*`
+ * and action-line props differ) so existing imports keep working; prefer `MangaFrame` for new code.
+ */
 export function MangaPanel({
   children,
   surface = 'ink',
@@ -799,22 +806,21 @@ export function MangaPanel({
   );
 }
 
-/** Comic speech bubble for playful hints like record counts. */
+/**
+ * Comic speech bubble for playful hints like record counts.
+ * @deprecated Thin viewport-aware wrapper over the canonical `SpeechBubble` from `speech-bubble.tsx`;
+ * prefer that component (exported as `SpeechBubble`) for new code.
+ */
 export function SpeechBubble({ children, className }: { children: ReactNode; className?: string }) {
   const motion = useAnimationVisibility<HTMLDivElement>();
   const reduced = useReducedMotion();
   return (
-    <div
+    <CanonicalSpeechBubble
       ref={motion.ref}
-      data-reduced-motion={reduced ? 'true' : undefined}
-      className={cn(
-        'mw-ui-speech-bubble',
-        reduced ? 'mw-ui-motion-paused' : motion.visibilityClass,
-        className
-      )}
+      className={cn(reduced ? 'mw-ui-motion-paused' : motion.visibilityClass, className)}
     >
       {children}
-    </div>
+    </CanonicalSpeechBubble>
   );
 }
 

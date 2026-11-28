@@ -2,8 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { LayeredScene, resolveSceneLayersForWidth } from '../dist/components/layered-scene.js';
-import { SpritePlayer, computeSpriteFrameIndex } from '../dist/components/sprite-player.js';
+import { LayeredScene, isMotionProfileOff, resolveSceneLayersForWidth } from '../dist/components/layered-scene.js';
+import {
+  SpritePlayer,
+  computeSpriteFrameIndex,
+  computeSpriteSheetOffset,
+  isValidSpriteSheet,
+  resolveSpriteSheetFrameCount,
+} from '../dist/components/sprite-player.js';
 import { resetSceneHarness, setSceneHarness } from '../dist/lib/scene-test-harness.js';
 
 const sampleLayers = [
@@ -229,4 +235,49 @@ test('SpritePlayer computes frames deterministically and honors pinnedFrame, red
   assert.match(harnessHtml, /data-sprite-state="pinned"/u);
   assert.match(harnessHtml, /src="\/wave-2\.png"/u);
   resetSceneHarness();
+});
+
+test('SpritePlayer renders spriteSheet atlas frames by background offset without swapping src', () => {
+  resetSceneHarness();
+  const clip = {
+    id: 'kuro-blink',
+    frames: ['/unused.png'],
+    fps: 10,
+    loop: true,
+    fallbackAsset: '/static.png',
+    width: 100,
+    height: 100,
+  };
+  const spriteSheet = { src: '/atlas.png', columns: 2, rows: 2, frameWidth: 100, frameHeight: 100 };
+  assert.deepEqual(computeSpriteSheetOffset(0, spriteSheet), { x: 0, y: 0 });
+  assert.deepEqual(computeSpriteSheetOffset(1, spriteSheet), { x: 100, y: 0 });
+  assert.deepEqual(computeSpriteSheetOffset(3, spriteSheet), { x: 100, y: 100 });
+  assert.equal(resolveSpriteSheetFrameCount({ ...spriteSheet, frameCount: 3 }), 3);
+  assert.equal(resolveSpriteSheetFrameCount({ ...spriteSheet, frameCount: 9 }), 4);
+  assert.equal(isValidSpriteSheet({ ...spriteSheet, columns: 0 }), false);
+
+  for (const frame of [0, 1, 2, 3]) {
+    const html = renderToStaticMarkup(React.createElement(SpritePlayer, { clip, spriteSheet, pinnedFrame: frame }));
+    assert.match(html, /data-sprite-atlas="true"/u);
+    assert.match(html, new RegExp(`data-sprite-frame="${frame}"`, 'u'));
+    assert.match(html, /background-size:200% 200%/u);
+    assert.doesNotMatch(html, /<img/u);
+  }
+  const frame3 = renderToStaticMarkup(React.createElement(SpritePlayer, { clip, spriteSheet, pinnedFrame: 3 }));
+  assert.match(frame3, /background-position:100% 100%/u);
+
+  const invalid = renderToStaticMarkup(
+    React.createElement(SpritePlayer, { clip, spriteSheet: { ...spriteSheet, rows: 0 }, pinnedFrame: 0 })
+  );
+  assert.match(invalid, /<img/u);
+});
+
+test('isMotionProfileOff detects data-motion-profile="off" on the element or an ancestor', () => {
+  const selectors = [];
+  const withAncestor = { closest: (selector) => (selectors.push(selector), {}) };
+  const without = { closest: () => null };
+  assert.equal(isMotionProfileOff(withAncestor), true);
+  assert.equal(isMotionProfileOff(without), false);
+  assert.equal(isMotionProfileOff(null), false);
+  assert.deepEqual(selectors, ["[data-motion-profile='off']"]);
 });

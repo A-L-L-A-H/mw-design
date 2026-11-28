@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T15:33:31.475Z",
+  "generatedAt": "2026-11-28T03:10:17.392Z",
   "assetQa": {
     "status": "passed",
-    "totalManifestAssets": 566,
+    "totalManifestAssets": 592,
     "errorCount": 0,
     "warningCount": 0,
     "errors": [],

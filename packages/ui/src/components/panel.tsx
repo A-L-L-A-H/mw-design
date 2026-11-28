@@ -7,7 +7,8 @@ export type PanelProps = Omit<ComponentProps<'section'>, 'children' | 'title'> &
   actions?: ReactNode;
   children: ReactNode;
   surface?: 'default' | 'ink' | 'paper';
-  frame?: 'line' | 'torn' | 'scuffed' | 'grunge';
+  frame?: 'line' | 'torn' | 'scuffed' | 'grunge' | 'pencil-sketch';
+  treatment?: 'none' | 'funky-zine' | 'cinematic-noir';
   density?: 'comfortable' | 'compact' | 'micro' | 'spacious';
   contentClassName?: string;
   headingLevel?: 2 | 3 | 4;
@@ -21,6 +22,7 @@ export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
     children,
     surface = 'default',
     frame = 'line',
+    treatment = 'none',
     density = 'comfortable',
     contentClassName,
     headingLevel = 2,
@@ -37,6 +39,7 @@ export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
       data-density={density}
       data-frame={frame}
       data-surface={surface}
+      data-treatment={treatment}
       {...props}
     >
       {title || description || actions ? (

@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { useId, type CSSProperties } from 'react';
 import {
   getCharacterById,
   type CharacterAccessory,
@@ -124,6 +124,8 @@ function renderAccessory(accessory: CharacterAccessory) {
         <g className="mw-ui-anime-accessory">
           <rect x="24" y="25" width="22" height="12" rx="4" className="mw-ui-anime-accent-fill" />
           <rect x="54" y="25" width="22" height="12" rx="4" className="mw-ui-anime-accent-fill" />
+          <line x1="27" y1="29" x2="35" y2="29" className="mw-ui-anime-specular" />
+          <line x1="57" y1="29" x2="65" y2="29" className="mw-ui-anime-specular" />
           <line x1="46" y1="31" x2="54" y2="31" className="mw-ui-anime-stroke" />
         </g>
       );
@@ -135,16 +137,7 @@ function renderAccessory(accessory: CharacterAccessory) {
         />
       );
     case 'halo':
-      return (
-        <ellipse
-          cx="50"
-          cy="11"
-          rx="20"
-          ry="4.5"
-          fill="none"
-          className="mw-ui-anime-halo"
-        />
-      );
+      return <ellipse cx="50" cy="11" rx="20" ry="4.5" fill="none" className="mw-ui-anime-halo" />;
     case 'horns':
       return (
         <g className="mw-ui-anime-accessory">
@@ -193,7 +186,7 @@ function renderAccessory(accessory: CharacterAccessory) {
   }
 }
 
-function renderEyes(eyeStyle: CharacterEyeStyle, mood: CharacterMood) {
+function renderEyes(eyeStyle: CharacterEyeStyle, mood: CharacterMood, irisGradId: string) {
   if (mood === 'ko') {
     return (
       <g className="mw-ui-cartoon-puppet-eyes">
@@ -217,24 +210,24 @@ function renderEyes(eyeStyle: CharacterEyeStyle, mood: CharacterMood) {
     return (
       <g className="mw-ui-cartoon-puppet-eyes">
         <rect x="30" y="43" width="40" height="14" rx="7" className="mw-ui-anime-ink-fill mw-ui-anime-stroke" />
-        <circle cx="50" cy="50" r="5" className="mw-ui-anime-accent-fill" />
+        <circle cx="50" cy="50" r="5" fill={`url(#${irisGradId})`} />
         <circle cx="48" cy="48" r="1.8" className="mw-ui-anime-white-fill" />
       </g>
     );
   }
 
-  const eyeRadiusY = mood === 'surprised' ? 7 : mood === 'happy' ? 3.5 : 5.5;
+  const eyeRadiusY = mood === 'surprised' ? 7 : mood === 'happy' ? 3.5 : 5.6;
   const browLeft =
     mood === 'angry' || mood === 'determined'
       ? 'M 29 40 L 44 45'
       : mood === 'surprised'
-        ? 'M 30 38 Q 38 34 45 38'
+        ? 'M 30 37 Q 38 33 45 37'
         : 'M 30 41 Q 38 39 45 41';
   const browRight =
     mood === 'angry' || mood === 'determined'
       ? 'M 71 40 L 56 45'
       : mood === 'surprised'
-        ? 'M 55 38 Q 62 34 70 38'
+        ? 'M 55 37 Q 62 33 70 37'
         : 'M 55 41 Q 62 39 70 41';
 
   return (
@@ -247,20 +240,24 @@ function renderEyes(eyeStyle: CharacterEyeStyle, mood: CharacterMood) {
           <path d="M 56 52 Q 62 45 68 52" fill="none" className="mw-ui-cartoon-puppet-brow" />
         </>
       ) : (
-        <>
-          <ellipse cx="38" cy="51" rx="5.5" ry={eyeRadiusY} className="mw-ui-anime-white-fill mw-ui-anime-stroke" />
-          <ellipse cx="62" cy="51" rx="5.5" ry={eyeRadiusY} className="mw-ui-anime-white-fill mw-ui-anime-stroke" />
-          <circle cx="38.5" cy="51" r="3.4" className="mw-ui-cartoon-puppet-eye" />
-          <circle cx="61.5" cy="51" r="3.4" className="mw-ui-cartoon-puppet-eye" />
+        <g className="mw-ui-anime-blink-group">
+          <ellipse cx="38" cy="51" rx="5.8" ry={eyeRadiusY} className="mw-ui-anime-white-fill mw-ui-anime-stroke" />
+          <ellipse cx="62" cy="51" rx="5.8" ry={eyeRadiusY} className="mw-ui-anime-white-fill mw-ui-anime-stroke" />
+          <circle cx="38.5" cy="51" r="3.9" fill={`url(#${irisGradId})`} className="mw-ui-anime-stroke" />
+          <circle cx="61.5" cy="51" r="3.9" fill={`url(#${irisGradId})`} className="mw-ui-anime-stroke" />
+          <circle cx="38.5" cy="51.2" r="1.8" className="mw-ui-anime-ink-fill" />
+          <circle cx="61.5" cy="51.2" r="1.8" className="mw-ui-anime-ink-fill" />
           {eyeStyle === 'star' ? (
             <>
-              <circle cx="38.5" cy="51" r="1.6" className="mw-ui-anime-accent-fill" />
-              <circle cx="61.5" cy="51" r="1.6" className="mw-ui-anime-accent-fill" />
+              <circle cx="38.5" cy="51" r="1.2" className="mw-ui-anime-accent-fill" />
+              <circle cx="61.5" cy="51" r="1.2" className="mw-ui-anime-accent-fill" />
             </>
           ) : null}
-          <circle cx="36.8" cy="49" r="1.5" className="mw-ui-anime-white-fill" />
-          <circle cx="59.8" cy="49" r="1.5" className="mw-ui-anime-white-fill" />
-        </>
+          <circle cx="36.6" cy="48.8" r="1.6" className="mw-ui-anime-white-fill" />
+          <circle cx="59.6" cy="48.8" r="1.6" className="mw-ui-anime-white-fill" />
+          <circle cx="40.3" cy="52.6" r="0.8" className="mw-ui-anime-white-fill" />
+          <circle cx="63.3" cy="52.6" r="0.8" className="mw-ui-anime-white-fill" />
+        </g>
       )}
     </g>
   );
@@ -273,6 +270,9 @@ export interface AnimeCharacterSvgProps {
 }
 
 export function AnimeCharacterSvg({ characterId, mood, phoneme }: AnimeCharacterSvgProps) {
+  const uid = useId().replace(/:/g, '');
+  const skinGradId = `mw-skin-${uid}`;
+  const irisGradId = `mw-iris-${uid}`;
   const profile = getCharacterById(characterId);
   const visual = profile?.visual ?? {
     hairStyle: 'spiky' as CharacterHairStyle,
@@ -314,23 +314,44 @@ export function AnimeCharacterSvg({ characterId, mood, phoneme }: AnimeCharacter
       style={cssVars}
       aria-hidden="true"
     >
+      <defs>
+        <linearGradient id={skinGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--mw-anime-skin-highlight, var(--mw-anime-skin, var(--mw-paper)))" />
+          <stop offset="68%" stopColor="var(--mw-anime-skin, var(--mw-paper))" />
+          <stop offset="100%" stopColor="var(--mw-anime-skin-shade, var(--mw-muted))" />
+        </linearGradient>
+        <linearGradient id={irisGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--mw-ink-black)" />
+          <stop offset="45%" stopColor="var(--mw-char-accent, var(--mw-magenta))" />
+          <stop offset="100%" stopColor="var(--mw-char-primary, var(--mw-cyan))" />
+        </linearGradient>
+      </defs>
       <circle cx="50" cy="54" r="42" className="mw-ui-anime-aura" />
       {renderHairBack(visual.hairStyle)}
       <path d="M 22 96 C 24 78 36 74 50 74 C 64 74 76 78 78 96 Z" className="mw-ui-anime-suit" />
+      <path d="M 43 71 V 80 C 46 83 54 83 57 80 V 71 Z" fill={`url(#${skinGradId})`} className="mw-ui-anime-stroke" />
+      <path d="M 44 73 Q 50 77 56 73 L 56 76 Q 50 79 44 76 Z" className="mw-ui-anime-skin-shadow" />
       <path d="M 38 76 L 50 86 L 62 76" fill="none" className="mw-ui-anime-collar" />
+      <circle cx="23" cy="52" r="4.2" fill={`url(#${skinGradId})`} className="mw-ui-anime-stroke" />
+      <circle cx="77" cy="52" r="4.2" fill={`url(#${skinGradId})`} className="mw-ui-anime-stroke" />
       <path
         d="M 24 44 C 24 22 76 22 76 44 C 76 62 66 74 50 76 C 34 74 24 62 24 44 Z"
+        fill={`url(#${skinGradId})`}
         className="mw-ui-cartoon-puppet-head"
+        style={{ fill: `url(#${skinGradId})` }}
       />
+      <path d="M 28 63 Q 50 74 72 63 C 68 71 58 75 50 75 C 42 75 32 71 28 63 Z" className="mw-ui-anime-skin-shadow" />
       <path
         d="M 30 34 C 36 27 52 25 66 30 C 56 30 40 32 30 40 Z"
         className="mw-ui-anime-cel-sheen"
       />
-      <ellipse cx="30" cy="58" rx="4" ry="2.2" className="mw-ui-anime-blush" />
-      <ellipse cx="70" cy="58" rx="4" ry="2.2" className="mw-ui-anime-blush" />
-      {renderEyes(visual.eyeStyle, mood)}
+      <ellipse cx="30" cy="58" rx="4.2" ry="2.2" className="mw-ui-anime-blush" />
+      <ellipse cx="70" cy="58" rx="4.2" ry="2.2" className="mw-ui-anime-blush" />
+      <path d="M 49.5 56 L 48.2 59.5 L 50.8 60" className="mw-ui-anime-skin-line" />
+      {renderEyes(visual.eyeStyle, mood, irisGradId)}
       <path d={mouthPath} className="mw-ui-cartoon-puppet-mouth" />
       {renderHairFront(visual.hairStyle)}
+      <path d="M 30 30 Q 44 23 64 29" fill="none" className="mw-ui-anime-cel-sheen mw-ui-anime-hair-sheen" stroke="var(--mw-dna-cel-highlight)" strokeWidth="2.2" strokeLinecap="round" />
       {renderAccessory(visual.accessory)}
     </svg>
   );

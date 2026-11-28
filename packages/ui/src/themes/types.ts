@@ -1,5 +1,7 @@
 export type ColorMode = 'light' | 'dark';
 
+export type ThemeMode = ColorMode | 'high-contrast';
+
 export type SkinDensity = 'comfortable' | 'compact';
 
 export type BuiltinSkinId =
@@ -52,6 +54,10 @@ export interface ThemeRegistry {
 
 export function isColorMode(value: unknown): value is ColorMode {
   return value === 'light' || value === 'dark';
+}
+
+export function isThemeMode(value: unknown): value is ThemeMode {
+  return isColorMode(value) || value === 'high-contrast';
 }
 
 export function isSkinDensity(value: unknown): value is SkinDensity {

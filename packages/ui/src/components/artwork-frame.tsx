@@ -5,7 +5,8 @@ export type ArtworkFrameProps = Omit<ComponentProps<'figure'>, 'children'> & {
   shape?: 'landscape' | 'portrait' | 'square';
   caption?: ReactNode;
   surface?: 'ink' | 'paper';
-  frame?: 'line' | 'torn' | 'scuffed' | 'grunge';
+  frame?: 'line' | 'torn' | 'scuffed' | 'grunge' | 'pencil-sketch';
+  treatment?: 'none' | 'funky-zine' | 'cinematic-noir';
   animeEffect?: 'none' | 'slash' | 'impact' | 'cel-shake';
 };
 
@@ -16,6 +17,7 @@ export function ArtworkFrame({
   caption,
   surface = 'ink',
   frame = 'line',
+  treatment = 'none',
   animeEffect = 'none',
   className,
   ...props
@@ -27,6 +29,7 @@ export function ArtworkFrame({
       data-frame={frame}
       data-shape={shape}
       data-surface={surface}
+      data-treatment={treatment}
       {...props}
     >
       <div className="mw-ui-artwork-frame-media" data-surface={surface}>

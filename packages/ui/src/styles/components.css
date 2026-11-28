@@ -7638,4 +7638,90 @@
       transform: none;
     }
   }
+
+  .mw-ui-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    font-family: var(--mw-font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 2px solid var(--mw-border);
+    clip-path: var(--mw-grunge-clip-notched);
+    background: var(--mw-paper);
+    background-image: radial-gradient(var(--mw-halftone-dot) 0.7px, transparent 0.9px);
+    background-size: 7px 7px;
+    color: var(--mw-ink);
+    box-shadow: var(--mw-shadow-comic, 2px 2px 0 var(--mw-ink));
+    --mw-status-pill-accent: var(--mw-ink-soft);
+  }
+
+  .mw-ui-status-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--mw-status-pill-accent);
+  }
+
+  .mw-ui-status-pill--sm {
+    padding: 0.15rem 0.45rem;
+    font-size: 0.65rem;
+  }
+
+  .mw-ui-status-pill--live,
+  .mw-ui-status-pill--online,
+  .mw-ui-status-pill--clean {
+    border-color: var(--mw-success);
+    color: var(--mw-success);
+    --mw-status-pill-accent: var(--mw-success);
+  }
+
+  .mw-ui-status-pill--reconnecting,
+  .mw-ui-status-pill--dirty {
+    border-color: var(--mw-warning);
+    color: var(--mw-warning);
+    --mw-status-pill-accent: var(--mw-warning);
+  }
+
+  .mw-ui-status-pill--offline,
+  .mw-ui-status-pill--offline-svc {
+    border-color: var(--mw-destructive);
+    color: var(--mw-destructive);
+    --mw-status-pill-accent: var(--mw-destructive);
+  }
+
+  .mw-ui-status-pill--magpie {
+    border-color: var(--mw-cyan-readable, var(--mw-signal-blue));
+    color: var(--mw-cyan-readable, var(--mw-signal-blue));
+    --mw-status-pill-accent: var(--mw-cyan-readable, var(--mw-signal-blue));
+  }
+
+  .mw-ui-status-pill--ready {
+    border-color: var(--mw-border);
+    color: var(--mw-ink-soft);
+    --mw-status-pill-accent: var(--mw-ink-soft);
+  }
+
+  .mw-ui-status-pill--absent {
+    border-color: var(--mw-border-subtle);
+    color: var(--mw-ink-soft);
+    --mw-status-pill-accent: var(--mw-border-subtle);
+  }
+
+  .mw-ui-status-pill--pulse::before {
+    box-shadow: 0 0 8px var(--mw-status-pill-accent);
+    animation: mw-ui-status-pill-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes mw-ui-status-pill-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.9); }
+  }
 }

@@ -64,6 +64,7 @@ import { CharacterPreview } from '@moonwitness/ui/components/character-preview';
 import { ExampleCopyButton } from './ExampleCopyButton.js';
 import { ComponentPlayground } from './ComponentPlayground.js';
 import {
+  AppearanceMenu,
   applyGenreDnaAttribute,
   type GenreDnaPreset,
 } from '@moonwitness/ui';
@@ -410,49 +411,6 @@ function CatalogSection({
 
 type CatalogThemeMode = 'light' | 'dark' | 'high-contrast';
 
-const THEME_MODES: ReadonlyArray<{
-  id: CatalogThemeMode;
-  label: string;
-  ariaLabel: string;
-  title: string;
-}> = [
-  {
-    id: 'light',
-    label: 'Light',
-    ariaLabel: 'Use light theme',
-    title: 'Switch to light theme',
-  },
-  {
-    id: 'dark',
-    label: 'Dark',
-    ariaLabel: 'Use dark theme',
-    title: 'Switch to dark theme',
-  },
-  {
-    id: 'high-contrast',
-    label: 'High contrast',
-    ariaLabel: 'Use high contrast theme',
-    title: 'Switch to high contrast system theme',
-  },
-];
-
-const DENSITY_MODES: ReadonlyArray<{
-  id: SkinDensity;
-  label: string;
-  title: string;
-}> = [
-  {
-    id: 'comfortable',
-    label: 'Comfortable',
-    title: 'Switch preview cards to comfortable layout density',
-  },
-  {
-    id: 'compact',
-    label: 'Compact',
-    title: 'Switch preview cards to compact layout density',
-  },
-];
-
 const SEMANTIC_SWATCHES: ReadonlyArray<readonly [label: string, token: string]> = [
   ['Page', '--mw-background'],
   ['Surface', '--mw-surface'],
@@ -461,104 +419,6 @@ const SEMANTIC_SWATCHES: ReadonlyArray<readonly [label: string, token: string]> 
   ['Success', '--mw-success'],
   ['Info', '--mw-info'],
 ];
-
-function ThemeModeGlyph({ mode }: { mode: CatalogThemeMode }) {
-  if (mode === 'light') {
-    return (
-      <svg
-        className="catalog-theme-glyph"
-        viewBox="0 0 16 16"
-        width="13"
-        height="13"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        aria-hidden="true"
-      >
-        <circle cx="8" cy="8" r="3.1" />
-        <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1" />
-      </svg>
-    );
-  }
-  if (mode === 'dark') {
-    return (
-      <svg
-        className="catalog-theme-glyph"
-        viewBox="0 0 16 16"
-        width="13"
-        height="13"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M12.9 9.8A5.4 5.4 0 0 1 6.2 3.1a5.5 5.5 0 1 0 6.7 6.7Z" />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      className="catalog-theme-glyph"
-      viewBox="0 0 16 16"
-      width="13"
-      height="13"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <circle cx="8" cy="8" r="5.5" />
-      <path d="M8 2.5a5.5 5.5 0 0 1 0 11Z" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function DensityModeGlyph({ mode }: { mode: SkinDensity }) {
-  if (mode === 'comfortable') {
-    return (
-      <svg
-        className="catalog-theme-glyph"
-        viewBox="0 0 16 16"
-        width="13"
-        height="13"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        aria-hidden="true"
-      >
-        <rect x="2" y="2" width="5" height="5" />
-        <rect x="9" y="2" width="5" height="5" />
-        <rect x="2" y="9" width="5" height="5" />
-        <rect x="9" y="9" width="5" height="5" />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      className="catalog-theme-glyph"
-      viewBox="0 0 16 16"
-      width="13"
-      height="13"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      aria-hidden="true"
-    >
-      <rect x="1.75" y="1.75" width="3" height="3" />
-      <rect x="6.5" y="1.75" width="3" height="3" />
-      <rect x="11.25" y="1.75" width="3" height="3" />
-      <rect x="1.75" y="6.5" width="3" height="3" />
-      <rect x="6.5" y="6.5" width="3" height="3" />
-      <rect x="11.25" y="6.5" width="3" height="3" />
-      <rect x="1.75" y="11.25" width="3" height="3" />
-      <rect x="6.5" y="11.25" width="3" height="3" />
-      <rect x="11.25" y="11.25" width="3" height="3" />
-    </svg>
-  );
-}
 
 function applyThemeMode(nextMode: CatalogThemeMode) {
   const root = document.documentElement;
@@ -2334,55 +2194,15 @@ function CatalogContent() {
                   ))}
                 </SelectContent>
               </Select>
-              <div
-                className="catalog-density-toggle"
-                role="group"
-                aria-label="Grid density"
-                data-testid="grid-density-toggle"
-              >
-                {DENSITY_MODES.map((option) => {
-                  const active = density === option.id;
-                  return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      className="catalog-density-toggle-button"
-                      data-active={active ? 'true' : 'false'}
-                      aria-pressed={active}
-                      title={option.title}
-                      onClick={() => selectDensity(option.id)}
-                    >
-                      <DensityModeGlyph mode={option.id} />
-                      <span>{option.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div
-                className="catalog-theme-toggle"
-                role="group"
-                aria-label="Color theme"
-                data-testid="theme-mode-toggle"
-              >
-                {THEME_MODES.map((mode) => {
-                  const active = themeMode === mode.id;
-                  return (
-                    <button
-                      key={mode.id}
-                      type="button"
-                      className="catalog-theme-toggle-button"
-                      data-active={active ? 'true' : 'false'}
-                      aria-label={mode.ariaLabel}
-                      aria-pressed={active}
-                      title={mode.title}
-                      onClick={() => selectThemeMode(mode.id)}
-                    >
-                      <ThemeModeGlyph mode={mode.id} />
-                      <span>{mode.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <AppearanceMenu
+                mode={themeMode}
+                onModeChange={selectThemeMode}
+                density={density}
+                onDensityChange={selectDensity}
+                buttonSize="icon-sm"
+                buttonVariant="outline"
+                ariaLabel="Display and theme preferences"
+              />
             </div>
           </header>
 

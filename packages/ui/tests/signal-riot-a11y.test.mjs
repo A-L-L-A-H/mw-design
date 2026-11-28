@@ -62,11 +62,15 @@ function contrast(foreground, background) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-test('all 68 @moonwitness/ui component subpath exports resolve to valid modules', async () => {
+test('all @moonwitness/ui component subpath exports resolve to valid modules', async () => {
+  const sourceComponents = (await readdir(resolve(uiRoot, 'src/components')))
+    .filter((file) => file.endsWith('.tsx'))
+    .map((file) => `./components/${file.replace(/\.tsx$/u, '')}`)
+    .sort();
   const componentSubpaths = Object.keys(packageJson.exports)
     .filter((key) => key.startsWith('./components/') && !key.includes('*'))
     .sort();
-  assert.equal(componentSubpaths.length, 69, 'Expected 69 public component exports');
+  assert.deepEqual(componentSubpaths, sourceComponents, 'Public ./components/* exports must match src/components/*.tsx');
 
   for (const subpath of componentSubpaths) {
     const distTarget = packageJson.exports[subpath].import;

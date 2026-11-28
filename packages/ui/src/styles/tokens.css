@@ -125,6 +125,9 @@
   --mw-dna-border-heavy: 3px;
   --mw-dna-speedline-opacity: 0.22;
   --mw-dna-chromatic-x: 3px;
+  --mw-anime-skin: #fad7bf;
+  --mw-anime-skin-shade: #deb094;
+  --mw-anime-skin-highlight: #fff0e5;
   --mw-motion-pop: 180ms;
   --mw-motion-fast: 120ms;
   --mw-motion-normal: 160ms;
@@ -275,6 +278,8 @@
   --mw-layer-toast: 60;
 }
 
+[data-theme='dark'],
+:root[data-theme='dark'],
 .dark,
 [data-skin='moonwitness-riot'] {
   --mw-color-ink-muted: var(--mw-ink-faint);
@@ -295,6 +300,8 @@
   --mw-input: var(--mw-ink);
 }
 
+[data-theme='dark'],
+:root[data-theme='dark'],
 .dark {
   color-scheme: dark;
   --mw-yellow-readable: var(--mw-yellow);
@@ -332,6 +339,8 @@
   --mw-shadow-ink-lg: 4px 4px 0 0 var(--mw-ink);
 }
 
+:root[data-theme='dark'] [data-skin='moonwitness-compact'],
+[data-skin='moonwitness-compact'][data-theme='dark'],
 [data-skin='moonwitness-compact'].dark {
   --mw-paper: #0c0d10;
   --mw-paper-raised: #15171c;
@@ -364,6 +373,8 @@
   --mw-frame-width: 3px;
 }
 
+:root[data-theme='dark'] [data-skin='moonwitness-high-contrast'],
+[data-skin='moonwitness-high-contrast'][data-theme='dark'],
 [data-skin='moonwitness-high-contrast'].dark {
   --mw-paper: #000000;
   --mw-paper-raised: #0a0a0a;
@@ -416,6 +427,8 @@
   --mw-dna-chromatic-x: 4px;
 }
 
+:root[data-theme='dark'] [data-skin='moonwitness-riot'],
+[data-skin='moonwitness-riot'][data-theme='dark'],
 [data-skin='moonwitness-riot'].dark {
   color-scheme: dark;
   --mw-paper: #09090b;
@@ -444,6 +457,8 @@
 }
 
 /* Theme mode: high-contrast (system high-contrast CSS variable overrides) */
+[data-theme='high-contrast'],
+.high-contrast,
 :root[data-theme='high-contrast'],
 :root.high-contrast {
   color-scheme: dark;
@@ -534,6 +549,8 @@
   --mw-dna-border-heavy: 3px;
 }
 
+:root[data-theme='dark'] [data-skin='cartoon-pop'],
+[data-skin='cartoon-pop'][data-theme='dark'],
 [data-skin='cartoon-pop'].dark {
   color-scheme: dark;
   --mw-paper: #141326;
@@ -582,6 +599,8 @@
   --mw-shadow-ink-lg: 6px 6px 0 0 #0a1020;
 }
 
+:root[data-theme='dark'] [data-skin='arcade-neon'],
+[data-skin='arcade-neon'][data-theme='dark'],
 [data-skin='arcade-neon'].dark {
   color-scheme: dark;
   --mw-paper: #080b14;
@@ -636,6 +655,8 @@
   --mw-shadow-comic: 0 4px 12px rgb(15 23 42 / 10%);
 }
 
+:root[data-theme='dark'] [data-skin='clean-motion'],
+[data-skin='clean-motion'][data-theme='dark'],
 [data-skin='clean-motion'].dark {
   color-scheme: dark;
   --mw-paper: #0b1120;
@@ -685,6 +706,8 @@
   --mw-shadow-ink-lg: 6px 6px 0 0 #3f2d1d;
 }
 
+:root[data-theme='dark'] [data-skin='cozy-rpg'],
+[data-skin='cozy-rpg'][data-theme='dark'],
 [data-skin='cozy-rpg'].dark {
   color-scheme: dark;
   --mw-paper: #1b1510;

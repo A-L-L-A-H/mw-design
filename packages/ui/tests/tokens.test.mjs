@@ -7,10 +7,16 @@ const css = await readFile(new URL('../src/styles/tokens.css', import.meta.url),
 const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
 function declaration(token, selector = ':root') {
-  const section = css.match(new RegExp(`${selector}\\s*\\{([^}]+)\\}`));
-  assert.ok(section, `Missing ${selector} token block`);
-  const value = section[1].match(new RegExp(`--mw-${token}:\\s*([^;]+);`));
-  return value?.[1].trim();
+  const headerPattern = `(?:^|\\n|\\})\\s*(?:[^\\{]*,\\s*)?${selector}(?:\\s*,[^\\{]*)?\\s*\\{([^}]+)\\}`;
+  const blockRegex = new RegExp(headerPattern, 'gu');
+  let foundBlock = false;
+  for (const match of css.matchAll(blockRegex)) {
+    foundBlock = true;
+    const value = match[1].match(new RegExp(`--mw-${token}:\\s*([^;]+);`));
+    if (value?.[1]) return value[1].trim();
+  }
+  assert.ok(foundBlock, `Missing ${selector} token block`);
+  return undefined;
 }
 
 function tokenValue(token, selector = ':root') {
@@ -516,4 +522,33 @@ test('shared tokens avoid app-specific global styling and external font loading'
   assert.match(cssWithoutInlineDataUris, /--mw-chalk-mask:\s*[^;]+;/u);
   assert.doesNotMatch(cssWithoutInlineDataUris, /@import\s+url|https?:\/\//i);
   assert.doesNotMatch(cssWithoutInlineDataUris, /(^|\})\s*(html|body|\*)\s*\{/);
+});
+
+test('token exporter matches all tokens.css :root properties, ROCKSOUL crimson, and 8 skins', async () => {
+  const exporter = await import('../dist/token-exporter.js');
+  const rootVars = exporter.parseTokensFromCss(css, ':root');
+  const resolveRootVar = (val, seen = new Set()) => {
+    const ref = val?.match(/^var\((--mw-[\w-]+)\)$/u);
+    if (!ref || !rootVars[ref[1]] || seen.has(ref[1])) return val;
+    seen.add(ref[1]);
+    return resolveRootVar(rootVars[ref[1]], seen);
+  };
+  const exportedMap = new Map(exporter.CORE_DESIGN_TOKENS.map((entry) => [entry.cssVariable, entry]));
+  for (const [cssVariable, rawValue] of Object.entries(rootVars)) {
+    const entry = exportedMap.get(cssVariable);
+    assert.ok(entry, `token-exporter missing ${cssVariable} from tokens.css`);
+    const resolved = resolveRootVar(rawValue);
+    assert.ok(
+      entry.value === rawValue || entry.value === resolved,
+      `Value mismatch for ${cssVariable}: expected ${rawValue} (or ${resolved}), got ${entry.value}`
+    );
+  }
+  assert.equal(exportedMap.get('--mw-brand-crimson')?.value, '#D1132A');
+  assert.equal(exportedMap.get('--mw-signal-crimson')?.value, '#9F1022');
+  assert.equal(exportedMap.get('--mw-motion-normal')?.value, '160ms');
+  assert.equal(exportedMap.get('--mw-layer-toast')?.value, '60');
+
+  const bundle = exporter.exportDesignTokenBundle();
+  assert.equal(bundle.skins.length, 8);
+  assert.equal(Object.keys(bundle.skinTokens ?? {}).length, 8);
 });

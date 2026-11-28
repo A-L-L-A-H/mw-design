@@ -23,8 +23,19 @@ export interface SpriteClipMetadata {
   readonly height: number;
 }
 
+/** One image holding every frame in a grid; frames swap by background offset, never by src. */
+export interface SpriteSheetAtlas {
+  readonly src: string;
+  readonly columns: number;
+  readonly rows: number;
+  readonly frameWidth: number;
+  readonly frameHeight: number;
+  readonly frameCount?: number;
+}
+
 export interface SpritePlayerProps {
   readonly clip: SpriteClipMetadata;
+  readonly spriteSheet?: SpriteSheetAtlas;
   readonly label?: string;
   readonly scale?: number;
   readonly playing?: boolean;
@@ -40,6 +51,70 @@ export interface SpritePlayerProps {
 
 const DEFAULT_SPRITE_FPS = 12;
 const spriteAdapter = createSpriteSequenceAdapter();
+
+const isPositiveInt = (value: unknown): value is number => Number.isInteger(value) && (value as number) > 0;
+
+export function isValidSpriteSheet(atlas: SpriteSheetAtlas | undefined): atlas is SpriteSheetAtlas {
+  return (
+    atlas !== undefined &&
+    atlas.src.length > 0 &&
+    isPositiveInt(atlas.columns) &&
+    isPositiveInt(atlas.rows) &&
+    Number.isFinite(atlas.frameWidth) &&
+    atlas.frameWidth > 0 &&
+    Number.isFinite(atlas.frameHeight) &&
+    atlas.frameHeight > 0
+  );
+}
+
+export function resolveSpriteSheetFrameCount(atlas: SpriteSheetAtlas): number {
+  const cells = atlas.columns * atlas.rows;
+  return isPositiveInt(atlas.frameCount) && atlas.frameCount <= cells ? atlas.frameCount : cells;
+}
+
+/** Background offset (in %) that shows grid cell `frameIndex`, filling rows left to right. */
+export function computeSpriteSheetOffset(
+  frameIndex: number,
+  atlas: Pick<SpriteSheetAtlas, 'columns' | 'rows'>
+): { readonly x: number; readonly y: number } {
+  const column = frameIndex % atlas.columns;
+  const row = Math.floor(frameIndex / atlas.columns) % atlas.rows;
+  return {
+    x: atlas.columns > 1 ? (column / (atlas.columns - 1)) * 100 : 0,
+    y: atlas.rows > 1 ? (row / (atlas.rows - 1)) * 100 : 0,
+  };
+}
+
+function SpriteSheetFrame({
+  atlas,
+  frameIndex,
+  label,
+  style,
+}: {
+  readonly atlas: SpriteSheetAtlas;
+  readonly frameIndex: number;
+  readonly label: string;
+  readonly style?: CSSProperties;
+}) {
+  const offset = computeSpriteSheetOffset(frameIndex, atlas);
+  return (
+    <div
+      className="mw-ui-sprite-player-frame"
+      role="img"
+      aria-label={label}
+      data-sprite-atlas="true"
+      style={{
+        ...style,
+        width: '100%',
+        height: '100%',
+        backgroundImage: `url(${JSON.stringify(atlas.src)})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${atlas.columns * 100}% ${atlas.rows * 100}%`,
+        backgroundPosition: `${offset.x}% ${offset.y}%`,
+      }}
+    />
+  );
+}
 
 function resolveClipCycleDurationMs(
   clip: Pick<SpriteClipMetadata, 'frames' | 'fps' | 'durationMs' | 'pingPong'>
@@ -91,7 +166,8 @@ export function computeSpriteFrameIndex(
 }
 
 export function SpritePlayer({
-  clip,
+  clip: sourceClip,
+  spriteSheet,
   label,
   scale = 1,
   playing = true,
@@ -105,6 +181,16 @@ export function SpritePlayer({
   onFrameChange,
 }: SpritePlayerProps) {
   const harness = getActiveSceneHarness();
+  const atlas = isValidSpriteSheet(spriteSheet) ? spriteSheet : undefined;
+  const atlasSrc = atlas?.src;
+  const atlasFrameCount = atlas ? resolveSpriteSheetFrameCount(atlas) : 0;
+  const clip = useMemo<SpriteClipMetadata>(
+    () =>
+      atlasSrc === undefined
+        ? sourceClip
+        : { ...sourceClip, frames: Array.from({ length: atlasFrameCount }, () => atlasSrc) },
+    [sourceClip, atlasSrc, atlasFrameCount]
+  );
   const effectiveReducedMotion = useReducedMotion(reducedMotion);
   const effectivePinnedFrame = pinnedFrame ?? harness?.fixedFrame;
   const effectivePaused = Boolean(paused || harness?.paused === true);
@@ -243,10 +329,20 @@ export function SpritePlayer({
         display: 'inline-block',
         width: `min(100%, ${scaledWidth}px)`,
         maxWidth: '100%',
-        aspectRatio: `${scaledWidth} / ${scaledHeight}`,
+        aspectRatio: atlas
+          ? `${atlas.frameWidth} / ${atlas.frameHeight}`
+          : `${scaledWidth} / ${scaledHeight}`,
         ...style,
       }}
     >
+      {atlas ? (
+        <SpriteSheetFrame
+          atlas={atlas}
+          frameIndex={resolved.frameIndex}
+          label={label ?? `${clip.id} sprite frame`}
+          style={frameStyle}
+        />
+      ) : (
       <img
         className="mw-ui-sprite-player-frame"
         src={resolved.asset}
@@ -262,6 +358,7 @@ export function SpritePlayer({
           objectFit: 'contain',
         }}
       />
+      )}
     </div>
   );
 }

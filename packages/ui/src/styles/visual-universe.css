@@ -1,0 +1,133 @@
+@layer components {
+  .mw-ui-riot-sticker {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    user-select: none;
+    filter: drop-shadow(2px 3px 0 color-mix(in srgb, var(--mw-ink) 35%, transparent));
+  }
+  .mw-ui-riot-sticker[data-tilt='left'] {
+    transform: rotate(-4deg);
+  }
+  .mw-ui-riot-sticker[data-tilt='right'] {
+    transform: rotate(4deg);
+  }
+
+  .mw-ui-sketch-annotation {
+    --mw-sketch-color: var(--mw-yellow);
+    position: relative;
+    display: inline-block;
+    padding: 0.1em 0.25em;
+  }
+  .mw-ui-sketch-annotation[data-tone='magenta'] {
+    --mw-sketch-color: var(--mw-magenta);
+  }
+  .mw-ui-sketch-annotation[data-tone='cyan'] {
+    --mw-sketch-color: var(--mw-cyan);
+  }
+  .mw-ui-sketch-annotation[data-tone='violet'] {
+    --mw-sketch-color: var(--mw-violet);
+  }
+  .mw-ui-sketch-annotation-content {
+    position: relative;
+    z-index: 1;
+  }
+  .mw-ui-sketch-annotation-mark {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--mw-sketch-color);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.9;
+  }
+  .mw-ui-sketch-annotation-mark path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    vector-effect: non-scaling-stroke;
+  }
+  .mw-ui-sketch-annotation[data-mark='underline'] .mw-ui-sketch-annotation-mark {
+    top: auto;
+    bottom: -0.2em;
+    height: 0.5em;
+  }
+  .mw-ui-sketch-annotation:not([data-reduced-motion='true']) .mw-ui-sketch-annotation-mark path {
+    animation: mw-ui-sketch-draw var(--mw-motion-slow) var(--mw-motion-ease-emphasis) both;
+  }
+  .mw-ui-sketch-annotation-note {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) rotate(-2deg);
+    margin-top: 0.35em;
+    white-space: nowrap;
+    font-size: 0.75em;
+    font-weight: 700;
+    color: var(--mw-ink-soft);
+  }
+
+  .mw-ui-character-badge {
+    --mw-badge-tone: var(--mw-ink);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5em;
+    padding: 0.2em 0.6em;
+    border: 2px solid var(--mw-ink);
+    border-left: 0.5em solid var(--mw-badge-tone);
+    background: var(--mw-paper-raised);
+    color: var(--mw-ink);
+    font-size: 0.875rem;
+    line-height: 1.25;
+    box-shadow: 2px 2px 0 0 var(--mw-ink);
+  }
+  .mw-ui-character-badge[data-size='sm'] {
+    font-size: 0.75rem;
+    padding: 0.1em 0.45em;
+  }
+  .mw-ui-character-badge[data-tone='yellow'] {
+    --mw-badge-tone: var(--mw-yellow);
+  }
+  .mw-ui-character-badge[data-tone='magenta'] {
+    --mw-badge-tone: var(--mw-magenta);
+  }
+  .mw-ui-character-badge[data-tone='cyan'] {
+    --mw-badge-tone: var(--mw-cyan);
+  }
+  .mw-ui-character-badge[data-tone='violet'] {
+    --mw-badge-tone: var(--mw-violet);
+  }
+  .mw-ui-character-badge[data-tone='success'] {
+    --mw-badge-tone: var(--mw-success);
+  }
+  .mw-ui-character-badge-name {
+    font-weight: 800;
+  }
+  .mw-ui-character-badge-codename,
+  .mw-ui-character-badge-group {
+    font-weight: 600;
+    color: var(--mw-ink-soft);
+  }
+  .mw-ui-character-badge-group {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  @keyframes mw-ui-sketch-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  [data-motion-profile='off'] .mw-ui-sketch-annotation-mark path {
+    animation: none;
+  }
+}

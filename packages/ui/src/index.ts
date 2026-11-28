@@ -149,6 +149,7 @@ export {
 } from './components/speech-bubble.js';
 export { Spinner, type SpinnerProps, type SpinnerSize } from './components/spinner.js';
 export { StatusBar, type StatusBarProps, type StatusBarState, type StatusBarStep } from './components/status-bar.js';
+export { StatusPill, type StatusPillProps, type StatusPillVariant, type StatusPillSize } from './components/status-pill.js';
 export { Switch, type SwitchProps } from './components/switch.js';
 export {
   Table,
@@ -227,3 +228,135 @@ export {
   type SkinMetadata,
 } from './themes/index.js';
 
+export {
+  AccentMarker,
+  AnimeActionLines,
+  AnimeImpactBurst,
+  DecorativeMotif,
+  Doodle,
+  EditorialTexture,
+  GrungeCanvas,
+  GrungeDivider,
+  GrungeStamp,
+  InkFrame,
+  InkUnderline,
+  LiveIndicator,
+  LoadingProgress,
+  LoadingSpinner,
+  MangaPanel,
+  SignalOrbit,
+  SpeechBubble as EffectsSpeechBubble,
+  SpeedLines,
+  ZineSticker,
+  type DecorativeMotifKind,
+} from './components/effects.js';
+export { AppearanceMenu, type AppearanceMenuProps, type AppearanceToggleItem } from './components/appearance-menu.js';
+export { CharacterPreview, type CharacterPreviewProps } from './components/character-preview.js';
+export {
+  CharacterDisplay,
+  CharacterReaction,
+  type CharacterDisplayProps,
+  type CharacterDisplaySize,
+  type CharacterReactionProps,
+} from './components/character-stage.js';
+export {
+  ComicTheater,
+  type ComicTheaterLang,
+  type ComicTheaterMode,
+  type ComicTheaterPanelItem,
+  type ComicTheaterProps,
+} from './components/comic-theater.js';
+export {
+  EpistemicBranchPanel,
+  type EpistemicBranchChoice,
+  type EpistemicBranchPanelProps,
+} from './components/epistemic-branch-panel.js';
+export {
+  LayeredScene,
+  isMotionProfileOff,
+  resolveSceneLayersForWidth,
+  useMotionProfileOff,
+  type LayeredSceneProps,
+  type SceneBreakpointDescriptor,
+  type SceneLayerDescriptor,
+  type SceneLayerMediaKind,
+  type SceneLayerOverride,
+  type SceneLayerPivot,
+  type SceneLayerTransform,
+} from './components/layered-scene.js';
+export {
+  MAX_SCENE_PARTICLES,
+  SceneParticles,
+  generateSceneParticles,
+  type SceneParticleDatum,
+  type SceneParticleIntensity,
+  type SceneParticlePreset,
+  type SceneParticlesProps,
+} from './components/scene-particles.js';
+export {
+  ComicSceneTransition,
+  type ComicTransitionState,
+  type ComicTransitionVariant,
+  type SceneTransitionProps,
+} from './components/scene-transitions.js';
+export {
+  SpritePlayer,
+  computeSpriteFrameIndex,
+  computeSpriteSheetOffset,
+  isValidSpriteSheet,
+  resolveSpriteSheetFrameCount,
+  type SpriteClipMetadata,
+  type SpritePlayerProps,
+  type SpriteSheetAtlas,
+} from './components/sprite-player.js';
+export {
+  RIOT_STICKER_SLUGS,
+  RiotSticker,
+  getRiotStickerSrc,
+  type RiotStickerProps,
+  type RiotStickerSize,
+  type RiotStickerSlug,
+  type RiotStickerTilt,
+} from './components/riot-sticker.js';
+export {
+  SketchAnnotation,
+  type SketchAnnotationMark,
+  type SketchAnnotationProps,
+  type SketchAnnotationTone,
+} from './components/sketch-annotation.js';
+export {
+  CharacterBadge,
+  type CharacterBadgeProps,
+  type CharacterBadgeSize,
+} from './components/character-badge.js';
+export {
+  EXTENDED_LORE_CAST_IDS,
+  MOONWITNESS_XII_CAST_IDS,
+  ROCKSOUL_CAP_MODES,
+  ROCKSOUL_LORE_CAST_IDS,
+  ROCKSOUL_LORE_FACTIONS,
+  ROCKSOUL_LORE_ROSTER,
+  assertNoLoreAliasAutoMerge,
+  filterLoreCharacters,
+  getExtendedLoreCast,
+  getLoreCharacterById,
+  getMoonWitnessXiiCast,
+  getRocksoulCapMode,
+  validateLoreCharacterCanonGuards,
+  validateRocksoulLoreRoster,
+  type AliasAutoMergeAudit,
+  type CanonGuardMetadata,
+  type LoreCanonStatus,
+  type LoreCanonValidationResult,
+  type LoreCharacterFilterQuery,
+  type LoreCharacterId,
+  type LoreCharacterProfile,
+  type LoreDepictionPolicy,
+  type LoreFactionMeta,
+  type LoreGroupId,
+  type LoreVisualRenderingMode,
+  type RocksoulCapModeId,
+  type RocksoulCapModeSpec,
+} from './lib/character-registry.js';
+
+export { MonoBadge, ComicSticker, StatTile, StageHeroBanner, SectionCard, CopyableSnippet, ToastStack, type XvBadgeTone, type XvToastTone, type StatTileProps, type StageHeroBannerProps, type SectionCardProps, type ToastNotice } from './components/xv-primitives.js';

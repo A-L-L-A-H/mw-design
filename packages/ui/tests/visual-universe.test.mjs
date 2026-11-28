@@ -399,3 +399,68 @@ test('visual universe components forward DOM refs cleanly', async () => {
     globalThis.document = prevDocument;
   }
 });
+
+test('RiotSticker resolves stickers-pack PNGs with an accessible name or a decorative opt-out', async () => {
+  const { RiotSticker, RIOT_STICKER_SLUGS, getRiotStickerSrc } = await import('../dist/components/riot-sticker.js');
+  assert.equal(RIOT_STICKER_SLUGS.length, 32);
+  assert.equal(getRiotStickerSrc('ship-it'), '/illustrations/stickers-pack/sticker-ship-it.png');
+  assert.equal(getRiotStickerSrc('ship-it', '/assets/'), '/assets/illustrations/stickers-pack/sticker-ship-it.png');
+
+  const named = renderToStaticMarkup(React.createElement(RiotSticker, { slug: 'gg-wp', size: 'lg', tilt: 'left' }));
+  assert.match(named, /src="\/illustrations\/stickers-pack\/sticker-gg-wp\.png"/u);
+  assert.match(named, /alt="gg wp sticker"/u);
+  assert.match(named, /width="176"/u);
+  assert.match(named, /data-tilt="left"/u);
+  assert.doesNotMatch(named, /style=/u);
+
+  const labelled = renderToStaticMarkup(React.createElement(RiotSticker, { slug: 'merged', label: 'Merged to main' }));
+  assert.match(labelled, /alt="Merged to main"/u);
+
+  const decorative = renderToStaticMarkup(React.createElement(RiotSticker, { slug: 'doodle-star', decorative: true }));
+  assert.match(decorative, /alt=""/u);
+  assert.match(decorative, /aria-hidden="true"/u);
+});
+
+test('RiotSticker slugs match the files shipped in the stickers-pack', async () => {
+  const { RIOT_STICKER_SLUGS } = await import('../dist/components/riot-sticker.js');
+  const { readdir } = await import('node:fs/promises');
+  const dir = new URL('../../assets/illustrations/stickers-pack/', import.meta.url);
+  const shipped = (await readdir(dir))
+    .filter((name) => name.endsWith('.png'))
+    .map((name) => name.replace(/^sticker-|\.png$/gu, ''))
+    .sort();
+  assert.deepEqual([...RIOT_STICKER_SLUGS].sort(), shipped);
+});
+
+test('SketchAnnotation draws a decorative mark and keeps the note as real text', async () => {
+  const { SketchAnnotation } = await import('../dist/components/sketch-annotation.js');
+  const html = renderToStaticMarkup(
+    React.createElement(SketchAnnotation, { mark: 'circle', tone: 'magenta', note: 'check this' }, 'Release gate')
+  );
+  assert.match(html, /data-mark="circle"/u);
+  assert.match(html, /data-tone="magenta"/u);
+  assert.match(html, /<svg[^>]*aria-hidden="true"/u);
+  assert.match(html, /mw-ui-sketch-annotation-content">Release gate</u);
+  assert.match(html, /mw-ui-sketch-annotation-note">check this</u);
+  assert.doesNotMatch(html, /style=/u);
+
+  const reduced = renderToStaticMarkup(
+    React.createElement(SketchAnnotation, { reducedMotion: true }, 'Quiet')
+  );
+  assert.match(reduced, /data-reduced-motion="true"/u);
+});
+
+test('visual-universe exports are on the root barrel, package subpaths, and a hex-free stylesheet', async () => {
+  const ui = await import('../dist/index.js');
+  for (const name of ['RiotSticker', 'SketchAnnotation', 'RIOT_STICKER_SLUGS', 'getRiotStickerSrc']) {
+    assert.ok(name in ui, `Expected ${name} on the root barrel`);
+  }
+  const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  for (const key of ['./components/riot-sticker', './components/sketch-annotation', './styles/visual-universe.css']) {
+    assert.ok(key in pkg.exports, `Missing package export ${key}`);
+  }
+  const css = await readFile(new URL('../src/styles/visual-universe.css', import.meta.url), 'utf8');
+  assert.match(css, /^@layer components \{/u);
+  assert.doesNotMatch(css.replace(/\/\*[\s\S]*?\*\//gu, ''), /#[\da-f]{3,8}\b/iu);
+  assert.match(css, /\[data-motion-profile='off'\]/u);
+});

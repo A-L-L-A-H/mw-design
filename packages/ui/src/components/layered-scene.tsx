@@ -97,6 +97,30 @@ export interface LayeredSceneProps {
 }
 
 const DEFAULT_VIEWPORT_WIDTH = 1280;
+const MOTION_OFF_SELECTOR = "[data-motion-profile='off']";
+
+/** True when the element, or any ancestor, carries data-motion-profile="off". */
+export function isMotionProfileOff(element: Pick<Element, 'closest'> | null): boolean {
+  return element !== null && element.closest(MOTION_OFF_SELECTOR) !== null;
+}
+
+export function useMotionProfileOff(element: HTMLElement | null): boolean {
+  const [off, setOff] = useState(false);
+  useEffect(() => {
+    if (!element) return undefined;
+    const read = () => setOff(isMotionProfileOff(element));
+    read();
+    if (typeof MutationObserver === 'undefined') return undefined;
+    const observer = new MutationObserver(read);
+    observer.observe(element.ownerDocument.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-motion-profile'],
+      subtree: true,
+    });
+    return () => observer.disconnect();
+  }, [element]);
+  return off;
+}
 
 function clampOpacity(opacity: number | undefined): number {
   if (typeof opacity !== 'number' || !Number.isFinite(opacity)) return 1;
@@ -236,7 +260,9 @@ export function LayeredScene({
   style,
 }: LayeredSceneProps) {
   const harness = getActiveSceneHarness();
-  const effectiveReducedMotion = useReducedMotion(reducedMotion);
+  const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
+  const motionProfileOff = useMotionProfileOff(rootElement);
+  const effectiveReducedMotion = useReducedMotion(reducedMotion) || motionProfileOff;
   const playback = useScenePlayback({
     autoPlay: forceStatic || effectiveReducedMotion ? false : autoPlay,
     durationMs,
@@ -264,6 +290,7 @@ export function LayeredScene({
   const setCombinedRef = useCallback(
     (element: HTMLDivElement | null) => {
       rootElementRef.current = element;
+      setRootElement(element);
       playback.ref(element);
     },
     [playback.ref]

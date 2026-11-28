@@ -690,3 +690,17 @@ describe('Expanded Playground presets, shareable link, and ComponentApiTable', (
 
 
 
+
+describe('tokenExport derives its groups from the canonical ui exporter', () => {
+  it('lists every canonical color, spacing, and typography token exactly once', async () => {
+    const { CORE_DESIGN_TOKENS } = await import('@moonwitness/ui/token-exporter');
+    const { COLOR_TOKENS, SPACING_TOKENS, TYPOGRAPHY_TOKENS } = await import('../src/tokenExport.js');
+    const names = (...categories: string[]) =>
+      CORE_DESIGN_TOKENS.filter((entry) => categories.includes(entry.category)).map((entry) => entry.cssVariable);
+    expect([...COLOR_TOKENS]).toEqual(names('color'));
+    expect([...SPACING_TOKENS]).toEqual(names('spacing', 'radius', 'shadow'));
+    expect([...TYPOGRAPHY_TOKENS]).toEqual(names('typography'));
+    const all = [...COLOR_TOKENS, ...SPACING_TOKENS, ...TYPOGRAPHY_TOKENS];
+    expect(new Set(all).size).toBe(all.length);
+  });
+});

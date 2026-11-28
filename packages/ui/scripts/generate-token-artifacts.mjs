@@ -1,24 +1,52 @@
 #!/usr/bin/env node
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const uiRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const distDir = join(uiRoot, 'dist');
+const tokensCssPath = join(uiRoot, 'src', 'styles', 'tokens.css');
 
 const {
   CORE_DESIGN_TOKENS,
   exportDesignTokenBundle,
+  exportSkinTokensToW3cJson,
+  exportSkinsToCssVariables,
   exportTailwindThemeExtend,
   exportTokensToCssVariables,
   exportTokensToW3cJson,
+  parseTokensFromCss,
 } = await import('../dist/token-exporter.js');
+
+const tokensCss = readFileSync(tokensCssPath, 'utf8');
+const cssRootVars = parseTokensFromCss(tokensCss, ':root');
+const exporterByVar = new Map(CORE_DESIGN_TOKENS.map((entry) => [entry.cssVariable, entry]));
+
+const missingFromExporter = Object.keys(cssRootVars).filter((cssVar) => !exporterByVar.has(cssVar));
+if (missingFromExporter.length > 0) {
+  throw new Error(
+    `token-exporter is missing ${missingFromExporter.length} :root token(s) from tokens.css: ${missingFromExporter.join(', ')}`
+  );
+}
+
+for (const criticalVar of ['--mw-motion-normal', '--mw-layer-toast']) {
+  const expected = cssRootVars[criticalVar];
+  const actual = exporterByVar.get(criticalVar)?.value;
+  if (expected && actual !== expected) {
+    throw new Error(
+      `Token drift detected for ${criticalVar}: tokens.css="${expected}" vs exporter="${actual}"`
+    );
+  }
+}
 
 mkdirSync(distDir, { recursive: true });
 
-const w3cTokens = exportTokensToW3cJson(CORE_DESIGN_TOKENS);
+const w3cTokens = {
+  ...exportTokensToW3cJson(CORE_DESIGN_TOKENS),
+  skins: exportSkinTokensToW3cJson(),
+};
 const fullBundle = exportDesignTokenBundle(CORE_DESIGN_TOKENS);
-const cssVars = exportTokensToCssVariables(CORE_DESIGN_TOKENS);
+const cssVars = `${exportTokensToCssVariables(CORE_DESIGN_TOKENS)}\n${exportSkinsToCssVariables()}`;
 const twExtend = exportTailwindThemeExtend(CORE_DESIGN_TOKENS);
 
 const tailwindPresetCss = [
