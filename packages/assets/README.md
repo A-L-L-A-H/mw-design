@@ -1,6 +1,12 @@
 # `@moonwitness/assets`
 
-Framework-independent visual assets for MoonWitness. The package has no runtime dependencies; React icon wrappers belong in `@moonwitness/ui`.
+Framework-independent visual assets for MoonWitness. `mw-design` is the only UI and visual assets owner across the MoonWitness workspace; consumer repositories must import assets and fonts from `@moonwitness/assets` rather than maintaining duplicate copies. The package has no runtime dependencies; React icon wrappers belong in `@moonwitness/ui`.
+
+## v1.0.0 Visual Universe & PNG Packs
+
+- **Character cast & animations:** Kuro Signal PNG masters and sprite-sheet clips (`animation/kuro-signal-*`), RockSoul cel/sketch cast and animations (`illustrations/rocksoul-universe/`, `animation/rocksoul-*`), and MoonWitness XII / Extended Lore cast assets.
+- **Stickers, UI states & telemetry:** Street stickers (`illustrations/stickers-pack/`), feathered UI state cutout vignettes (`illustrations/ui-state-pack/`), and 256px AI telemetry PNG badges in `ink` and `rough-pencil` variants (`illustrations/telemetry-pack/`).
+- **Visual proof sheets:** Contact sheets under `brand/rendered/` for RockSoul cast, pencil-grunge stickers, and AI agent telemetry states.
 
 ## Generate and export
 

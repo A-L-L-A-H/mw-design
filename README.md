@@ -4,7 +4,7 @@
 
 ## What it does
 
-Contains @moonwitness/ui, @moonwitness/assets, and the static ui-catalog application.
+Contains `@moonwitness/ui`, `@moonwitness/assets`, `@moonwitness/design-tokens`, and the static `ui-catalog` application. `mw-design` is the only UI, visual asset, and design-token owner across the MoonWitness workspace; consumer repositories must import packages from `mw-design` rather than duplicating UI packages or hex tokens locally.
 
 ## Quick start
 
