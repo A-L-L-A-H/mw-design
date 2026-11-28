@@ -16,6 +16,8 @@ const moonCitySourceTotal = assetManifest.assets.filter(
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
+const expectedCatalogBasePath = process.env.MW_UI_CATALOG_BASE_PATH ?? '/';
+
 test('static catalog loads under the repository Pages subpath with its shared UI assets', async ({
   page,
 }, testInfo) => {
@@ -34,7 +36,7 @@ test('static catalog loads under the repository Pages subpath with its shared UI
     'https://github.com/MoonWitness/moonwitness-design/tree/main/packages/ui'
   );
   expect(failedRequests).toEqual([]);
-  expect(new URL(page.url()).pathname).toBe('/moonwitness-xiv/components/');
+  expect(new URL(page.url()).pathname).toBe(expectedCatalogBasePath);
   await page.screenshot({ path: testInfo.outputPath('desktop.png'), fullPage: false });
 });
 
@@ -347,7 +349,7 @@ test('brand, typography, and homepage proof use canonical assets and correct spe
   expect(bodyMetrics.scrollWidth).toBeLessThanOrEqual(bodyMetrics.clientWidth);
   expect(bodyMetrics.height).toBeGreaterThan(bodyMetrics.lineHeight * 2);
   await copyStress.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/typography-indonesian-320.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/typography-indonesian-320.png'),
   });
 });
 
@@ -439,7 +441,7 @@ test('failed local fonts keep the Indonesian typography specimen readable on mob
     true
   );
   await copyStress.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/font-fallback-320.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/font-fallback-320.png'),
   });
 });
 
@@ -466,7 +468,7 @@ test('shared animated effects pause offscreen and resume when visible', async ({
 
   await page.locator('.catalog-motion-grid').scrollIntoViewIfNeeded();
   await page.locator('.catalog-motion-grid').screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/offscreen-animation-visible.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/offscreen-animation-visible.png'),
     animations: 'disabled',
   });
   await expect
@@ -644,7 +646,9 @@ test('filter input controls sample table and navigation keeps a deep link at the
   await expect(sampleTable.getByText('Base')).toHaveCount(0);
 
   await page.getByRole('link', { name: 'Charts' }).click();
-  await expect(page).toHaveURL(/\/moonwitness-xiv\/components\/#charts$/u);
+  await expect
+    .poll(() => `${new URL(page.url()).pathname}${new URL(page.url()).hash}`)
+    .toBe(`${expectedCatalogBasePath}#charts`);
   await expect(page.getByRole('heading', { name: 'Charts', exact: true })).toBeVisible();
 });
 
@@ -751,7 +755,7 @@ test('toast entry and dismissal use shared motion timing and remain immediate wi
   );
   await expect(toast.getByText('Your workspace preferences are up to date.')).toBeVisible();
   await toast.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/toast-motion-state.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/toast-motion-state.png'),
   });
   await toast.getByRole('button', { name: 'Close toast' }).click();
   await expect(toast).toBeHidden();
@@ -915,7 +919,7 @@ test('button hover and pressed motion keeps a stable hit area and visible focus 
   const pressedBox = await button.boundingBox();
   expect(pressedBox?.width).toBeCloseTo(idleBox!.width, 2);
   expect(pressedBox?.height).toBeCloseTo(idleBox!.height, 2);
-  await button.screenshot({ path: '../../docs/design/ui-catalog/button-pressed-motion.png' });
+  await button.screenshot({ path: '../../test-results/ui-catalog/proofs/button-pressed-motion.png' });
   await page.mouse.up();
 
   await button.focus();
@@ -1047,7 +1051,7 @@ test('icons, materials, and decorations contact sheet renders canonical assets a
     element.style.position = 'static';
   });
   await section.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/icons-materials-desktop.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/icons-materials-desktop.png'),
   });
 });
 
@@ -1089,7 +1093,7 @@ test('story workbench proof renders 3-column desktop, stacks on mobile without o
     false
   );
   await grid.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/workbench-proof-desktop.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/workbench-proof-desktop.png'),
   });
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -1106,7 +1110,7 @@ test('story workbench proof renders 3-column desktop, stacks on mobile without o
   );
   await grid.scrollIntoViewIfNeeded();
   await grid.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/workbench-proof-mobile.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/workbench-proof-mobile.png'),
   });
 });
 
@@ -1146,7 +1150,7 @@ test('component matrix covers textarea, switch, indeterminate checkbox, sentinel
     element.style.position = 'static';
   });
   await overlaysSection.screenshot({
-    path: resolve(process.cwd(), '../../docs/design/ui-catalog/component-matrix-desktop.png'),
+    path: resolve(process.cwd(), '../../test-results/ui-catalog/proofs/component-matrix-desktop.png'),
   });
 
   await expect(overlaysSection.locator('.mw-ui-page-header[data-treatment="display"]')).toHaveCount(

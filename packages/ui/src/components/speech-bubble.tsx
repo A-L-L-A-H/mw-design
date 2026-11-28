@@ -30,8 +30,14 @@ export const SpeechBubble = forwardRef<HTMLDivElement, SpeechBubbleProps>(functi
       data-variant={variant}
       {...props}
     >
-      {speaker ? <span className="mw-ui-speech-bubble-speaker">{speaker}</span> : null}
-      <div className="mw-ui-speech-bubble-body">{children}</div>
+      {speaker ? (
+        <>
+          <span className="mw-ui-speech-bubble-speaker">{speaker}</span>
+          <div className="mw-ui-speech-bubble-body">{children}</div>
+        </>
+      ) : (
+        children
+      )}
     </div>
   );
 });

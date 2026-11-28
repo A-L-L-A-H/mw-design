@@ -17,7 +17,7 @@ test('effects SpeechBubble renders through the canonical markup', () => {
   const html = renderToStaticMarkup(React.createElement(EffectsBubble, { className: 'x' }, 'Hi'));
   assert.match(html, /class="mw-ui-speech-bubble [^"]*x"/u);
   assert.match(html, /data-variant="speech"/u);
-  assert.match(html, /mw-ui-speech-bubble-body/u);
+  assert.match(html, /data-tail="bottom"/u);
 });
 
 test('deprecated manga components stay exported', () => {
