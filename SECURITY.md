@@ -13,13 +13,13 @@ Only the latest release on the default branch receives security updates.
 
 Do **not** open a public issue for security vulnerabilities.
 
-Email the maintainers at **security@moonwitness.example** (replace with actual contact) with:
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Any suggested fix
+Use the repository's **Security → Report a vulnerability** flow on GitHub for private vulnerability reporting.
 
-We aim to acknowledge within 48 hours and provide a fix timeline within 7 days.
+If that action is unavailable, contact the repository owner privately through the contact method listed on [the owner profile](https://github.com/bjo163); do not create a public issue containing exploit details.
+
+Include the affected commit or release, impact, prerequisites, reproducible steps, and a safe proof of concept. Remove real tokens, personal data, and production records. Do not test against systems or data you do not own. The maintainers will acknowledge reports as soon as practical, coordinate a fix and disclosure with the reporter, and publish a correction notice when appropriate. There is no guaranteed response time or bounty program.
+
+The repository owner must verify and enable GitHub private vulnerability reporting and configure an actively monitored private contact before claiming this channel is operational. See [the incident-response runbook](../mw-docs/operations/security-incident-response.md) for containment and release correction.
 
 ## Disclosure
 

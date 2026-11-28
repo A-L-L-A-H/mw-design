@@ -2,7 +2,9 @@
   "name": "mw-design",
   "version": "1.0.0-rc.1",
   "private": true,
-  "description": "MoonWitness Design System (@moonwitness/ui, @moonwitness/assets, ui-catalog)",
+  "type": "module",
+  "packageManager": "bun@1.4.5",
+  "description": "MoonWitness Design System (@moonwitness/ui, @moonwitness/assets, @moonwitness/design-tokens, ui-catalog)",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -11,8 +13,13 @@
     "dev": "npm run build --workspace=@moonwitness/ui && npm run dev --workspace=@moonwitness/ui-catalog",
     "build": "npm run build --workspace=@moonwitness/ui && npm run build:built --workspace=@moonwitness/ui-catalog",
     "lint": "node scripts/lint-repo.mjs",
-    "typecheck": "npm run build --workspace=@moonwitness/ui && npx tsc -p apps/ui-catalog/tsconfig.json --noEmit",
-    "test": "npm run test --workspace=@moonwitness/ui && npm run test:unit --workspace=@moonwitness/ui-catalog",
+    "typecheck": "npm run build --workspace=@moonwitness/ui && tsc -p packages/tokens/tsconfig.json --noEmit && tsc -p apps/ui-catalog/tsconfig.json --noEmit",
+    "test:ui": "npm run test --workspace=@moonwitness/ui",
+    "test:tokens": "npm run test --workspace=@moonwitness/design-tokens",
+    "test:assets": "node --test packages/assets/tests/*.test.mjs",
+    "test:social": "node --test tests/social-card-compiler.test.ts",
+    "test:catalog": "npm run test:unit --workspace=@moonwitness/ui-catalog",
+    "test": "npm run test:ui && npm run test:tokens && npm run test:assets && npm run test:social && npm run test:catalog",
     "test:e2e": "npm run test:e2e --workspace=@moonwitness/ui-catalog",
     "verify:pack": "node scripts/verify-consumer-pack.mjs",
     "catalog:build": "npm run build --workspace=@moonwitness/ui-catalog"
