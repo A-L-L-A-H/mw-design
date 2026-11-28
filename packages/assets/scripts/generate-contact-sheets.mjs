@@ -1,9 +1,10 @@
 import { Buffer } from 'node:buffer';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { argv, stdout } from 'node:process';
+import process, { argv, stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { PROOF_DIR, generateProofSheets, registerProofSheets } from './generate-proof-sheets.mjs';
 import { SOCIAL_FORMATS, SOCIAL_THEMES, listSocialFormats } from './social-formats.config.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -287,9 +288,22 @@ export async function generateSocialFormatContactSheet({
 }
 
 if (argv[1] && resolve(argv[1]) === fileURLToPath(import.meta.url)) {
+  if (argv.includes('--proof-sheets')) {
+    const results = await generateProofSheets();
+    await registerProofSheets(results);
+    stdout.write(`Generated ${results.length} proof contact sheets in ${PROOF_DIR}.\n`);
+    process.exit(0);
+  }
   const renderPng = !argv.includes('--index-only');
   const { index, indexPath, sheetOutputs } = await generateContactSheets({ renderPng });
   stdout.write(
     `Generated contact-sheet index (${index.totalGroups} groups, ${index.totalVisualAssets} visual assets, ${sheetOutputs.length} rendered PNG sheet(s)) at ${indexPath}.\n`
   );
 }
+
+export {
+  generateProofSheets,
+  proofLabel,
+  registerProofSheets,
+  selectProofAssets,
+} from './generate-proof-sheets.mjs';

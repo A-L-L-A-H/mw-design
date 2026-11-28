@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFile, stat } from 'node:fs/promises';
 import sharp from 'sharp';
@@ -7,9 +7,61 @@ import { dirname, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+const isWindows = process.platform === 'win32';
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(await readFile(resolve(packageRoot, 'manifest.json'), 'utf8'));
 const assetByPath = new Map(manifest.assets.map((asset) => [asset.path, asset]));
+
+function runPackageCmd(bin, args, cwd) {
+  if (isWindows) {
+    return execFileSync('cmd.exe', ['/d', '/s', '/c', `${bin}.cmd`, ...args], {
+      cwd,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+    });
+  }
+  return execFileSync(bin, args, {
+    cwd,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+}
+
+function readPackedPathsWithBun(dir) {
+  const stdout = runPackageCmd('bun', ['pm', 'pack', '--dry-run'], dir);
+  const paths = new Set();
+  for (const rawLine of stdout.split(/\r?\n/u)) {
+    const match = rawLine.match(/^packed\s+\S+\s+(.+)$/u);
+    if (match?.[1]) {
+      paths.add(match[1].trim().replace(/^\.\//u, ''));
+    }
+  }
+  return paths;
+}
+
+function getExecErrorText(err) {
+  if (!(err instanceof Error)) return String(err);
+  const stderr = typeof err.stderr === 'string' ? err.stderr : '';
+  const code = typeof err.code === 'string' ? err.code : '';
+  return `${code} ${err.message} ${stderr}`;
+}
+
+function readPackedPaths(dir) {
+  try {
+    const stdout = runPackageCmd('npm', ['pack', '--dry-run', '--json'], dir);
+    const rawPacked = JSON.parse(stdout);
+    const packed = Array.isArray(rawPacked) ? rawPacked[0] : rawPacked;
+    const files = Array.isArray(packed?.files) ? packed.files : [];
+    return new Set(files.map(({ path }) => path));
+  } catch (err) {
+    if (/Exit handler never called|ENOENT/iu.test(getExecErrorText(err))) {
+      return readPackedPathsWithBun(dir);
+    }
+    throw err;
+  }
+}
 
 test('manifest describes all stable brand and icon exports with unique paths', () => {
   assert.equal(manifest.name, '@moonwitness/assets');
@@ -385,11 +437,8 @@ test('package exports only framework-independent static assets', async () => {
 });
 
 test('package tarball contains every public manifest asset and export target', async () => {
-  const rawPacked = JSON.parse(
-    execSync('npm pack --dry-run --json', { cwd: packageRoot, encoding: 'utf8' })
-  );
-  const packed = Array.isArray(rawPacked) ? rawPacked[0] : rawPacked;
-  const packedPaths = new Set(packed.files.map(({ path }) => path));
+  const packedPaths = readPackedPaths(packageRoot);
+  assert.ok(packedPaths.size > 0, 'package tarball contains packed entries');
   const packageJson = JSON.parse(await readFile(resolve(packageRoot, 'package.json'), 'utf8'));
   for (const asset of manifest.assets.filter(({ kind }) => kind !== 'source')) {
     assert.ok(packedPaths.has(asset.path), `${asset.path} is present in the package tarball`);

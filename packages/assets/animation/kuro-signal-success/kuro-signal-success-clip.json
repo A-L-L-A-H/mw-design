@@ -16,19 +16,19 @@
     "frames": [
       {
         "asset": "animation/kuro-signal-success/kuro-signal-success-frame-01.png",
-        "durationMs": 190
+        "durationMs": 185
       },
       {
         "asset": "animation/kuro-signal-success/kuro-signal-success-frame-02.png",
-        "durationMs": 190
+        "durationMs": 185
       },
       {
         "asset": "animation/kuro-signal-success/kuro-signal-success-frame-03.png",
-        "durationMs": 190
+        "durationMs": 185
       },
       {
         "asset": "animation/kuro-signal-success/kuro-signal-success-frame-04.png",
-        "durationMs": 190
+        "durationMs": 185
       }
     ]
   },
@@ -37,7 +37,7 @@
     "frameWidth": 512,
     "frameHeight": 512,
     "frameCount": 4,
-    "frameDurationMs": 190,
+    "frameDurationMs": 185,
     "columns": 2,
     "rows": 2,
     "loop": true,

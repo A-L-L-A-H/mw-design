@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "clipId": "rocksoul-resonance-overdrive",
+  "characterId": "rocksoul-witness",
+  "pack": "rocksoul-universe",
+  "domain": "visual-universe",
+  "capMode": "dual-shift",
+  "artStyle": "cel",
+  "canonLevel": "lore",
+  "autoMergeForbidden": true,
+  "canonGuard": {
+    "canonLevel": "lore",
+    "autoMergeForbidden": true,
+    "rules": [
+      "CAN-0004",
+      "CAN-0005",
+      "CAN-0011"
+    ],
+    "visualRenderingMode": "faceless-stylized",
+    "facelessOrStylizedOnly": true,
+    "photorealismForbidden": true,
+    "realPersonLikenessForbidden": true,
+    "sacredDepictionForbidden": true,
+    "prohibitedVariants": [
+      "sacred-figure",
+      "real-person-likeness",
+      "photorealistic-face",
+      "recognizable-face"
+    ],
+    "rationale": "Faceless low-brim street-zine witness depiction under CAN-0011; strictly fictional CAN-0004 lore catalyst."
+  },
+  "description": "Four-frame dual-cap resonance shift (Green Mercy to Black Resolve overdrive) with 2x2 atlas.",
+  "clip": {
+    "id": "rocksoul-resonance-overdrive",
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    },
+    "frames": [
+      {
+        "asset": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-frame-01.png",
+        "durationMs": 140
+      },
+      {
+        "asset": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-frame-02.png",
+        "durationMs": 140
+      },
+      {
+        "asset": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-frame-03.png",
+        "durationMs": 140
+      },
+      {
+        "asset": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-frame-04.png",
+        "durationMs": 140
+      }
+    ]
+  },
+  "spriteSheet": {
+    "atlas": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-sheet.png",
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "frameCount": 4,
+    "frameDurationMs": 140,
+    "columns": 2,
+    "rows": 2,
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    }
+  },
+  "reducedMotionFallback": "animation/rocksoul-resonance-overdrive/rocksoul-resonance-overdrive-frame-01.png",
+  "license": "ISC",
+  "status": "review"
+}

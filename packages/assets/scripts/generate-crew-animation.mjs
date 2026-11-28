@@ -33,7 +33,9 @@ function leg(hipX, kneeX, footX, footY, bob) {
   const fy = r(footY + bob);
   return `<g>
     <path d="M ${hipX - 36} ${hy} L ${hipX + 36} ${hy} L ${kneeX + 32} ${ky} L ${footX + 25} ${fy - 20} L ${footX - 25} ${fy - 20} L ${kneeX - 32} ${ky} Z" fill="#151923" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M ${hipX + 4} ${hy} L ${hipX + 36} ${hy} L ${kneeX + 32} ${ky} L ${footX + 25} ${fy - 20} L ${footX + 2} ${fy - 20} L ${kneeX + 4} ${ky} Z" fill="${INK}" opacity="0.34"/>
     <path d="M ${kneeX - 22} ${ky - 26} l 44 0" stroke="${HAIR_LIGHT}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M ${kneeX + 8} ${ky + 8} l 18 -14 M ${kneeX + 4} ${ky + 30} l 20 -16" stroke="${INK}" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" fill="none"/>
     <path d="M ${footX - 30} ${fy - 24} L ${footX + 30} ${fy - 24} L ${footX + 34} ${fy + 8} Q ${footX} ${fy + 28} ${footX - 34} ${fy + 8} Z" fill="${INK}" stroke="${INK}" stroke-width="5"/>
     <path d="M ${footX - 26} ${fy + 6} h 52" stroke="${YELLOW}" stroke-width="7" stroke-linecap="round"/>
   </g>`;
@@ -87,6 +89,8 @@ function torso(bob, badge) {
     <path d="M 356 476 Q 512 434 668 476 L 690 662 Q 700 752 646 808 L 378 808 Q 324 752 334 662 Z" fill="${MAGENTA}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>
     <path d="M 356 476 Q 420 454 456 468 L 442 802 L 378 808 Q 324 752 334 662 Z" fill="${MAGENTA_DEEP}" stroke="${INK}" stroke-width="4"/>
     <path d="M 438 464 Q 512 524 586 464 L 602 506 Q 512 562 422 506 Z" fill="${INK}" opacity="0.62"/>
+    <path d="M 582 470 Q 640 466 668 476 L 690 662 Q 700 752 646 808 L 600 808 Q 636 734 626 640 Z" fill="${INK}" opacity="0.26"/>
+    <path d="M 604 720 l 28 -22 M 600 752 l 36 -28 M 606 784 l 34 -26" stroke="${INK}" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" fill="none"/>
     <path d="M 512 520 L 512 800" stroke="${INK}" stroke-width="5"/>
     <path d="M 390 716 h 78 m 88 0 h 78" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
     <path d="M 468 482 Q 560 604 624 668" fill="none" stroke="${INK}" stroke-width="16" opacity="0.9"/>
@@ -103,10 +107,14 @@ function torso(bob, badge) {
 function buildFrame({ label, bob, sway, angle, legs, arms, badge }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="${label}">
   <title>${label}</title>
-  <rect width="1024" height="1024" fill="${PAPER}"/>
-  <circle cx="512" cy="500" r="372" fill="none" stroke="${INK}" stroke-opacity="0.06" stroke-width="2" stroke-dasharray="3 15"/>
   <path d="M 206 262 L 288 284 M 190 316 L 262 328 M 736 262 L 818 244 M 752 316 L 822 308" stroke="${MAGENTA}" stroke-width="4" stroke-linecap="round" opacity="0.28"/>
-  <ellipse cx="512" cy="956" rx="198" ry="22" fill="${INK}" opacity="0.1"/>
+  <g data-layer="cel-shadow">
+    <ellipse cx="520" cy="958" rx="214" ry="26" fill="${INK}" opacity="0.16"/>
+    <ellipse cx="528" cy="956" rx="158" ry="17" fill="${INK}" opacity="0.3"/>
+  </g>
+  <g data-layer="graphite-shadow" fill="none" stroke="${INK}" stroke-opacity="0.42" stroke-width="3" stroke-linecap="round">
+    <path d="M 340 944 l 26 22 M 380 940 l 26 26 M 420 938 l 26 28 M 460 938 l 26 28 M 500 938 l 26 28 M 540 938 l 26 28 M 580 940 l 26 26 M 620 944 l 26 22 M 660 948 l 22 18"/>
+  </g>
   ${leg(...legs[0], bob)}
   ${leg(...legs[1], bob)}
   ${arm(...arms[0], bob)}

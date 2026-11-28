@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "clipId": "rocksoul-black-resolve-sketch",
+  "characterId": "rocksoul-witness",
+  "pack": "rocksoul-universe",
+  "domain": "visual-universe",
+  "capMode": "black-resolve",
+  "artStyle": "rough-pencil",
+  "canonLevel": "lore",
+  "autoMergeForbidden": true,
+  "canonGuard": {
+    "canonLevel": "lore",
+    "autoMergeForbidden": true,
+    "rules": [
+      "CAN-0004",
+      "CAN-0005",
+      "CAN-0011"
+    ],
+    "visualRenderingMode": "faceless-stylized",
+    "facelessOrStylizedOnly": true,
+    "photorealismForbidden": true,
+    "realPersonLikenessForbidden": true,
+    "sacredDepictionForbidden": true,
+    "prohibitedVariants": [
+      "sacred-figure",
+      "real-person-likeness",
+      "photorealistic-face",
+      "recognizable-face"
+    ],
+    "rationale": "Faceless low-brim street-zine witness depiction under CAN-0011; strictly fictional CAN-0004 lore catalyst."
+  },
+  "description": "Four-frame rough-pencil charcoal animation for ROCKSOUL in Black Resolve Cap mode.",
+  "clip": {
+    "id": "rocksoul-black-resolve-sketch",
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    },
+    "frames": [
+      {
+        "asset": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-frame-01.png",
+        "durationMs": 150
+      },
+      {
+        "asset": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-frame-02.png",
+        "durationMs": 150
+      },
+      {
+        "asset": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-frame-03.png",
+        "durationMs": 150
+      },
+      {
+        "asset": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-frame-04.png",
+        "durationMs": 150
+      }
+    ]
+  },
+  "spriteSheet": {
+    "atlas": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-sheet.png",
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "frameCount": 4,
+    "frameDurationMs": 150,
+    "columns": 2,
+    "rows": 2,
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    }
+  },
+  "reducedMotionFallback": "animation/rocksoul-black-resolve-sketch/rocksoul-black-resolve-sketch-frame-01.png",
+  "license": "ISC",
+  "status": "review"
+}

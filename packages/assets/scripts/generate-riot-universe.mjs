@@ -30,13 +30,16 @@ function assetSlug(filePath) {
     .replace(/^-|-$/gu, '');
 }
 
+const KURO_CUTOUT_OPTIONS = { clearEnclosedBackdrop: true };
+const KURO_PORTRAIT_CUTOUT_OPTIONS = { clearEnclosedBackdrop: true, hairGapBand: 0.15 };
+
 /**
  * Remove exterior near-white backdrop using 4-edge BFS flood-fill with smooth
  * 2px anti-aliased edge feathering & white-fringe decontamination so cutouts sit
  * cleanly on both dark (#09090b) and light (#f3efe4) surfaces while interior
  * whites (eyes, teeth, bandages, Vesper's silver-cream hair) stay strictly opaque.
  */
-export async function floodFillCutout(input, extractRect = null) {
+export async function floodFillCutout(input, extractRect = null, options = {}) {
   let pipeline = sharp(input).ensureAlpha();
   if (extractRect) pipeline = pipeline.extract(extractRect);
   const { data, info } = await pipeline.raw().toBuffer({ resolveWithObject: true });
@@ -64,6 +67,45 @@ export async function floodFillCutout(input, extractRect = null) {
     queue[tail++] = pixel;
   };
 
+  // Enclosed pockets (arm/torso gaps, hair loops) that are flat pure white are backdrop, as are
+  // loose pockets in the top hairGapBand of portraits; teeth, eyes and bandages stay opaque.
+  const seedEnclosedBackdrop = () => {
+    const seen = new Uint8Array(total);
+    const stack = new Int32Array(total);
+    for (let start = 0; start < total; start += 1) {
+      if (seen[start] || visited[start] || !isNearWhite(start * 4)) continue;
+      const members = [];
+      let top = 0;
+      let pure = 0;
+      stack[top++] = start;
+      seen[start] = 1;
+      while (top > 0) {
+        const pixel = stack[--top];
+        members.push(pixel);
+        const offset = pixel * 4;
+        if (data[offset] >= 253 && data[offset + 1] >= 253 && data[offset + 2] >= 253) pure += 1;
+        const x = pixel % width;
+        const neighbours = [x > 0 ? pixel - 1 : -1, x < width - 1 ? pixel + 1 : -1, pixel >= width ? pixel - width : -1, pixel < total - width ? pixel + width : -1];
+        for (const next of neighbours) {
+          if (next < 0 || seen[next] || visited[next] || !isNearWhite(next * 4)) continue;
+          seen[next] = 1;
+          stack[top++] = next;
+        }
+      }
+      const purity = pure / members.length;
+      const centroidY = members.reduce((sum, pixel) => sum + Math.floor(pixel / width), 0) / members.length;
+      const inHairGapBand = centroidY < height * (options.hairGapBand ?? 0);
+      const isBackdropPocket =
+        (members.length >= 300 && purity >= 0.8) || (inHairGapBand && members.length >= 150 && purity >= 0.2);
+      if (isBackdropPocket) {
+        for (const pixel of members) {
+          visited[pixel] = 1;
+          queue[tail++] = pixel;
+        }
+      }
+    }
+  };
+
   for (let x = 0; x < width; x += 1) {
     enqueue(x, 0);
     enqueue(x, height - 1);
@@ -73,14 +115,21 @@ export async function floodFillCutout(input, extractRect = null) {
     enqueue(width - 1, y);
   }
 
-  while (head < tail) {
-    const pixel = queue[head++];
-    const x = pixel % width;
-    const y = (pixel - x) / width;
-    if (x > 0) enqueue(x - 1, y);
-    if (x < width - 1) enqueue(x + 1, y);
-    if (y > 0) enqueue(x, y - 1);
-    if (y < height - 1) enqueue(x, y + 1);
+  const drain = () => {
+    while (head < tail) {
+      const pixel = queue[head++];
+      const x = pixel % width;
+      const y = (pixel - x) / width;
+      if (x > 0) enqueue(x - 1, y);
+      if (x < width - 1) enqueue(x + 1, y);
+      if (y > 0) enqueue(x, y - 1);
+      if (y < height - 1) enqueue(x, y + 1);
+    }
+  };
+  drain();
+  if (options.clearEnclosedBackdrop) {
+    seedEnclosedBackdrop();
+    drain();
   }
 
   // Pass 1: clear exterior pixels & identify 1px boundary ring
@@ -263,7 +312,6 @@ const EXPRESSIONS = [
     overlay: `
       <path d="M 396 126 C 396 92 444 92 444 120 C 444 142 420 148 420 170" fill="none" stroke="${CYAN}" stroke-width="8.5" stroke-linecap="round"/>
       <circle cx="420" cy="192" r="6" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
-      <path d="M 88 156 C 74 156 74 182 94 182 C 108 182 108 162 98 162" fill="none" stroke="${VIOLET}" stroke-width="4.5" stroke-linecap="round"/>
     `,
   },
   {
@@ -1139,15 +1187,32 @@ const GAME_ASSETS = [
   },
 ];
 
+const BLINK_EYELID_HALF = `
+  <path d="M 237 176 Q 256 171 273 179 L 273 192 Q 255 186 237 191 Z" fill="#f8c8a9"/>
+  <path d="M 238 191 Q 255 186 272 192" fill="none" stroke="${INK}" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M 292 178 Q 307 174 321 181 L 321 194 Q 306 188 292 193 Z" fill="#f7c5a7"/>
+  <path d="M 292 193 Q 306 188 320 194" fill="none" stroke="${INK}" stroke-width="4.4" stroke-linecap="round"/>
+`;
+
+const BLINK_EYELID_CLOSED = `
+  <ellipse cx="255" cy="192" rx="19" ry="15.5" fill="#f8c8a9"/>
+  <ellipse cx="306" cy="194" rx="16.5" ry="15.5" fill="#f7c5a7"/>
+  <path d="M 242 184 Q 255 180 268 185" fill="none" stroke="#cf9677" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M 295 186 Q 306 182 317 187" fill="none" stroke="#cf9677" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M 239 196 Q 255 188 271 197" fill="none" stroke="${INK}" stroke-width="4.8" stroke-linecap="round"/>
+  <path d="M 293 198 Q 306 190 320 198" fill="none" stroke="${INK}" stroke-width="4.8" stroke-linecap="round"/>
+`;
+
 const ANIMATION_CLIPS = [
   {
     id: 'idle',
     masterKey: 'happy',
     durationMs: 240,
     direction: 'ping-pong',
-    bob: [0, -5, -8, -3],
-    tilt: [0, -1.2, 0.8, 0.4],
-    scale: [1.0, 1.015, 1.022, 1.008],
+    bob: [0, -5, -9, -3],
+    tilt: [0, -1.5, 1.0, 0.4],
+    scaleX: [1.0, 0.99, 0.985, 0.996],
+    scaleY: [1.0, 1.018, 1.03, 1.008],
     fx: (i) => `
       <circle cx="392" cy="96" r="${9 + i * 2.5}" fill="none" stroke="${CYAN}" stroke-width="3.5" stroke-opacity="${0.9 - i * 0.16}"/>
       <circle cx="392" cy="96" r="${4 + i}" fill="${CYAN}" stroke="${INK}" stroke-width="2.5"/>
@@ -1156,38 +1221,45 @@ const ANIMATION_CLIPS = [
   {
     id: 'blink',
     masterKey: 'happy',
-    durationMs: 170,
+    durationMs: 165,
     direction: 'forward',
-    bob: [0, 2, 3, 0],
-    tilt: [0, 0.6, 0.3, 0],
-    scale: [1.0, 0.995, 0.992, 1.0],
-    fx: (i) =>
-      i === 1 || i === 2
-        ? `<path d="${starPath(406, 108, 16 + i * 2, 5.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/><circle cx="96" cy="138" r="${5 + i}" fill="${CYAN}" stroke="${INK}" stroke-width="2.5"/>`
-        : `<path d="${starPath(406, 108, 12 + i * 2, 4, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>`,
+    bob: [0, 2, 4, -1],
+    tilt: [0, 0, 0, 0],
+    scaleX: [1.0, 1.015, 1.028, 0.994],
+    scaleY: [1.0, 0.985, 0.972, 1.012],
+    fx: (i) => {
+      const lid = i === 1 ? BLINK_EYELID_HALF : i === 2 ? BLINK_EYELID_CLOSED : '';
+      const badge =
+        i === 2 || i === 3
+          ? `<path d="${starPath(406, 108, 16 + i * 1.5, 5.5, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/><circle cx="96" cy="138" r="${5 + i}" fill="${CYAN}" stroke="${INK}" stroke-width="2.5"/>`
+          : `<path d="${starPath(406, 108, 12, 4, 4)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3"/>`;
+      return `${lid}${badge}`;
+    },
   },
   {
     id: 'wave',
     masterKey: 'excited',
-    durationMs: 190,
+    durationMs: 185,
     direction: 'ping-pong',
-    bob: [0, -8, -12, -4],
-    tilt: [-3, 3, -2, 1],
-    scale: [1.0, 1.02, 1.03, 1.01],
+    bob: [2, -8, -14, -4],
+    tilt: [-4, 4, -3, 2],
+    scaleX: [1.015, 0.985, 0.975, 1.0],
+    scaleY: [0.985, 1.025, 1.04, 1.005],
     fx: (i) => `
-      <path d="M ${82 - i * 4} 174 Q 62 136 ${88 + i * 4} 108" fill="none" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M ${64 - i * 4} 188 Q 42 138 ${70 + i * 4} 96" fill="none" stroke="${MAGENTA}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M ${82 - i * 5} 174 Q 58 136 ${88 + i * 5} 106" fill="none" stroke="${YELLOW}" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M ${64 - i * 5} 188 Q 38 138 ${70 + i * 5} 94" fill="none" stroke="${MAGENTA}" stroke-width="4.5" stroke-linecap="round"/>
       <path d="${starPath(424, 108 - i * 4, 18 + i * 2, 6, 4)}" fill="${CYAN}" stroke="${INK}" stroke-width="3.5"/>
     `,
   },
   {
     id: 'celebrate',
     masterKey: 'celebrating',
-    durationMs: 175,
+    durationMs: 170,
     direction: 'forward',
-    bob: [0, -14, -22, -8],
-    tilt: [-3, 2, 4, -1],
-    scale: [1.0, 1.025, 1.04, 1.01],
+    bob: [6, -14, -24, -6],
+    tilt: [-3, 2, 5, -1],
+    scaleX: [1.04, 0.97, 0.96, 1.015],
+    scaleY: [0.96, 1.04, 1.055, 0.99],
     fx: (i) => `
       <path d="${starPath(94 + i * 5, 108 - i * 4, 20 + i * 1.5, 7, 5)}" fill="${YELLOW}" stroke="${INK}" stroke-width="3.5"/>
       <path d="${starPath(422 - i * 5, 114 - i * 4, 20 + i * 1.5, 7, 5)}" fill="${MAGENTA}" stroke="${INK}" stroke-width="3.5"/>
@@ -1197,11 +1269,12 @@ const ANIMATION_CLIPS = [
   {
     id: 'think',
     masterKey: 'thinking',
-    durationMs: 260,
+    durationMs: 255,
     direction: 'ping-pong',
-    bob: [0, -3, -6, -2],
-    tilt: [-3, -5, -4, -2],
-    scale: [1.0, 1.008, 1.012, 1.004],
+    bob: [0, -3, -7, -2],
+    tilt: [-3, -6, -4, -2],
+    scaleX: [1.0, 0.992, 0.988, 0.996],
+    scaleY: [1.0, 1.012, 1.018, 1.005],
     fx: (i) => `
       <circle cx="386" cy="168" r="${5 + i}" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/>
       <circle cx="412" cy="136" r="${9 + i * 1.5}" fill="${PAPER}" stroke="${INK}" stroke-width="3.5"/>
@@ -1213,9 +1286,10 @@ const ANIMATION_CLIPS = [
     masterKey: 'thinking',
     durationMs: 170,
     direction: 'forward',
-    bob: [0, -4, 0, 3],
-    tilt: [0, 1.5, 0, -1.5],
-    scale: [1.0, 1.01, 1.0, 0.995],
+    bob: [0, -5, 0, 4],
+    tilt: [0, 2, 0, -2],
+    scaleX: [1.0, 0.985, 1.0, 1.015],
+    scaleY: [1.0, 1.02, 1.0, 0.985],
     fx: (i) => `
       <g transform="rotate(${i * 90} 418 122)">
         <circle cx="418" cy="122" r="24" fill="${CHARCOAL}" fill-opacity="0.7" stroke="${INK}" stroke-width="6"/>
@@ -1227,11 +1301,12 @@ const ANIMATION_CLIPS = [
   {
     id: 'success',
     masterKey: 'celebrating',
-    durationMs: 190,
+    durationMs: 185,
     direction: 'forward',
-    bob: [0, -10, -14, -4],
-    tilt: [0, 2, 3, 1],
-    scale: [1.0, 1.02, 1.03, 1.01],
+    bob: [4, -10, -16, -4],
+    tilt: [0, 2.5, 4, 1],
+    scaleX: [1.025, 0.98, 0.97, 1.01],
+    scaleY: [0.975, 1.03, 1.045, 0.995],
     fx: (i) => `
       <circle cx="414" cy="126" r="${22 + i * 2}" fill="${YELLOW}" stroke="${INK}" stroke-width="4.5"/>
       <path d="M 402 126 L 412 136 L 428 114" fill="none" stroke="${INK}" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1240,11 +1315,12 @@ const ANIMATION_CLIPS = [
   {
     id: 'error',
     masterKey: 'angry',
-    durationMs: 150,
+    durationMs: 145,
     direction: 'ping-pong',
-    bob: [0, 4, -4, 2],
-    tilt: [-4, 4, -3, 2],
-    scale: [1.02, 1.04, 1.02, 1.03],
+    bob: [0, 5, -5, 2],
+    tilt: [-5, 5, -3.5, 2.5],
+    scaleX: [1.035, 0.98, 1.04, 1.0],
+    scaleY: [0.97, 1.035, 0.965, 1.01],
     fx: (i) => `
       <polygon points="416,${84 + i * 2} 446,${140 + i * 2} 386,${140 + i * 2}" fill="${MAGENTA}" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round"/>
       <path d="M 416 ${104 + i * 2} V ${120 + i * 2}" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
@@ -1327,15 +1403,18 @@ async function buildCompositePortrait(
     size = 512,
     tilt = 0,
     scale = 1,
+    scaleX = null,
+    scaleY = null,
     offsetY = 0,
     tint = null,
     overlaySvg = '',
     background = { r: 0, g: 0, b: 0, alpha: 0 },
   }
 ) {
-  const innerSize = Math.round(size * 0.84 * scale);
-  let fg = sharp(cutoutBuf).resize(innerSize, innerSize, {
-    fit: 'contain',
+  const innerW = Math.round(size * 0.84 * (scaleX ?? scale));
+  const innerH = Math.round(size * 0.84 * (scaleY ?? scale));
+  let fg = sharp(cutoutBuf).resize(innerW, innerH, {
+    fit: 'fill',
     background: { r: 0, g: 0, b: 0, alpha: 0 },
   });
   if (tilt !== 0) {
@@ -1352,11 +1431,18 @@ async function buildCompositePortrait(
     composites.push({ input: overlayBuf, left: 0, top: 0 });
   }
 
-  return sharp({
+  const rawOut = await sharp({
     create: { width: size, height: size, channels: 4, background },
   })
     .composite(composites)
-    .png({ compressionLevel: 9, palette: true, quality: 92, effort: 10 })
+    .raw()
+    .toBuffer();
+  for (let idx = 3; idx < rawOut.length; idx += 4) {
+    const a = rawOut[idx];
+    rawOut[idx] = a >= 220 ? 255 : a >= 140 ? 180 : a >= 64 ? 96 : 0;
+  }
+  return sharp(rawOut, { raw: { width: size, height: size, channels: 4 } })
+    .png({ compressionLevel: 9, palette: true, quality: 95, colors: 256, effort: 10, dither: 0 })
     .toBuffer();
 }
 
@@ -1368,6 +1454,22 @@ async function encodeWebpWithinBudget(buildPipeline, maxBytes, qualities) {
     if (buf.length <= maxBytes) return buf;
   }
   return smallest;
+}
+
+async function featherBottomCutout(buf, width, height, fadeRows = 42) {
+  const { data } = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const startRow = Math.max(0, height - fadeRows);
+  for (let y = startRow; y < height; y += 1) {
+    const t = 1 - (y - startRow) / fadeRows;
+    const smooth = t * t * (3 - 2 * t);
+    for (let x = 0; x < width; x += 1) {
+      const idx = (y * width + x) * 4 + 3;
+      data[idx] = Math.round(data[idx] * smooth);
+    }
+  }
+  return sharp(data, { raw: { width, height, channels: 4 } })
+    .png()
+    .toBuffer();
 }
 
 async function main() {
@@ -1408,16 +1510,16 @@ async function main() {
     kuroSideCutout,
     kuroThreeQuarterCutout,
   ] = await Promise.all([
-    floodFillCutout(kuroHappyPath),
-    floodFillCutout(kuroExcitedPath),
-    floodFillCutout(kuroThinkingPath),
-    floodFillCutout(kuroCelebratingPath),
-    floodFillCutout(kuroAngryPath),
-    floodFillCutout(kuroSadPath),
-    floodFillCutout(kuroFullbodyPath),
-    floodFillCutout(kuroPoseRunningPath),
-    floodFillCutout(kuroPoseSittingPath),
-    floodFillCutout(kuroPoseWavingPath),
+    floodFillCutout(kuroHappyPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroExcitedPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroThinkingPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroCelebratingPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroAngryPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroSadPath, null, KURO_PORTRAIT_CUTOUT_OPTIONS),
+    floodFillCutout(kuroFullbodyPath, null, KURO_CUTOUT_OPTIONS),
+    floodFillCutout(kuroPoseRunningPath, null, KURO_CUTOUT_OPTIONS),
+    floodFillCutout(kuroPoseSittingPath, null, KURO_CUTOUT_OPTIONS),
+    floodFillCutout(kuroPoseWavingPath, null, KURO_CUTOUT_OPTIONS),
     floodFillCutout(vesperPortraitPath),
     floodFillCutout(walterCelPath),
     floodFillCutout(kuroModelPath, { left: 614, top: 44, width: 208, height: 710 }),
@@ -1456,61 +1558,61 @@ async function main() {
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-happy-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI happy bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-excited-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI excited bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI thinking bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI celebrating bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-angry-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI angry/determined bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-portrait-sad-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI sad/teary bust portrait master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI full-body standing master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-pose-running-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI dynamic full-body running/action master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-pose-sitting-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI full-body seated on crate with handheld signal deck master for kuro-signal.',
     },
     {
       path: 'source/artwork/riot-universe/kuro-signal-pose-waving-master.png',
-      creator: 'Google Gemini image generation, commissioned by MoonWitness contributors',
+      creator: 'xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors',
       source: 'Direct AI master generation on solid white backdrop for Signal Riot character pipeline',
       modifications: 'Direct AI full-body friendly waving master for kuro-signal.',
     },
@@ -1899,17 +2001,19 @@ async function main() {
     const composites = [];
     if (!hasEmbeddedActor && (state.actor === 'kuro' || state.actor === 'both')) {
       const kuroCutout = expressionCutouts[state.expr] ?? expressionCutouts.thinking;
-      const kBuf = await sharp(kuroCutout)
+      const rawK = await sharp(kuroCutout)
         .resize(248, 248, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer();
+      const kBuf = await featherBottomCutout(rawK, 248, 248, 44);
       composites.push({ input: kBuf, left: 20, top: 222 });
     }
     if (!hasEmbeddedActor && (state.actor === 'vesper' || state.actor === 'both')) {
-      const vBuf = await sharp(vesperPortraitCutout)
+      const rawV = await sharp(vesperPortraitCutout)
         .resize(236, 236, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer();
+      const vBuf = await featherBottomCutout(rawV, 236, 236, 42);
       composites.push({ input: vBuf, left: state.actor === 'both' ? 378 : 22, top: 234 });
     }
     composites.push({ input: await svgBuffer(640, 480, frameSvg), left: 0, top: 0 });
@@ -2072,6 +2176,8 @@ async function main() {
         size: 512,
         tilt: clipSpec.tilt[i],
         scale: clipSpec.scale ? clipSpec.scale[i] : 0.98 + (i % 2 === 1 ? 0.02 : 0),
+        scaleX: clipSpec.scaleX ? clipSpec.scaleX[i] : null,
+        scaleY: clipSpec.scaleY ? clipSpec.scaleY[i] : null,
         offsetY: clipSpec.bob[i],
         overlaySvg: clipSpec.fx(i),
       });

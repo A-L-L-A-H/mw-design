@@ -164,19 +164,19 @@
       "frames": [
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-01.png",
-          "durationMs": 190
+          "durationMs": 185
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-02.png",
-          "durationMs": 190
+          "durationMs": 185
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-03.png",
-          "durationMs": 190
+          "durationMs": 185
         },
         {
           "asset": "animation/kuro-signal-wave/kuro-signal-wave-frame-04.png",
-          "durationMs": 190
+          "durationMs": 185
         }
       ]
     }

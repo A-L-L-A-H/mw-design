@@ -16,19 +16,19 @@
     "frames": [
       {
         "asset": "animation/kuro-signal-error/kuro-signal-error-frame-01.png",
-        "durationMs": 150
+        "durationMs": 145
       },
       {
         "asset": "animation/kuro-signal-error/kuro-signal-error-frame-02.png",
-        "durationMs": 150
+        "durationMs": 145
       },
       {
         "asset": "animation/kuro-signal-error/kuro-signal-error-frame-03.png",
-        "durationMs": 150
+        "durationMs": 145
       },
       {
         "asset": "animation/kuro-signal-error/kuro-signal-error-frame-04.png",
-        "durationMs": 150
+        "durationMs": 145
       }
     ]
   },
@@ -37,7 +37,7 @@
     "frameWidth": 512,
     "frameHeight": 512,
     "frameCount": 4,
-    "frameDurationMs": 150,
+    "frameDurationMs": 145,
     "columns": 2,
     "rows": 2,
     "loop": true,

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -249,4 +249,35 @@ test('5-layer riot-alley-scene.json and SVG layers validate against scene-schema
   assert.equal(result.sceneCount, 1);
   assert.equal(result.clipCount, 2);
   assert.equal(bundle.scenes[0].layers.length, 5);
+});
+
+test('Kuro Signal expressions and clips keep the cyan-ringed black headset on a clean cutout', async () => {
+  const sprites = (await readdir(resolve(packageRoot, 'illustrations/riot-universe/characters')))
+    .filter((name) => /^kuro-signal-expression-.+\.png$/u.test(name))
+    .map((name) => `illustrations/riot-universe/characters/${name}`);
+  const clips = (await readdir(resolve(packageRoot, 'animation')))
+    .filter((name) => name.startsWith('kuro-signal-'))
+    .map((name) => `animation/${name}/${name}-frame-01.png`);
+  assert.equal(sprites.length, 16);
+  assert.equal(clips.length, 8);
+
+  for (const path of [...sprites, ...clips]) {
+    const { data, info } = await sharp(resolve(packageRoot, path))
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    let cyanRing = 0;
+    let hairGapWhite = 0;
+    for (let y = 0; y < info.height; y += 1) {
+      for (let x = 0; x < info.width; x += 1) {
+        const offset = (y * info.width + x) * 4;
+        if (data[offset + 3] < 200) continue;
+        const [r, g, b] = [data[offset], data[offset + 1], data[offset + 2]];
+        if (r < 90 && g > 170 && b > 190) cyanRing += 1;
+        if (y < info.height * 0.15 && r >= 250 && g >= 250 && b >= 250) hairGapWhite += 1;
+      }
+    }
+    assert.ok(cyanRing >= 60, `${path}: cyan headset ring missing (${cyanRing} px)`);
+    assert.ok(hairGapWhite <= 40, `${path}: opaque white backdrop pocket above the hair (${hairGapWhite} px)`);
+  }
 });

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "clipId": "rocksoul-green-mercy-sketch",
+  "characterId": "rocksoul-witness",
+  "pack": "rocksoul-universe",
+  "domain": "visual-universe",
+  "capMode": "green-mercy",
+  "artStyle": "rough-pencil",
+  "canonLevel": "lore",
+  "autoMergeForbidden": true,
+  "canonGuard": {
+    "canonLevel": "lore",
+    "autoMergeForbidden": true,
+    "rules": [
+      "CAN-0004",
+      "CAN-0005",
+      "CAN-0011"
+    ],
+    "visualRenderingMode": "faceless-stylized",
+    "facelessOrStylizedOnly": true,
+    "photorealismForbidden": true,
+    "realPersonLikenessForbidden": true,
+    "sacredDepictionForbidden": true,
+    "prohibitedVariants": [
+      "sacred-figure",
+      "real-person-likeness",
+      "photorealistic-face",
+      "recognizable-face"
+    ],
+    "rationale": "Faceless low-brim street-zine witness depiction under CAN-0011; strictly fictional CAN-0004 lore catalyst."
+  },
+  "description": "Four-frame rough-pencil sketchbook animation for ROCKSOUL in Green Mercy Cap mode.",
+  "clip": {
+    "id": "rocksoul-green-mercy-sketch",
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    },
+    "frames": [
+      {
+        "asset": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-frame-01.png",
+        "durationMs": 160
+      },
+      {
+        "asset": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-frame-02.png",
+        "durationMs": 160
+      },
+      {
+        "asset": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-frame-03.png",
+        "durationMs": 160
+      },
+      {
+        "asset": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-frame-04.png",
+        "durationMs": 160
+      }
+    ]
+  },
+  "spriteSheet": {
+    "atlas": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-sheet.png",
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "frameCount": 4,
+    "frameDurationMs": 160,
+    "columns": 2,
+    "rows": 2,
+    "loop": true,
+    "direction": "forward",
+    "pivot": {
+      "x": 0.5,
+      "y": 0.88
+    }
+  },
+  "reducedMotionFallback": "animation/rocksoul-green-mercy-sketch/rocksoul-green-mercy-sketch-frame-01.png",
+  "license": "ISC",
+  "status": "review"
+}

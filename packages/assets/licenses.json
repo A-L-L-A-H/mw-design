@@ -355,8 +355,8 @@
       "source": "Original manually authored JSON",
       "license": "ISC",
       "modifications": "Redrawn four-frame anonymous back-facing crew-01 keyframe; distinct silhouette per frame, no recognisable face.",
-      "status": "approved",
-      "distribution": "production"
+      "status": "review",
+      "distribution": "source-only pending visual acceptance"
     },
     {
       "path": "animation/crew-01-idle/crew-01-idle-frame-01.svg",
@@ -364,8 +364,8 @@
       "source": "Original manually authored SVG",
       "license": "ISC",
       "modifications": "Redrawn four-frame anonymous back-facing crew-01 keyframe; distinct silhouette per frame, no recognisable face.",
-      "status": "approved",
-      "distribution": "production"
+      "status": "review",
+      "distribution": "source-only pending visual acceptance"
     },
     {
       "path": "animation/crew-01-idle/crew-01-idle-frame-02.svg",
@@ -373,8 +373,8 @@
       "source": "Original manually authored SVG",
       "license": "ISC",
       "modifications": "Redrawn four-frame anonymous back-facing crew-01 keyframe; distinct silhouette per frame, no recognisable face.",
-      "status": "approved",
-      "distribution": "production"
+      "status": "review",
+      "distribution": "source-only pending visual acceptance"
     },
     {
       "path": "animation/crew-01-idle/crew-01-idle-frame-03.svg",
@@ -382,8 +382,8 @@
       "source": "Original manually authored SVG",
       "license": "ISC",
       "modifications": "Redrawn four-frame anonymous back-facing crew-01 keyframe; distinct silhouette per frame, no recognisable face.",
-      "status": "approved",
-      "distribution": "production"
+      "status": "review",
+      "distribution": "source-only pending visual acceptance"
     },
     {
       "path": "animation/crew-01-idle/crew-01-idle-frame-04.svg",
@@ -391,8 +391,8 @@
       "source": "Original manually authored SVG",
       "license": "ISC",
       "modifications": "Redrawn four-frame anonymous back-facing crew-01 keyframe; distinct silhouette per frame, no recognisable face.",
-      "status": "approved",
-      "distribution": "production"
+      "status": "review",
+      "distribution": "source-only pending visual acceptance"
     },
     {
       "path": "animation/crew-01-turn/crew-01-turn-clip.json",
@@ -628,7 +628,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-fullbody-standing-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -648,7 +648,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-angry-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -658,7 +658,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-celebrating-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -668,7 +668,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-excited-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -678,7 +678,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-happy-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -688,7 +688,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-sad-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -698,7 +698,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-portrait-thinking-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -708,7 +708,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-pose-running-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -718,7 +718,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-pose-sitting-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
@@ -728,7 +728,7 @@
     },
     {
       "path": "source/artwork/riot-universe/kuro-signal-pose-waving-master.png",
-      "creator": "Google Gemini image generation, commissioned by MoonWitness contributors",
+      "creator": "xKiro image generation (openai/gpt-image-2.5), commissioned by MoonWitness contributors",
       "source": "Direct AI master generation on solid white backdrop for Signal Riot character pipeline",
       "license": "MoonWitness Commissioned Asset (ISC pipeline)",
       "termsVerified": true,
