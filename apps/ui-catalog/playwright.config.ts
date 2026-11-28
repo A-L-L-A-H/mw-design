@@ -7,6 +7,7 @@ const flakeReporter = resolve(repositoryRoot, 'scripts/playwright-flake-reporter
 const ci = process.env.CI === 'true';
 
 const basePath = process.env.MW_UI_CATALOG_BASE_PATH ?? '/';
+const previewBase = basePath === '/' ? '' : `--base ${basePath}`;
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:4174${basePath}`;
 
 const reporters: ReporterDescription[] = [
@@ -47,7 +48,7 @@ export default defineConfig({
       : {}),
   },
   webServer: {
-    command: 'npx vite preview --host 127.0.0.1 --port 4174 --strictPort',
+    command: `npx vite preview --host 127.0.0.1 --port 4174 --strictPort ${previewBase}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
